@@ -26,77 +26,19 @@
     <div class="container-scroller">
       <!-- partial:../../partials/_navbar.html -->
       <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo" href="../../index.html"><img src="{% static 'images/logo.svg' %}" alt="logo" /></a>
-          <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
+          <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="height: 70px;">
+          <a class="navbar-brand brand-logo"  href="index"><img style="width: 60px;height: 60px;" src="{% static 'images/logo.png' %}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="index"><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="mdi mdi-menu"></span>
           </button>
           <div class="search-field d-none d-xl-block">
-            <form class="d-flex align-items-center h-100" action="#">
-              <div class="input-group">
-                <div class="input-group-prepend bg-transparent">
-                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
-                </div>
-                <input type="text" class="form-control bg-transparent border-0" placeholder="Search products">
-              </div>
-            </form>
+          
           </div>
           <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item  dropdown d-none d-md-block">
-              <a class="nav-link dropdown-toggle" id="reportDropdown" href="#" data-toggle="dropdown" aria-expanded="false"> Reports </a>
-              <div class="dropdown-menu navbar-dropdown" aria-labelledby="reportDropdown">
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-file-pdf mr-2"></i>PDF </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-file-excel mr-2"></i>Excel </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-file-word mr-2"></i>doc </a>
-              </div>
-            </li>
-            <li class="nav-item  dropdown d-none d-md-block">
-              <a class="nav-link dropdown-toggle" id="projectDropdown" href="#" data-toggle="dropdown" aria-expanded="false"> Projects </a>
-              <div class="dropdown-menu navbar-dropdown" aria-labelledby="projectDropdown">
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-eye-outline mr-2"></i>View Project </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-pencil-outline mr-2"></i>Edit Project </a>
-              </div>
-            </li>
-            <li class="nav-item nav-language dropdown d-none d-md-block">
-              <a class="nav-link dropdown-toggle" id="languageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                <div class="nav-language-icon">
-                  <i class="flag-icon flag-icon-us" title="us" id="us"></i>
-                </div>
-                <div class="nav-language-text">
-                  <p class="mb-1 text-black">English</p>
-                </div>
-              </a>
-              <div class="dropdown-menu navbar-dropdown" aria-labelledby="languageDropdown">
-                <a class="dropdown-item" href="#">
-                  <div class="nav-language-icon mr-2">
-                    <i class="flag-icon flag-icon-ae" title="ae" id="ae"></i>
-                  </div>
-                  <div class="nav-language-text">
-                    <p class="mb-1 text-black">Arabic</p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
-                  <div class="nav-language-icon mr-2">
-                    <i class="flag-icon flag-icon-gb" title="GB" id="gb"></i>
-                  </div>
-                  <div class="nav-language-text">
-                    <p class="mb-1 text-black">English</p>
-                  </div>
-                </a>
-              </div>
-            </li>
+           
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
@@ -143,47 +85,7 @@
                 </div>
               </div>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                <i class="mdi mdi-email-outline"></i>
-                <span class="count-symbol bg-success"></span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-                <h6 class="p-3 mb-0 bg-primary text-white py-4">Messages</h6>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <img src="{% static 'images/faces/face4.jpg' %}" alt="image" class="profile-pic">
-                  </div>
-                  <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                    <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a message</h6>
-                    <p class="text-gray mb-0"> 1 Minutes ago </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <img src="{% static 'images/faces/face2.jpg' %}" alt="image" class="profile-pic">
-                  </div>
-                  <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                    <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Cregh send you a message</h6>
-                    <p class="text-gray mb-0"> 15 Minutes ago </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <img src="{% static 'images/faces/face3.jpg' %}" alt="image" class="profile-pic">
-                  </div>
-                  <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                    <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Profile picture updated</h6>
-                    <p class="text-gray mb-0"> 18 Minutes ago </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <h6 class="p-3 mb-0 text-center">4 new messages</h6>
-              </div>
-            </li>
+           
             <li class="nav-item dropdown">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
                 <i class="mdi mdi-bell-outline"></i>
@@ -239,12 +141,12 @@
       </nav>
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
-        <!-- partial:../../partials/_sidebar.html -->
+        <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
-            <li class="nav-item nav-category">Main</li>
+            <li class="nav-item nav-category">Home</li>
             <li class="nav-item">
-              <a class="nav-link" href="../../index.html">
+              <a class="nav-link" href="index">
                 <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
                 <span class="menu-title">Dashboard</span>
               </a>
@@ -252,112 +154,49 @@
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
-                <span class="menu-title">UI Elements</span>
+                <span class="menu-title">Users</span>
                 <i class="menu-arrow"></i>
               </a>
               <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/buttons.html">Buttons</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/typography.html">Typography</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{% url 'admins' %}">Administrators</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{% url 'healthworkers' %}">Health Workers</a></li>
                 </ul>
               </div>
             </li>
+            <li class="nav-item nav-category">System Management</li>
             <li class="nav-item">
-              <a class="nav-link" href="../../pages/icons/mdi.html">
+              <a class="nav-link" href="{% url 'announcements' %}">
                 <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-                <span class="menu-title">Icons</span>
+                <span class="menu-title">Announcements</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../../pages/forms/basic_elements.html">
+              <a class="nav-link" href="{% url 'activities' %}">
                 <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
-                <span class="menu-title">Forms</span>
+                <span class="menu-title">Activities</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../../pages/charts/chartjs.html">
+              <a class="nav-link" href="{% url 'smsnotifications' %}">
                 <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
-                <span class="menu-title">Charts</span>
+                <span class="menu-title">SMS Notifications</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../../pages/tables/basic-table.html">
-                <span class="icon-bg"><i class="mdi mdi-table-large menu-icon"></i></span>
-                <span class="menu-title">Tables</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-                <span class="icon-bg"><i class="mdi mdi-lock menu-icon"></i></span>
-                <span class="menu-title">User Pages</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="auth">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/samples/blank-page.html"> Blank Page </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/samples/login.html"> Login </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/samples/register.html"> Register </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-404.html"> 404 </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-500.html"> 500 </a></li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item documentation-link">
-              <a class="nav-link" href="http://www.bootstrapdash.com/demo/connect-plus-free/jquery/documentation/documentation.html" target="_blank">
-                <span class="icon-bg">
-                  <i class="mdi mdi-file-document-box menu-icon"></i>
-                </span>
-                <span class="menu-title">Documentation</span>
-              </a>
-            </li>
-            <li class="nav-item sidebar-user-actions">
-              <div class="user-details">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <div class="d-flex align-items-center">
-                      <div class="sidebar-profile-img">
-                        <img src="{% static 'images/faces/face28.png' %}" alt="image">
-                      </div>
-                      <div class="sidebar-profile-text">
-                        <p class="mb-1">Henry Klein</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="badge badge-danger">3</div>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item sidebar-user-actions">
-              <div class="sidebar-user-menu">
-                <a href="#" class="nav-link"><i class="mdi mdi-settings menu-icon"></i>
-                  <span class="menu-title">Settings</span>
-                </a>
-              </div>
-            </li>
-            <li class="nav-item sidebar-user-actions">
-              <div class="sidebar-user-menu">
-                <a href="#" class="nav-link"><i class="mdi mdi-speedometer menu-icon"></i>
-                  <span class="menu-title">Take Tour</span></a>
-              </div>
-            </li>
-            <li class="nav-item sidebar-user-actions">
-              <div class="sidebar-user-menu">
-                <a href="#" class="nav-link"><i class="mdi mdi-logout menu-icon"></i>
-                  <span class="menu-title">Log Out</span></a>
-              </div>
-            </li>
+            
+          
+            
           </ul>
         </nav>
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Form elements </h3>
+              <h3 class="page-title"> Register an Administrator </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Form elements</li>
+                  <li class="breadcrumb-item"><a href="#">Register</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Administrator</li>
                 </ol>
               </nav>
             </div>
@@ -365,9 +204,8 @@
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Basic form elements</h4>
-                    <p class="card-description"> Basic form elements </p>
-                    <h1>Update Admin</h1>
+                 
+                    <h1>Input Credentials</h1>
                     <form method="post">
                       {% csrf_token %}
                       <div class="form-group">
@@ -419,7 +257,7 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
     <script src="{% static 'vendors/select2/select2.min.js' %}"></script>

@@ -20,8 +20,8 @@
     <div class="container-scroller">
       <!-- partial:../../partials/_navbar.html -->
       <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo" href="index"><img src="{% static 'images/logo.svg' %}" alt="logo" /></a>
+          <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="height: 70px;">
+          <a class="navbar-brand brand-logo"  href="index"><img style="width: 60px;height: 60px;" src="{% static 'images/logo.png' %}" alt="logo" /></a>
           <a class="navbar-brand brand-logo-mini" href="index"><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -153,26 +153,26 @@
               </a>
               <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="admins">Administrators</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="healthworkers">Health Workers</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{% url 'admins' %}">Administrators</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{% url 'healthworkers' %}">Health Workers</a></li>
                 </ul>
               </div>
             </li>
             <li class="nav-item nav-category">System Management</li>
             <li class="nav-item">
-              <a class="nav-link" href="announcements">
+              <a class="nav-link" href="{% url 'announcements' %}">
                 <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
                 <span class="menu-title">Announcements</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="activities">
+              <a class="nav-link" href="{% url 'activities' %}">
                 <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
                 <span class="menu-title">Activities</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="smsnotifications">
+              <a class="nav-link" href="{% url 'smsnotifications' %}">
                 <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
                 <span class="menu-title">SMS Notifications</span>
               </a>
