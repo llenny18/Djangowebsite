@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Citizens</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Senior Citizens</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Health Condition</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for senior in seniors %}
+            <tr>
+                <td>{{ senior.citizen_id }}</td>
+                <td>{{ senior.first_name }}</td>
+                <td>{{ senior.last_name }}</td>
+                <td>{{ senior.date_of_birth }}</td>
+                <td>{{ senior.gender }}</td>
+                <td>{{ senior.health_condition }}</td>
+                <td>{{ senior.address }}</td>
+                <td>{{ senior.phone }}</td>
+                <td>{{ senior.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
