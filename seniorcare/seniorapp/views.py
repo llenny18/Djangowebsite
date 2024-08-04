@@ -68,9 +68,12 @@ def activity_create(request):
         if form.is_valid():
             form.save()
             return redirect('activities')
+        else:
+            print(form.errors)  # Print form errors to the console
     else:
         form = ActivityForm()
     return render(request, 'views/activity_create.html', {'form': form})
+
 
 # Announcement update
 def announcement_update(request, id):
@@ -125,7 +128,7 @@ def sms_notification_update(request, id):
         form = SMSNotificationForm(request.POST, instance=sms_notification)
         if form.is_valid():
             form.save()
-            return redirect('sms_notifications')
+            return redirect('smsnotifications')
     else:
         form = SMSNotificationForm(instance=sms_notification)
     return render(request, 'views/sms_notification_update.html', {'form': form, 'sms_notification': sms_notification})
@@ -136,7 +139,7 @@ def sms_notification_create(request):
         form = SMSNotificationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('sms_notifications')
+            return redirect('smsnotifications')
     else:
         form = SMSNotificationForm()
     return render(request, 'views/sms_notification_create.html', {'form': form})

@@ -199,7 +199,7 @@
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Activities List<a href="" class="btn badge-success m-1">+ Insert new record</a></h4>
+                    <h4 class="card-title">Activities List<a href="{% url 'activity_create' %}" class="btn badge-success m-1">+ Insert new record</a></h4>
                   
                     </p>
                     <table class="table table-bordered">
@@ -229,7 +229,7 @@
                               <td>{{ activity.created_by }}</td>
                               <td>{{ activity.creator_id }}</td>
                               <td>{{ activity.created_at }}</td>
-                              <td><a href="" class="btn badge-primary m-1">Edit</a><br><a href="" class="btn badge-danger m-1">Delete</a></td>
+                              <td><a href="{% url 'activity_update' id=activity.activity_id %}" class="btn badge-primary m-1">Edit</a><br><a href="" class="btn badge-danger m-1">Delete</a></td>
                           </tr>
                           {% endfor %}
                       </tbody>

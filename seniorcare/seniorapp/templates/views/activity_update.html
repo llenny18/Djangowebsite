@@ -192,11 +192,11 @@
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Register an Administrator </h3>
+              <h3 class="page-title"> Register an Activity </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Register</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Administrator</li>
+                  <li class="breadcrumb-item active" aria-current="page">Activity</li>
                 </ol>
               </nav>
             </div>
@@ -209,10 +209,10 @@
                     <form method="post">
                       {% csrf_token %}
                       <div class="form-group">
-                          <label for="id_title">Title</label>
-                          <input type="text" class="form-control" id="id_title" name="title" value="{{ form.title.value }}">
-                          {% if form.title.errors %}
-                              <div class="text-danger">{{ form.title.errors }}</div>
+                          <label for="id_activity_name">Activity Name</label>
+                          <input type="text" class="form-control" id="id_activity_name" name="activity_name" value="{{ form.activity_name.value }}">
+                          {% if form.activity_name.errors %}
+                              <div class="text-danger">{{ form.activity_name.errors }}</div>
                           {% endif %}
                       </div>
                       <div class="form-group">
@@ -223,31 +223,28 @@
                           {% endif %}
                       </div>
                       <div class="form-group">
-                          <label for="id_date_posted">Date Posted</label>
-                          <input type="date" class="form-control" id="id_date_posted" name="date_posted" value="{{ form.date_posted.value }}">
-                          {% if form.date_posted.errors %}
-                              <div class="text-danger">{{ form.date_posted.errors }}</div>
+                          <label for="id_date">Date</label>
+                          <input type="date" class="form-control" id="id_date" name="date" value="{{ form.date.value }}">
+                          {% if form.date.errors %}
+                              <div class="text-danger">{{ form.date.errors }}</div>
                           {% endif %}
                       </div>
                       <div class="form-group">
-                          <label for="id_posted_by">Posted By</label>
-                          <select class="form-control" id="id_posted_by" name="posted_by">
-                              <option value="Admin">Admin</option>
-                              <option value="HealthWorker">HealthWorker</option>
-                          </select>
-                          {% if form.posted_by.errors %}
-                              <div class="text-danger">{{ form.posted_by.errors }}</div>
+                          <label for="id_time">Time</label>
+                          <input type="time" class="form-control" id="id_time" name="time" value="{{ form.time.value }}">
+                          {% if form.time.errors %}
+                              <div class="text-danger">{{ form.time.errors }}</div>
                           {% endif %}
                       </div>
                       <div class="form-group">
-                          <label for="id_poster_id">Poster ID</label>
-                          <input type="number" class="form-control" id="id_poster_id" name="poster_id" value="{{ form.poster_id.value }}">
-                          {% if form.poster_id.errors %}
-                              <div class="text-danger">{{ form.poster_id.errors }}</div>
+                          <label for="id_location">Location</label>
+                          <input type="text" class="form-control" id="id_location" name="location" value="{{ form.location.value }}">
+                          {% if form.location.errors %}
+                              <div class="text-danger">{{ form.location.errors }}</div>
                           {% endif %}
                       </div>
                       <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                      <a href="{% url 'announcements' %}" class="btn btn-light">Cancel</a>
+                      <a href="{% url 'activities' %}" class="btn btn-light">Cancel</a>
                   </form>
                   
                   

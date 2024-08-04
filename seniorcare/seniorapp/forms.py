@@ -20,6 +20,7 @@ class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
         fields = '__all__'
+        exclude = ['created_by', 'creator_id']
 
 class AnnouncementForm(forms.ModelForm):
     class Meta:
