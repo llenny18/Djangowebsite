@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags and CSS includes (same as in admin_create.html) -->
+    <title>Create Activity</title>
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- Navbar and sidebar (same as in admin_create.html) -->
+
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h3 class="page-title"> Create an Activity </h3>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Create</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Activity</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>Activity Details</h1>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="id_activity_name">Activity Name</label>
+                                    <input type="text" class="form-control" id="id_activity_name" name="activity_name" value="{{ form.activity_name.value }}">
+                                    {% if form.activity_name.errors %}
+                                        <div class="text-danger">{{ form.activity_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_description">Description</label>
+                                    <textarea class="form-control" id="id_description" name="description">{{ form.description.value }}</textarea>
+                                    {% if form.description.errors %}
+                                        <div class="text-danger">{{ form.description.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_date">Date</label>
+                                    <input type="date" class="form-control" id="id_date" name="date" value="{{ form.date.value }}">
+                                    {% if form.date.errors %}
+                                        <div class="text-danger">{{ form.date.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_time">Time</label>
+                                    <input type="time" class="form-control" id="id_time" name="time" value="{{ form.time.value }}">
+                                    {% if form.time.errors %}
+                                        <div class="text-danger">{{ form.time.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_location">Location</label>
+                                    <input type="text" class="form-control" id="id_location" name="location" value="{{ form.location.value }}">
+                                    {% if form.location.errors %}
+                                        <div class="text-danger">{{ form.location.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                <a href="{% url 'activities' %}" class="btn btn-light">Cancel</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer and JS includes (same as in admin_create.html) -->
+    </div>
+</body>
+</html>

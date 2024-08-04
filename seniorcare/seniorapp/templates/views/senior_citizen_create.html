@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags and CSS includes (same as in admin_create.html) -->
+    <title>Create Senior Citizen</title>
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- Navbar and sidebar (same as in admin_create.html) -->
+
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h3 class="page-title"> Register a Senior Citizen </h3>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Register</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Senior Citizen</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>Input Details</h1>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="id_first_name">First Name</label>
+                                    <input type="text" class="form-control" id="id_first_name" name="first_name" value="{{ form.first_name.value }}">
+                                    {% if form.first_name.errors %}
+                                        <div class="text-danger">{{ form.first_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_last_name">Last Name</label>
+                                    <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ form.last_name.value }}">
+                                    {% if form.last_name.errors %}
+                                        <div class="text-danger">{{ form.last_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_date_of_birth">Date of Birth</label>
+                                    <input type="date" class="form-control" id="id_date_of_birth" name="date_of_birth" value="{{ form.date_of_birth.value }}">
+                                    {% if form.date_of_birth.errors %}
+                                        <div class="text-danger">{{ form.date_of_birth.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_gender">Gender</label>
+                                    <select class="form-control" id="id_gender" name="gender">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    {% if form.gender.errors %}
+                                        <div class="text-danger">{{ form.gender.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_health_condition">Health Condition</label>
+                                    <textarea class="form-control" id="id_health_condition" name="health_condition">{{ form.health_condition.value }}</textarea>
+                                    {% if form.health_condition.errors %}
+                                        <div class="text-danger">{{ form.health_condition.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_address">Address</label>
+                                    <input type="text" class="form-control" id="id_address" name="address" value="{{ form.address.value }}">
+                                    {% if form.address.errors %}
+                                        <div class="text-danger">{{ form.address.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_phone">Phone</label>
+                                    <input type="text" class="form-control" id="id_phone" name="phone" value="{{ form.phone.value }}">
+                                    {% if form.phone.errors %}
+                                        <div class="text-danger">{{ form.phone.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                <a href="{% url 'senior_citizens' %}" class="btn btn-light">Cancel</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer and JS includes (same as in admin_create.html) -->
+    </div>
+</body>
+</html>

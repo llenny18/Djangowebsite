@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Announcement</title>
+    <!-- Include your CSS files -->
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- Navbar and sidebar (same as in admin_create.html) -->
+
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h3 class="page-title"> Create an Announcement </h3>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Create</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Announcement</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>Announcement Details</h1>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="id_title">Title</label>
+                                    <input type="text" class="form-control" id="id_title" name="title" value="{{ form.title.value }}">
+                                    {% if form.title.errors %}
+                                        <div class="text-danger">{{ form.title.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_description">Description</label>
+                                    <textarea class="form-control" id="id_description" name="description">{{ form.description.value }}</textarea>
+                                    {% if form.description.errors %}
+                                        <div class="text-danger">{{ form.description.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_date_posted">Date Posted</label>
+                                    <input type="date" class="form-control" id="id_date_posted" name="date_posted" value="{{ form.date_posted.value }}">
+                                    {% if form.date_posted.errors %}
+                                        <div class="text-danger">{{ form.date_posted.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_posted_by">Posted By</label>
+                                    <select class="form-control" id="id_posted_by" name="posted_by">
+                                        <option value="Admin">Admin</option>
+                                        <option value="HealthWorker">HealthWorker</option>
+                                    </select>
+                                    {% if form.posted_by.errors %}
+                                        <div class="text-danger">{{ form.posted_by.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_poster_id">Poster ID</label>
+                                    <input type="number" class="form-control" id="id_poster_id" name="poster_id" value="{{ form.poster_id.value }}">
+                                    {% if form.poster_id.errors %}
+                                        <div class="text-danger">{{ form.poster_id.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                <a href="{% url 'announcements' %}" class="btn btn-light">Cancel</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer and JS includes (same as in admin_create.html) -->
+    </div>
+</body>
+</html>
