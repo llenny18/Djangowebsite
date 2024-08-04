@@ -10,7 +10,7 @@ def health_worker_update(request, id):
         form = HealthWorkerForm(request.POST, instance=health_worker)
         if form.is_valid():
             form.save()
-            return redirect('health_workers')
+            return redirect('healthworkers')
     else:
         form = HealthWorkerForm(instance=health_worker)
     return render(request, 'views/health_worker_update.html', {'form': form, 'health_worker': health_worker})
@@ -21,7 +21,7 @@ def health_worker_create(request):
         form = HealthWorkerForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('health_workers')
+            return redirect('healthworkers')
     else:
         form = HealthWorkerForm()
     return render(request, 'views/health_worker_create.html', {'form': form})
@@ -33,7 +33,7 @@ def senior_citizen_update(request, id):
         form = SeniorCitizenForm(request.POST, instance=senior_citizen)
         if form.is_valid():
             form.save()
-            return redirect('senior_citizens')
+            return redirect('citizens')
     else:
         form = SeniorCitizenForm(instance=senior_citizen)
     return render(request, 'views/senior_citizen_update.html', {'form': form, 'senior_citizen': senior_citizen})
@@ -44,7 +44,7 @@ def senior_citizen_create(request):
         form = SeniorCitizenForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('senior_citizens')
+            return redirect('citizens')
     else:
         form = SeniorCitizenForm() 
     return render(request, 'views/senior_citizen_create.html', {'form': form})

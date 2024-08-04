@@ -1,92 +1,301 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Meta tags and CSS includes (same as in admin_create.html) -->
-    <title>Create Senior Citizen</title>
-</head>
-<body>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Senior Citizen MIS</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'vendors/select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+  </head>
+  <body>
     <div class="container-scroller">
-        <!-- Navbar and sidebar (same as in admin_create.html) -->
-
-        <div class="main-panel">
-            <div class="content-wrapper">
-                <div class="page-header">
-                    <h3 class="page-title"> Register a Senior Citizen </h3>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Register</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Senior Citizen</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="col-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h1>Input Details</h1>
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label for="id_first_name">First Name</label>
-                                    <input type="text" class="form-control" id="id_first_name" name="first_name" value="{{ form.first_name.value }}">
-                                    {% if form.first_name.errors %}
-                                        <div class="text-danger">{{ form.first_name.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label for="id_last_name">Last Name</label>
-                                    <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ form.last_name.value }}">
-                                    {% if form.last_name.errors %}
-                                        <div class="text-danger">{{ form.last_name.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label for="id_date_of_birth">Date of Birth</label>
-                                    <input type="date" class="form-control" id="id_date_of_birth" name="date_of_birth" value="{{ form.date_of_birth.value }}">
-                                    {% if form.date_of_birth.errors %}
-                                        <div class="text-danger">{{ form.date_of_birth.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label for="id_gender">Gender</label>
-                                    <select class="form-control" id="id_gender" name="gender">
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                    {% if form.gender.errors %}
-                                        <div class="text-danger">{{ form.gender.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label for="id_health_condition">Health Condition</label>
-                                    <textarea class="form-control" id="id_health_condition" name="health_condition">{{ form.health_condition.value }}</textarea>
-                                    {% if form.health_condition.errors %}
-                                        <div class="text-danger">{{ form.health_condition.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label for="id_address">Address</label>
-                                    <input type="text" class="form-control" id="id_address" name="address" value="{{ form.address.value }}">
-                                    {% if form.address.errors %}
-                                        <div class="text-danger">{{ form.address.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label for="id_phone">Phone</label>
-                                    <input type="text" class="form-control" id="id_phone" name="phone" value="{{ form.phone.value }}">
-                                    {% if form.phone.errors %}
-                                        <div class="text-danger">{{ form.phone.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                <a href="{% url 'senior_citizens' %}" class="btn btn-light">Cancel</a>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- partial:../../partials/_navbar.html -->
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+          <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="height: 70px;">
+          <a class="navbar-brand brand-logo"  href="index"><img style="width: 60px;height: 60px;" src="{% static 'images/logo.png' %}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="index"><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
         </div>
-        <!-- Footer and JS includes (same as in admin_create.html) -->
+        <div class="navbar-menu-wrapper d-flex align-items-stretch">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+          <div class="search-field d-none d-xl-block">
+          
+          </div>
+          <ul class="navbar-nav navbar-nav-right">
+           
+            <li class="nav-item nav-profile dropdown">
+              <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                <div class="nav-profile-img">
+                  <img src="{% static 'images/faces/face28.png' %}" alt="image">
+                </div>
+                <div class="nav-profile-text">
+                  <p class="mb-1 text-black">UserName</p>
+                </div>
+              </a>
+              <div class="dropdown-menu navbar-dropdown dropdown-menu-right p-0 border-0 font-size-sm" aria-labelledby="profileDropdown" data-x-placement="bottom-end">
+                <div class="p-3 text-center bg-primary">
+                  <img class="img-avatar img-avatar48 img-avatar-thumb" src="{% static 'images/faces/face28.png' %}" alt="">
+                </div>
+                <div class="p-2">
+                  <h5 class="dropdown-header text-uppercase pl-2 text-dark">User Options</h5>
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
+                    <span>Inbox</span>
+                    <span class="p-0">
+                      <span class="badge badge-primary">3</span>
+                      <i class="mdi mdi-email-open-outline ml-1"></i>
+                    </span>
+                  </a>
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
+                    <span>Profile</span>
+                    <span class="p-0">
+                      <span class="badge badge-success">1</span>
+                      <i class="mdi mdi-account-outline ml-1"></i>
+                    </span>
+                  </a>
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="javascript:void(0)">
+                    <span>Settings</span>
+                    <i class="mdi mdi-settings"></i>
+                  </a>
+                  <div role="separator" class="dropdown-divider"></div>
+                  <h5 class="dropdown-header text-uppercase  pl-2 text-dark mt-2">Actions</h5>
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
+                    <span>Lock Account</span>
+                    <i class="mdi mdi-lock ml-1"></i>
+                  </a>
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
+                    <span>Log Out</span>
+                    <i class="mdi mdi-logout ml-1"></i>
+                  </a>
+                </div>
+              </div>
+            </li>
+           
+            <li class="nav-item dropdown">
+              <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                <i class="mdi mdi-bell-outline"></i>
+                <span class="count-symbol bg-danger"></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                <h6 class="p-3 mb-0 bg-primary text-white py-4">Notifications</h6>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-success">
+                      <i class="mdi mdi-calendar"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                    <h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
+                    <p class="text-gray ellipsis mb-0"> Just a reminder that you have an event today </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-warning">
+                      <i class="mdi mdi-settings"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                    <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
+                    <p class="text-gray ellipsis mb-0"> Update dashboard </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-info">
+                      <i class="mdi mdi-link-variant"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                    <h6 class="preview-subject font-weight-normal mb-1">Launch Admin</h6>
+                    <p class="text-gray ellipsis mb-0"> New admin wow! </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <h6 class="p-3 mb-0 text-center">See all notifications</h6>
+              </div>
+            </li>
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-menu"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+            <li class="nav-item nav-category">Home</li>
+            <li class="nav-item">
+              <a class="nav-link" href="index">
+                <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
+                <span class="menu-title">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
+                <span class="menu-title">Users</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="{% url 'admins' %}">Administrators</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{% url 'healthworkers' %}">Health Workers</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item nav-category">System Management</li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'announcements' %}">
+                <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
+                <span class="menu-title">Announcements</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'activities' %}">
+                <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
+                <span class="menu-title">Activities</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'smsnotifications' %}">
+                <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
+                <span class="menu-title">SMS Notifications</span>
+              </a>
+            </li>
+            
+          
+            
+          </ul>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Register an Senior Citizen </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Register</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Senior Citizen</li>
+                </ol>
+              </nav>
+            </div>
+            
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                 
+                    <h1>Input Credentials</h1>
+                    <form method="post">
+                      {% csrf_token %}
+                      <div class="form-group">
+                          <label for="id_first_name">First Name</label>
+                          <input type="text" class="form-control" id="id_first_name" name="first_name" value="{{ form.first_name.value }}">
+                          {% if form.first_name.errors %}
+                              <div class="text-danger">{{ form.first_name.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_last_name">Last Name</label>
+                          <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ form.last_name.value }}">
+                          {% if form.last_name.errors %}
+                              <div class="text-danger">{{ form.last_name.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_date_of_birth">Date of Birth</label>
+                          <input type="date" class="form-control" id="id_date_of_birth" name="date_of_birth" value="{{ form.date_of_birth.value }}">
+                          {% if form.date_of_birth.errors %}
+                              <div class="text-danger">{{ form.date_of_birth.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_gender">Gender</label>
+                          <select class="form-control" id="id_gender" name="gender">
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                          </select>
+                          {% if form.gender.errors %}
+                              <div class="text-danger">{{ form.gender.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_health_condition">Health Condition</label>
+                          <textarea class="form-control" id="id_health_condition" name="health_condition">{{ form.health_condition.value }}</textarea>
+                          {% if form.health_condition.errors %}
+                              <div class="text-danger">{{ form.health_condition.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_address">Address</label>
+                          <input type="text" class="form-control" id="id_address" name="address" value="{{ form.address.value }}">
+                          {% if form.address.errors %}
+                              <div class="text-danger">{{ form.address.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_phone">Phone</label>
+                          <input type="text" class="form-control" id="id_phone" name="phone" value="{{ form.phone.value }}">
+                          {% if form.phone.errors %}
+                              <div class="text-danger">{{ form.phone.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <a href="{% url 'citizens' %}" class="btn btn-light">Cancel</a>
+                  </form>
+                  
+                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
     </div>
-</body>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'vendors/select2/select2.min.js' %}"></script>
+    <script src="{% static 'vendors/typeahead.js/typeahead.bundle.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'js/off-canvas.js' %}"></script>
+    <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'js/misc.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'js/file-upload.js' %}"></script>
+    <script src="{% static 'js/typeahead.js' %}"></script>
+    <script src="{% static 'js/select2.js' %}"></script>
+    <!-- End custom js for this page -->
+  </body>
 </html>

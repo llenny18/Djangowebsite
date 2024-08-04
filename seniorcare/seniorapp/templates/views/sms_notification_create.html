@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags and CSS includes (same as in admin_create.html) -->
+    <title>Create SMS Notification</title>
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- Navbar and sidebar (same as in admin_create.html) -->
+
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h3 class="page-title"> Create SMS Notification </h3>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Notifications</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">SMS Notification</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>Input SMS Details</h1>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="id_recipient_phone">Recipient Phone</label>
+                                    <input type="text" class="form-control" id="id_recipient_phone" name="recipient_phone" value="{{ form.recipient_phone.value }}">
+                                    {% if form.recipient_phone.errors %}
+                                        <div class="text-danger">{{ form.recipient_phone.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_message">Message</label>
+                                    <textarea class="form-control" id="id_message" name="message">{{ form.message.value }}</textarea>
+                                    {% if form.message.errors %}
+                                        <div class="text-danger">{{ form.message.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_sent_by">Sent By</label>
+                                    <select class="form-control" id="id_sent_by" name="sent_by">
+                                        <option value="Admin" {% if form.sent_by.value == 'Admin' %}selected{% endif %}>Admin</option>
+                                        <option value="HealthWorker" {% if form.sent_by.value == 'HealthWorker' %}selected{% endif %}>Health Worker</option>
+                                    </select>
+                                    {% if form.sent_by.errors %}
+                                        <div class="text-danger">{{ form.sent_by.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_sender_id">Sender ID</label>
+                                    <input type="number" class="form-control" id="id_sender_id" name="sender_id" value="{{ form.sender_id.value }}">
+                                    {% if form.sender_id.errors %}
+                                        <div class="text-danger">{{ form.sender_id.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                <a href="{% url 'sms_notifications' %}" class="btn btn-light">Cancel</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer and JS includes (same as in admin_create.html) -->
+    </div>
+</body>
+</html>
