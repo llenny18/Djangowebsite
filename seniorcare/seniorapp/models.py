@@ -51,7 +51,7 @@ class Activity(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'Activity'
+        db_table = 'activity'
         managed = False
 
 class Announcement(models.Model):
