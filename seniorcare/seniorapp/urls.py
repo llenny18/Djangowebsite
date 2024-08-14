@@ -39,5 +39,8 @@ urlpatterns = [
     path('healthworkers', views.healthworkers, name='healthworkers'),
     path('activities', views.activities, name='activities'),
     path('smsnotifications', views.smsnotifications, name='smsnotifications'),
-    
+
+    path('appointments', views.appointments, name='appointments'),
+    path('appointment/create/', views.appointment_create, name='appointment_create'),
+    path('appointment/update/<int:id>/', views.appointment_update, name='appointment_update'),
 ]

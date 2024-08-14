@@ -1,10 +1,14 @@
 from django import forms
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics
+from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
     password = forms.CharField(max_length=255, widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg'}))
 
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['senior_id', 'worker_id', 'date', 'time', 'status']
 
 class AdminForm(forms.ModelForm):
     class Meta:

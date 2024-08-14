@@ -105,3 +105,20 @@ class PredictiveAnalytics(models.Model):
     class Meta:
         db_table = 'PredictiveAnalytics'
         managed = False
+
+class Appointment(models.Model):
+    appointment_id = models.AutoField(primary_key=True)
+    senior_id = models.IntegerField()
+    worker_id = models.IntegerField()
+    date = models.DateField()
+    time = models.TimeField()
+    status = models.CharField(
+        max_length=10,
+        choices=[('Scheduled', 'Scheduled'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')],
+        default='Scheduled'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'appointment'
+        managed = False

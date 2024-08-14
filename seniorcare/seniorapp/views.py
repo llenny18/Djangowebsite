@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics
-from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm
+from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment
+from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password, make_password
@@ -237,6 +237,11 @@ def citizens(request):
     seniors = SeniorCitizen.objects.all()
     return render(request, 'views/citizens.html', {'seniors': seniors, 'username': username})
 
+def appointments(request):
+    username = request.session.get('user_name', 'Guest')
+    appointments_list = Appointment.objects.all()
+    return render(request, 'views/appointments.html', {'appointments': appointments_list, 'username': username})
+
 def announcements(request):
     username = request.session.get('user_name', 'Guest')
     Announcements = Announcement.objects.all()
@@ -279,3 +284,53 @@ def admin_create(request):
     else:
         form = AdminForm()
     return render(request, 'views/admin_create.html', {'form': form, 'username': username})
+
+
+def appointment_create(request):
+    username = request.session.get('user_name', 'Guest')
+    # Fetch seniors and health workers for the form
+    seniors = SeniorCitizen.objects.all()  
+    healthworkers = HealthWorker.objects.all()  
+    
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('appointments')
+    else:
+        form = AppointmentForm()
+        
+    return render(request, 'views/appointment_create.html', {
+        'form': form, 
+        'username': username, 
+        'seniors': seniors,
+        'healthworkers': healthworkers
+    })
+
+
+
+def appointment_update(request, id):
+    username = request.session.get('user_name', 'Guest')
+    appointment = get_object_or_404(Appointment, appointment_id=id)
+
+    # Fetch seniors and health workers for the form
+    seniors = SeniorCitizen.objects.all()  
+    healthworkers = HealthWorker.objects.all()  
+
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST, instance=appointment)
+        if form.is_valid():
+            form.save()
+            return redirect('appointments')
+    else:
+        form = AppointmentForm(instance=appointment)
+
+    return render(request, 'views/appointment_update.html', {
+        'form': form,
+        'appointment': appointment,
+        'username': username,
+        'seniors': seniors,
+        'healthworkers': healthworkers,
+    })
+
+
