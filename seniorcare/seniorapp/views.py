@@ -1,6 +1,47 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics
-from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm
+from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import check_password, make_password
+
+def login_view(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            # Check if the user is an Admin
+            try:
+                user = Admin.objects.get(username=username)
+                if password == user.password:
+                    request.session['user_id'] = user.admin_id
+                    request.session['user_name'] = user.username
+                    request.session['user_type'] = 'Admin'
+                    return redirect('home')
+            except Admin.DoesNotExist:
+                pass
+
+            # Check if the user is a HealthWorker
+            try:
+                user = HealthWorker.objects.get(username=username)
+                if password == user.password:
+                    request.session['user_id'] = user.worker_id
+                    request.session['user_name'] = user.username
+                    request.session['user_type'] = 'HealthWorker'
+                    return redirect('home')
+            except HealthWorker.DoesNotExist:
+                pass
+
+            # If user does not exist or password is incorrect
+            return render(request, 'views/login.html', {'form': form, 'error_message': 'Invalid username or password'})
+
+    else:
+        form = LoginForm()
+
+    return render(request, 'views/login.html', {'form': form})
+
 
 
 # HealthWorker update
@@ -169,8 +210,8 @@ def predictive_analytics_create(request):
 
 
 def home(request):
-    
-    return render(request, 'views/index.html')
+    username = request.session.get('user_name', 'Guest')  # Default to 'Guest' if no user is logged in
+    return render(request, 'views/index.html', {'username': username})
 
 
 def activities(request):
