@@ -50,11 +50,13 @@ def login_view(request):
 
 def home(request):
     username = request.session.get('user_name', 'Guest')  # Default to 'Guest' if no user is logged in
-    return render(request, 'views/index.html', {'username': username})
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
+    return render(request, 'views/index.html', {'username': username, 'user_type': user_type})
 
 # HealthWorker update
 def health_worker_update(request, id):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     health_worker = get_object_or_404(HealthWorker, worker_id=id)
     if request.method == 'POST':
         form = HealthWorkerForm(request.POST, instance=health_worker)
@@ -63,11 +65,17 @@ def health_worker_update(request, id):
             return redirect('healthworkers')
     else:
         form = HealthWorkerForm(instance=health_worker)
-    return render(request, 'views/health_worker_update.html', {'form': form, 'health_worker': health_worker, 'username': username})
+    return render(request, 'views/health_worker_update.html', {
+        'form': form, 
+        'health_worker': health_worker, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # HealthWorker create
 def health_worker_create(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     if request.method == 'POST':
         form = HealthWorkerForm(request.POST)
         if form.is_valid():
@@ -75,11 +83,16 @@ def health_worker_create(request):
             return redirect('healthworkers')
     else:
         form = HealthWorkerForm()
-    return render(request, 'views/health_worker_create.html', {'form': form, 'username': username})
+    return render(request, 'views/health_worker_create.html', {
+        'form': form, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # SeniorCitizen update
 def senior_citizen_update(request, id):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     senior_citizen = get_object_or_404(SeniorCitizen, citizen_id=id)
     if request.method == 'POST':
         form = SeniorCitizenForm(request.POST, instance=senior_citizen)
@@ -88,11 +101,17 @@ def senior_citizen_update(request, id):
             return redirect('citizens')
     else:
         form = SeniorCitizenForm(instance=senior_citizen)
-    return render(request, 'views/senior_citizen_update.html', {'form': form, 'senior_citizen': senior_citizen, 'username': username})
+    return render(request, 'views/senior_citizen_update.html', {
+        'form': form, 
+        'senior_citizen': senior_citizen, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # SeniorCitizen create
 def senior_citizen_create(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     if request.method == 'POST':
         form = SeniorCitizenForm(request.POST)
         if form.is_valid():
@@ -100,11 +119,16 @@ def senior_citizen_create(request):
             return redirect('citizens')
     else:
         form = SeniorCitizenForm() 
-    return render(request, 'views/senior_citizen_create.html', {'form': form, 'username': username})
+    return render(request, 'views/senior_citizen_create.html', {
+        'form': form, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # Activity update
 def activity_update(request, id):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     activity = get_object_or_404(Activity, activity_id=id)
     if request.method == 'POST':
         form = ActivityForm(request.POST, instance=activity)
@@ -113,11 +137,17 @@ def activity_update(request, id):
             return redirect('activities')
     else:
         form = ActivityForm(instance=activity)
-    return render(request, 'views/activity_update.html', {'form': form, 'activity': activity, 'username': username})
+    return render(request, 'views/activity_update.html', {
+        'form': form, 
+        'activity': activity, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # Activity create
 def activity_create(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     if request.method == 'POST':
         form = ActivityForm(request.POST)
         if form.is_valid():
@@ -125,11 +155,16 @@ def activity_create(request):
             return redirect('activities')
     else:
         form = ActivityForm()
-    return render(request, 'views/activity_create.html', {'form': form, 'username': username})
+    return render(request, 'views/activity_create.html', {
+        'form': form, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # Announcement update
 def announcement_update(request, id):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     announcement = get_object_or_404(Announcement, announcement_id=id)
     if request.method == 'POST':
         form = AnnouncementForm(request.POST, instance=announcement)
@@ -138,11 +173,17 @@ def announcement_update(request, id):
             return redirect('announcements')
     else:
         form = AnnouncementForm(instance=announcement)
-    return render(request, 'views/announcement_update.html', {'form': form, 'announcement': announcement, 'username': username})
+    return render(request, 'views/announcement_update.html', {
+        'form': form, 
+        'announcement': announcement, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # Announcement create
 def announcement_create(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     if request.method == 'POST':
         form = AnnouncementForm(request.POST)
         if form.is_valid():
@@ -150,11 +191,16 @@ def announcement_create(request):
             return redirect('announcements')
     else:
         form = AnnouncementForm()
-    return render(request, 'views/announcement_create.html', {'form': form, 'username': username})
+    return render(request, 'views/announcement_create.html', {
+        'form': form, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # Profile update
 def profile_update(request, id):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     profile = get_object_or_404(Profile, profile_id=id)
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
@@ -163,11 +209,17 @@ def profile_update(request, id):
             return redirect('profiles')
     else:
         form = ProfileForm(instance=profile)
-    return render(request, 'views/profile_update.html', {'form': form, 'profile': profile, 'username': username})
+    return render(request, 'views/profile_update.html', {
+        'form': form, 
+        'profile': profile, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # Profile create
 def profile_create(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         if form.is_valid():
@@ -175,11 +227,16 @@ def profile_create(request):
             return redirect('profiles')
     else:
         form = ProfileForm()
-    return render(request, 'views/profile_create.html', {'form': form, 'username': username})
+    return render(request, 'views/profile_create.html', {
+        'form': form, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # SMSNotification update
 def sms_notification_update(request, id):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     sms_notification = get_object_or_404(SMSNotification, sms_id=id)
     if request.method == 'POST':
         form = SMSNotificationForm(request.POST, instance=sms_notification)
@@ -188,11 +245,17 @@ def sms_notification_update(request, id):
             return redirect('smsnotifications')
     else:
         form = SMSNotificationForm(instance=sms_notification)
-    return render(request, 'views/sms_notification_update.html', {'form': form, 'sms_notification': sms_notification, 'username': username})
+    return render(request, 'views/sms_notification_update.html', {
+        'form': form, 
+        'sms_notification': sms_notification, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # SMSNotification create
 def sms_notification_create(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     if request.method == 'POST':
         form = SMSNotificationForm(request.POST)
         if form.is_valid():
@@ -200,11 +263,16 @@ def sms_notification_create(request):
             return redirect('smsnotifications')
     else:
         form = SMSNotificationForm()
-    return render(request, 'views/sms_notification_create.html', {'form': form, 'username': username})
+    return render(request, 'views/sms_notification_create.html', {
+        'form': form, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # PredictiveAnalytics update
 def predictive_analytics_update(request, id):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     predictive_analytics = get_object_or_404(PredictiveAnalytics, analytics_id=id)
     if request.method == 'POST':
         form = PredictiveAnalyticsForm(request.POST, instance=predictive_analytics)
@@ -213,11 +281,17 @@ def predictive_analytics_update(request, id):
             return redirect('predictive_analytics')
     else:
         form = PredictiveAnalyticsForm(instance=predictive_analytics)
-    return render(request, 'views/predictive_analytics_update.html', {'form': form, 'predictive_analytics': predictive_analytics, 'username': username})
+    return render(request, 'views/predictive_analytics_update.html', {
+        'form': form, 
+        'predictive_analytics': predictive_analytics, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 # PredictiveAnalytics create
 def predictive_analytics_create(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     if request.method == 'POST':
         form = PredictiveAnalyticsForm(request.POST)
         if form.is_valid():
@@ -225,45 +299,85 @@ def predictive_analytics_create(request):
             return redirect('predictive_analytics')
     else:
         form = PredictiveAnalyticsForm()
-    return render(request, 'views/predictive_analytics_create.html', {'form': form, 'username': username})
+    return render(request, 'views/predictive_analytics_create.html', {
+        'form': form, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def activities(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     activities = Activity.objects.all()
-    return render(request, 'views/activities.html', {'activities': activities, 'username': username})
+    return render(request, 'views/activities.html', {
+        'activities': activities, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def citizens(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     seniors = SeniorCitizen.objects.all()
-    return render(request, 'views/citizens.html', {'seniors': seniors, 'username': username})
+    return render(request, 'views/citizens.html', {
+        'seniors': seniors, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def appointments(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     appointments_list = Appointment.objects.all()
-    return render(request, 'views/appointments.html', {'appointments': appointments_list, 'username': username})
+    return render(request, 'views/appointments.html', {
+        'appointments': appointments_list, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def announcements(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     Announcements = Announcement.objects.all()
-    return render(request, 'views/announcements.html', {'announcements': Announcements, 'username': username})
+    return render(request, 'views/announcements.html', {
+        'announcements': Announcements, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def admins(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     Admins = Admin.objects.all()
-    return render(request, 'views/admins.html', {'admins': Admins, 'username': username})
+    return render(request, 'views/admins.html', {
+        'admins': Admins, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def healthworkers(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     HealthWorkers = HealthWorker.objects.all()
-    return render(request, 'views/healthworkers.html', {'healthworkers': HealthWorkers, 'username': username})
+    return render(request, 'views/healthworkers.html', {
+        'healthworkers': HealthWorkers, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def smsnotifications(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     smsnotifications = SMSNotification.objects.all()
-    return render(request, 'views/smsnotifications.html', {'smsnotifications': smsnotifications, 'username': username})
+    return render(request, 'views/smsnotifications.html', {
+        'smsnotifications': smsnotifications, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def admin_update(request, id):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     admin = get_object_or_404(Admin, admin_id=id)
     if request.method == 'POST':
         form = AdminForm(request.POST, instance=admin)
@@ -272,10 +386,16 @@ def admin_update(request, id):
             return redirect('admins')
     else:
         form = AdminForm(instance=admin)
-    return render(request, 'views/admin_update.html', {'form': form, 'admin': admin, 'username': username})
+    return render(request, 'views/admin_update.html', {
+        'form': form, 
+        'admin': admin, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def admin_create(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     if request.method == 'POST':
         form = AdminForm(request.POST)
         if form.is_valid():
@@ -283,11 +403,15 @@ def admin_create(request):
             return redirect('admins')
     else:
         form = AdminForm()
-    return render(request, 'views/admin_create.html', {'form': form, 'username': username})
-
+    return render(request, 'views/admin_create.html', {
+        'form': form, 
+        'username': username, 
+        'user_type': user_type
+    })
 
 def appointment_create(request):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     # Fetch seniors and health workers for the form
     seniors = SeniorCitizen.objects.all()  
     healthworkers = HealthWorker.objects.all()  
@@ -303,14 +427,14 @@ def appointment_create(request):
     return render(request, 'views/appointment_create.html', {
         'form': form, 
         'username': username, 
+        'user_type': user_type, 
         'seniors': seniors,
         'healthworkers': healthworkers
     })
 
-
-
 def appointment_update(request, id):
     username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
     appointment = get_object_or_404(Appointment, appointment_id=id)
 
     # Fetch seniors and health workers for the form
@@ -326,11 +450,10 @@ def appointment_update(request, id):
         form = AppointmentForm(instance=appointment)
 
     return render(request, 'views/appointment_update.html', {
-        'form': form,
-        'appointment': appointment,
-        'username': username,
-        'seniors': seniors,
+        'form': form, 
+        'appointment': appointment, 
+        'username': username, 
+        'user_type': user_type, 
+        'seniors': seniors, 
         'healthworkers': healthworkers,
     })
-
-
