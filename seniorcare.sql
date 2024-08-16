@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2024 at 10:22 AM
+-- Generation Time: Aug 16, 2024 at 11:46 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -34,7 +34,7 @@ CREATE TABLE `activity` (
   `date` date DEFAULT NULL,
   `time` time DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
-  `created_by` enum('Admin','HealthWorker') DEFAULT NULL,
+  `created_by` enum('Admin','HealthWorker') NOT NULL DEFAULT 'Admin',
   `creator_id` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -44,7 +44,8 @@ CREATE TABLE `activity` (
 --
 
 INSERT INTO `activity` (`activity_id`, `activity_name`, `description`, `date`, `time`, `location`, `created_by`, `creator_id`, `created_at`) VALUES
-(1, 'act name', 'try description', '2024-08-09', '13:03:18', 'Batangas', 'Admin', 1, '2024-08-04 05:03:35');
+(1, 'act name', 'try description', '2024-08-09', '13:03:18', 'Batangas', 'Admin', 1, '2024-08-04 05:03:35'),
+(2, 'asdasda', 'asdasdas', '2024-08-09', '15:16:00', 'sdasda', 'Admin', NULL, '2024-08-04 07:27:06');
 
 -- --------------------------------------------------------
 
@@ -66,7 +67,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`admin_id`, `username`, `password`, `email`, `phone`, `created_at`) VALUES
-(1, 'adminusername1', 'adminpass', 'adminemail@email.com', '32094823987', '2024-08-04 04:15:20'),
+(1, 'admin_user', 'adminpass', 'adminemail@email.com', '32094823987', '2024-08-04 04:15:20'),
 (2, 'fdgdr', 'fdgd', 'dgf@email.com', 'gfdgfdg', '2024-08-03 23:54:19');
 
 -- --------------------------------------------------------
@@ -90,7 +91,33 @@ CREATE TABLE `announcement` (
 --
 
 INSERT INTO `announcement` (`announcement_id`, `title`, `description`, `date_posted`, `posted_by`, `poster_id`, `created_at`) VALUES
-(1, 'try title', 'description', '2024-08-14', 'Admin', 1, '2024-08-04 04:15:09');
+(1, 'try titless', 'description', '2024-08-16', 'Admin', 1, '2024-08-04 04:15:09'),
+(2, 'dfsdf', 'fsfdds', '2024-08-14', 'HealthWorker', 1, '2024-08-04 07:29:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `appointment`
+--
+
+CREATE TABLE `appointment` (
+  `appointment_id` int(11) NOT NULL,
+  `senior_id` int(11) NOT NULL,
+  `worker_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `time` time NOT NULL,
+  `status` enum('Scheduled','Completed','Cancelled') NOT NULL DEFAULT 'Scheduled',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`appointment_id`, `senior_id`, `worker_id`, `date`, `time`, `status`, `created_at`) VALUES
+(1, 1, 2, '2024-08-30', '20:59:00', 'Scheduled', '2024-08-14 12:59:57'),
+(2, 1, 2, '2024-08-01', '21:35:00', 'Completed', '2024-08-14 05:32:45'),
+(3, 1, 2, '2024-08-02', '21:38:00', 'Cancelled', '2024-08-14 05:33:46');
 
 -- --------------------------------------------------------
 
@@ -160,7 +187,39 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (25, 'Can add session', 7, 'add_session'),
 (26, 'Can change session', 7, 'change_session'),
 (27, 'Can delete session', 7, 'delete_session'),
-(28, 'Can view session', 7, 'view_session');
+(28, 'Can view session', 7, 'view_session'),
+(29, 'Can add activity', 8, 'add_activity'),
+(30, 'Can change activity', 8, 'change_activity'),
+(31, 'Can delete activity', 8, 'delete_activity'),
+(32, 'Can view activity', 8, 'view_activity'),
+(33, 'Can add admin', 9, 'add_admin'),
+(34, 'Can change admin', 9, 'change_admin'),
+(35, 'Can delete admin', 9, 'delete_admin'),
+(36, 'Can view admin', 9, 'view_admin'),
+(37, 'Can add announcement', 10, 'add_announcement'),
+(38, 'Can change announcement', 10, 'change_announcement'),
+(39, 'Can delete announcement', 10, 'delete_announcement'),
+(40, 'Can view announcement', 10, 'view_announcement'),
+(41, 'Can add health worker', 11, 'add_healthworker'),
+(42, 'Can change health worker', 11, 'change_healthworker'),
+(43, 'Can delete health worker', 11, 'delete_healthworker'),
+(44, 'Can view health worker', 11, 'view_healthworker'),
+(45, 'Can add predictive analytics', 12, 'add_predictiveanalytics'),
+(46, 'Can change predictive analytics', 12, 'change_predictiveanalytics'),
+(47, 'Can delete predictive analytics', 12, 'delete_predictiveanalytics'),
+(48, 'Can view predictive analytics', 12, 'view_predictiveanalytics'),
+(49, 'Can add profile', 13, 'add_profile'),
+(50, 'Can change profile', 13, 'change_profile'),
+(51, 'Can delete profile', 13, 'delete_profile'),
+(52, 'Can view profile', 13, 'view_profile'),
+(53, 'Can add sms notification', 14, 'add_smsnotification'),
+(54, 'Can change sms notification', 14, 'change_smsnotification'),
+(55, 'Can delete sms notification', 14, 'delete_smsnotification'),
+(56, 'Can view sms notification', 14, 'view_smsnotification'),
+(57, 'Can add appointment', 15, 'add_appointment'),
+(58, 'Can change appointment', 15, 'change_appointment'),
+(59, 'Can delete appointment', 15, 'delete_appointment'),
+(60, 'Can view appointment', 15, 'view_appointment');
 
 -- --------------------------------------------------------
 
@@ -252,7 +311,15 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (2, 'auth', 'permission'),
 (4, 'auth', 'user'),
 (5, 'contenttypes', 'contenttype'),
+(8, 'seniorapp', 'activity'),
+(9, 'seniorapp', 'admin'),
+(10, 'seniorapp', 'announcement'),
+(15, 'seniorapp', 'appointment'),
+(11, 'seniorapp', 'healthworker'),
+(12, 'seniorapp', 'predictiveanalytics'),
+(13, 'seniorapp', 'profile'),
 (6, 'seniorapp', 'seniorcitizen'),
+(14, 'seniorapp', 'smsnotification'),
 (7, 'sessions', 'session');
 
 -- --------------------------------------------------------
@@ -292,7 +359,9 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (17, 'auth', '0012_alter_user_first_name_max_length', '2024-08-04 03:05:59.328966'),
 (18, 'seniorapp', '0001_initial', '2024-08-04 03:09:03.741439'),
 (19, 'seniorapp', '0002_alter_seniorcitizen_options', '2024-08-04 03:09:03.753294'),
-(20, 'sessions', '0001_initial', '2024-08-04 03:11:44.832230');
+(20, 'sessions', '0001_initial', '2024-08-04 03:11:44.832230'),
+(21, 'seniorapp', '0003_activity_admin_announcement_healthworker_and_more', '2024-08-14 13:51:36.746656'),
+(22, 'seniorapp', '0004_appointment', '2024-08-16 08:31:14.554623');
 
 -- --------------------------------------------------------
 
@@ -305,13 +374,6 @@ CREATE TABLE `django_session` (
   `session_data` longtext NOT NULL,
   `expire_date` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `django_session`
---
-
-INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('98eg2ph01i8cfy3pmn1jnlpz8vfgacvf', '.eJxVjMEOwiAQRP-FsyFsQEo9evcbyLK7laqBpLQn479Lkx70NjNvZt4q4rbmuDVZ4szqokCdfrOE9JSyA35guVdNtazLnPRe0Qdt-lZZXtej-3eQseW-Dg78MFpEArbkLSOLd0AmmSkInZ0wuOAh0BCgK0IGcSZ0P40kSX2-5U84Mw:1saVbM:2oGvjMUSqXdfzM1NdcDVhIZlQ6r0H-LfupRqu1MTAoA', '2024-08-18 07:24:24.149394');
 
 -- --------------------------------------------------------
 
@@ -333,7 +395,23 @@ CREATE TABLE `healthworker` (
 --
 
 INSERT INTO `healthworker` (`worker_id`, `username`, `password`, `email`, `phone`, `created_at`) VALUES
-(1, 'HWusername', 'HWpass', 'HW@email.com', '5756756756', '2024-08-04 04:15:31');
+(1, 'HWusername', 'HWpass', 'HW@email.com', '5756756756', '2024-08-04 04:15:31'),
+(2, 'dsfdf', 'fsdf', 'dasda@gmail.com', 'fsdfsdf', '2024-08-04 06:42:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `health_report`
+--
+
+CREATE TABLE `health_report` (
+  `report_id` int(11) NOT NULL,
+  `senior_id` int(11) NOT NULL,
+  `worker_id` int(11) NOT NULL,
+  `report_data` text NOT NULL,
+  `date_created` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -391,7 +469,8 @@ CREATE TABLE `seniorcitizen` (
 --
 
 INSERT INTO `seniorcitizen` (`citizen_id`, `first_name`, `last_name`, `date_of_birth`, `gender`, `health_condition`, `address`, `phone`, `created_at`) VALUES
-(1, 'first senior', 'last name', '2024-08-07', 'Female', 'Fine', 'Batanags', '745746', '2024-08-04 03:12:37');
+(1, 'first senior', 'last name', '2024-08-07', 'Female', 'Fine', 'Batanags', '745746', '2024-08-04 03:12:37'),
+(2, 'fsdf', 'sdfsdff', '2024-08-13', 'Female', 'sdfsdf', 'fsdfds', 'fsdfds', '2024-08-04 06:58:50');
 
 -- --------------------------------------------------------
 
@@ -438,6 +517,12 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `announcement`
   ADD PRIMARY KEY (`announcement_id`);
+
+--
+-- Indexes for table `appointment`
+--
+ALTER TABLE `appointment`
+  ADD PRIMARY KEY (`appointment_id`);
 
 --
 -- Indexes for table `auth_group`
@@ -552,7 +637,7 @@ ALTER TABLE `smsnotification`
 -- AUTO_INCREMENT for table `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `admin`
@@ -564,7 +649,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `announcement`
 --
 ALTER TABLE `announcement`
-  MODIFY `announcement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `announcement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `appointment`
+--
+ALTER TABLE `appointment`
+  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `auth_group`
@@ -582,7 +673,7 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `auth_user`
@@ -612,19 +703,19 @@ ALTER TABLE `django_admin_log`
 -- AUTO_INCREMENT for table `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `healthworker`
 --
 ALTER TABLE `healthworker`
-  MODIFY `worker_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `worker_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `predictiveanalytics`
@@ -642,7 +733,7 @@ ALTER TABLE `profile`
 -- AUTO_INCREMENT for table `seniorcitizen`
 --
 ALTER TABLE `seniorcitizen`
-  MODIFY `citizen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `citizen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `smsnotification`
