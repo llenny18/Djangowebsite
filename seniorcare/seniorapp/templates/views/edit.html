@@ -112,7 +112,12 @@
                 </div>
                 <div class="p-2">
                   <h5 class="dropdown-header text-uppercase pl-2 text-dark">User Options</h5>
-                   <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
+                 <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="{% if user_type == 'HealthWorker' %}
+                  {% url 'health_worker_update' id=user_id %}
+                  {% else %}
+                  {% url 'admin_update' id=user_id %}
+                  {% endif %}">
+
                     <span>Profile</span>
                     <span class="p-0">
                       <span class="badge badge-success">1</span>

@@ -51,7 +51,8 @@ def login_view(request):
 def home(request):
     username = request.session.get('user_name', 'Guest')  # Default to 'Guest' if no user is logged in
     user_type = request.session.get('user_type', None)  # Retrieve user_type from the session
-    return render(request, 'views/index.html', {'username': username, 'user_type': user_type})
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+    return render(request, 'views/index.html', {'username': username, 'user_type': user_type, 'user_id': user_id})
 
 # HealthWorker update
 def health_worker_update(request, id):

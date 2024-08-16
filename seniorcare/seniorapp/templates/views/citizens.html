@@ -21,8 +21,8 @@
       <!-- partial:../../partials/_navbar.html -->
      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
           <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="height: 70px;">
-          <a class="navbar-brand brand-logo"  href="index"><img style="width: 60px;height: 60px;" src="{% static 'images/logo.png' %}" alt="logo" /></a>
-          <a class="navbar-brand brand-logo-mini" href="index"><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo"  href={% url 'home' %}><img style="width: 60px;height: 60px;" src="{% static 'images/logo.png' %}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href={% url 'home' %}><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -48,7 +48,12 @@
                 </div>
                 <div class="p-2">
                   <h5 class="dropdown-header text-uppercase pl-2 text-dark">User Options</h5>
-                   <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
+                 <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="{% if user_type == 'HealthWorker' %}
+                  {% url 'health_worker_update' id=user_id %}
+                  {% else %}
+                  {% url 'admin_update' id=user_id %}
+                  {% endif %}">
+
                     <span>Profile</span>
                     <span class="p-0">
                       <span class="badge badge-success">1</span>
@@ -79,7 +84,7 @@
           <ul class="nav">
             <li class="nav-item nav-category">Home</li>
             <li class="nav-item">
-              <a class="nav-link" href="index">
+              <a class="nav-link" href={% url 'home' %}>
                 <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
                 <span class="menu-title">Dashboard</span>
               </a>
