@@ -1,7 +1,5 @@
 (function($) {
-	document.querySelector('#bannerClose').addEventListener('click',function() {
-		document.querySelector('#proBanner').classList.add('d-none');
-	});
+	
 	'use strict';
 	$(function() {
 		if ($(".dashboard-progress-1").length) {

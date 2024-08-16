@@ -6,7 +6,7 @@
 	$(function() {
 		if ($(".dashboard-progress-1").length) {
 			$('.dashboard-progress-1').circleProgress({
-				value: 0.70,
+				value: 0.96,
 				size: 125,
 				thickness: 7,
 				startAngle: 80,
@@ -17,7 +17,7 @@
 		}
 		if ($(".dashboard-progress-1-dark").length) {
 			$('.dashboard-progress-1-dark').circleProgress({
-				value: 0.70,
+				value: 0.9,
 				size: 125,
 				thickness: 7,
 				startAngle: 10,
@@ -30,7 +30,7 @@
 
 		if ($(".dashboard-progress-2").length) {
 			$('.dashboard-progress-2').circleProgress({
-				value: 0.60,
+				value: 0.97,
 				size: 125,
 				thickness: 7,
 				startAngle: 10,
@@ -41,7 +41,7 @@
 		}
 		if ($(".dashboard-progress-2-dark").length) {
 			$('.dashboard-progress-2-dark').circleProgress({
-				value: 0.60,
+				value: 0.94,
 				size: 125,
 				thickness: 7,
 				startAngle: 10,
