@@ -7,11 +7,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Senior Citizen MIS</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- plugins:css -->
-    <link rel="stylesheet" href="{% static 'vendors/mdi/css/materialdesignicons.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendors/flag-icon-css/css/flag-icon.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}">
-
+    <link rel="stylesheet" href="{% static 'vendors/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}">
+   
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}.css' %}" />
@@ -23,8 +24,8 @@
       <!-- partial:partials/_navbar.html -->
       <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
           <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="height: 70px;">
-          <a class="navbar-brand brand-logo"  href={% url 'home' %}><img style="width: 60px;height: 60px;" src="{% static 'images/logo.png' %}" alt="logo" /> </a>
-          <a class="navbar-brand brand-logo-mini" href={% url 'home' %}><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo"  href={% url 'index' %}><img style="width: 60px;height: 60px;" src="{% static 'images/logo.png' %}" alt="logo" /> </a>
+          <a class="navbar-brand brand-logo-mini" href={% url 'index' %}><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -86,7 +87,7 @@
           <ul class="nav">
             <li class="nav-item nav-category">Home</li>
             <li class="nav-item">
-              <a class="nav-link" href={% url 'home' %}>
+              <a class="nav-link" href={% url 'index' %}>
                 <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
                 <span class="menu-title">Dashboard</span>
               </a>

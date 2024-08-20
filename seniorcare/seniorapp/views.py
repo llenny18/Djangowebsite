@@ -25,7 +25,7 @@ def login_view(request):
                     request.session['user_id'] = user.admin_id
                     request.session['user_name'] = user.username
                     request.session['user_type'] = 'Admin'
-                    return redirect('home')
+                    return redirect('index')
             except Admin.DoesNotExist:
                 pass
 
@@ -36,7 +36,7 @@ def login_view(request):
                     request.session['user_id'] = user.worker_id
                     request.session['user_name'] = user.username
                     request.session['user_type'] = 'HealthWorker'
-                    return redirect('home')
+                    return redirect('index')
             except HealthWorker.DoesNotExist:
                 pass
 
