@@ -12,6 +12,7 @@ def logout_view(request):
     return redirect('login')
 
 def login_view(request):
+    user_id = request.session.get('user_id', 'None')  # Retrieve user_id from the session
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -46,7 +47,7 @@ def login_view(request):
     else:
         form = LoginForm()
 
-    return render(request, 'views/login.html', {'form': form})
+    return render(request, 'views/login.html', {'form': form, 'user_id': user_id})
 
 def home(request):
     username = request.session.get('user_name', 'Guest')  # Default to 'Guest' if no user is logged in

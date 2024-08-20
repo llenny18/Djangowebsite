@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'vendors/mdi/css/materialdesignicons.min.css' %}">
     <link rel="stylesheet" href="{% static 'vendors/flag-icon-css/css/flag-icon.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}">
+  
     <!-- endinject -->
     <!-- Plugin css for this page -->
     <!-- End plugin css for this page -->
@@ -65,9 +66,9 @@
     <script src="{% static 'js/hoverable-collapse.js' %}"></script>
      <script src="{% static 'js/misc.js' %}"></script><script>
         document.addEventListener('DOMContentLoaded', function() {
-            var username = "{{ username }}";
-            if (username === 'Guest') {
-                window.location.href ='login'; alert('Login is required.'); 
+            var username = "{{ user_id }}";
+            if (username != 'None') {
+                window.location.href ='index'; 
             }
         });
     </script>
