@@ -1,5 +1,11 @@
 from django import forms
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment
+from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling
+
+class DataProfilingForm(forms.ModelForm):
+    class Meta:
+        model = DataProfiling
+        fields = '__all__'
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))

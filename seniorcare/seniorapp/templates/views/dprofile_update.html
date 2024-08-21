@@ -144,11 +144,11 @@
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Register an Activity </h3>
+              <h3 class="page-title"> Update an Administrator Record </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Register</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Activity</li>
+                  <li class="breadcrumb-item"><a href="#">Update</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Administrator</li>
                 </ol>
               </nav>
             </div>
@@ -161,44 +161,90 @@
                     <form method="post">
                       {% csrf_token %}
                       <div class="form-group">
-                          <label for="id_activity_name">Activity Name</label>
-                          <input type="text" class="form-control" id="id_activity_name" name="activity_name" value="{{ form.activity_name.value }}">
-                          {% if form.activity_name.errors %}
-                              <div class="text-danger">{{ form.activity_name.errors }}</div>
+                          <label for="id_address">Address</label>
+                          <input type="text" class="form-control" id="id_address" name="address" value="{{ form.address.value }}">
+                          {% if form.address.errors %}
+                              <div class="text-danger">{{ form.address.errors }}</div>
                           {% endif %}
                       </div>
                       <div class="form-group">
-                          <label for="id_description">Description</label>
-                          <textarea class="form-control" id="id_description" name="description">{{ form.description.value }}</textarea>
-                          {% if form.description.errors %}
-                              <div class="text-danger">{{ form.description.errors }}</div>
+                          <label for="id_gender">Gender</label>
+                          <select class="form-control" id="id_gender" name="gender">
+                              <option value="" {% if not form.gender.value %}selected{% endif %}>Select Gender</option>
+                              <option value="Male" {% if form.gender.value == 'Male' %}selected{% endif %}>Male</option>
+                              <option value="Female" {% if form.gender.value == 'Female' %}selected{% endif %}>Female</option>
+                          </select>
+                          {% if form.gender.errors %}
+                              <div class="text-danger">{{ form.gender.errors }}</div>
                           {% endif %}
                       </div>
                       <div class="form-group">
-                          <label for="id_date">Date</label>
-                          <input type="date" class="form-control" id="id_date" name="date" value="{{ form.date.value }}">
-                          {% if form.date.errors %}
-                              <div class="text-danger">{{ form.date.errors }}</div>
+                          <label for="id_age">Age</label>
+                          <input type="number" class="form-control" id="id_age" name="age" value="{{ form.age.value }}">
+                          {% if form.age.errors %}
+                              <div class="text-danger">{{ form.age.errors }}</div>
                           {% endif %}
                       </div>
                       <div class="form-group">
-                          <label for="id_time">Time</label>
-                          <input type="time" class="form-control" id="id_time" name="time" value="{{ form.time.value }}">
-                          {% if form.time.errors %}
-                              <div class="text-danger">{{ form.time.errors }}</div>
+                          <label for="id_lifestyle_diet">Diet</label>
+                          <select class="form-control" id="id_lifestyle_diet" name="lifestyle_diet">
+                              <option value="" {% if not form.lifestyle_diet.value %}selected{% endif %}>Select</option>
+                              <option value="Yes" {% if form.lifestyle_diet.value == 'Yes' %}selected{% endif %}>Yes</option>
+                              <option value="No" {% if form.lifestyle_diet.value == 'No' %}selected{% endif %}>No</option>
+                          </select>
+                          {% if form.lifestyle_diet.errors %}
+                              <div class="text-danger">{{ form.lifestyle_diet.errors }}</div>
                           {% endif %}
                       </div>
                       <div class="form-group">
-                          <label for="id_location">Location</label>
-                          <input type="text" class="form-control" id="id_location" name="location" value="{{ form.location.value }}">
-                          {% if form.location.errors %}
-                              <div class="text-danger">{{ form.location.errors }}</div>
+                          <label for="id_lifestyle_exercise">Exercise</label>
+                          <select class="form-control" id="id_lifestyle_exercise" name="lifestyle_exercise">
+                              <option value="" {% if not form.lifestyle_exercise.value %}selected{% endif %}>Select</option>
+                              <option value="Yes" {% if form.lifestyle_exercise.value == 'Yes' %}selected{% endif %}>Yes</option>
+                              <option value="No" {% if form.lifestyle_exercise.value == 'No' %}selected{% endif %}>No</option>
+                          </select>
+                          {% if form.lifestyle_exercise.errors %}
+                              <div class="text-danger">{{ form.lifestyle_exercise.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_lifestyle_others">Other Lifestyle Factors</label>
+                          <textarea class="form-control" id="id_lifestyle_others" name="lifestyle_others">{{ form.lifestyle_others.value }}</textarea>
+                          {% if form.lifestyle_others.errors %}
+                              <div class="text-danger">{{ form.lifestyle_others.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_medical_history_past_illness">Past Illness</label>
+                          <textarea class="form-control" id="id_medical_history_past_illness" name="medical_history_past_illness">{{ form.medical_history_past_illness.value }}</textarea>
+                          {% if form.medical_history_past_illness.errors %}
+                              <div class="text-danger">{{ form.medical_history_past_illness.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_medical_history_treatments">Treatments</label>
+                          <textarea class="form-control" id="id_medical_history_treatments" name="medical_history_treatments">{{ form.medical_history_treatments.value }}</textarea>
+                          {% if form.medical_history_treatments.errors %}
+                              <div class="text-danger">{{ form.medical_history_treatments.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_medical_history_ongoing_medications">Ongoing Medications</label>
+                          <textarea class="form-control" id="id_medical_history_ongoing_medications" name="medical_history_ongoing_medications">{{ form.medical_history_ongoing_medications.value }}</textarea>
+                          {% if form.medical_history_ongoing_medications.errors %}
+                              <div class="text-danger">{{ form.medical_history_ongoing_medications.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_medical_history_checkups">Checkups</label>
+                          <textarea class="form-control" id="id_medical_history_checkups" name="medical_history_checkups">{{ form.medical_history_checkups.value }}</textarea>
+                          {% if form.medical_history_checkups.errors %}
+                              <div class="text-danger">{{ form.medical_history_checkups.errors }}</div>
                           {% endif %}
                       </div>
                       <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                      <a href="{% url 'activities' %}" class="btn btn-light">Cancel</a>
+                      <a href="{% url 'data_profiling' %}" class="btn btn-light">Cancel</a>
                   </form>
-                  
                   
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment
-from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm
+from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling
+from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password, make_password
@@ -509,4 +509,60 @@ def appointment_update(request, id):
         'user_type': user_type, 'user_id': user_id, 
         'seniors': seniors, 
         'healthworkers': healthworkers,
+    })
+
+
+
+
+# Data Profiling Display
+def data_profiling_list(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)
+    user_id = request.session.get('user_id', None)
+    data_profilings = DataProfiling.objects.all()
+    return render(request, 'views/dprofile_list.html', {
+        'data_profilings': data_profilings,
+        'username': username,
+        'user_type': user_type,
+        'user_id': user_id
+    })
+
+# Data Profiling Update
+def data_profiling_update(request, id):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)
+    user_id = request.session.get('user_id', None)
+    data_profiling = get_object_or_404(DataProfiling, id=id)
+    if request.method == 'POST':
+        form = DataProfilingForm(request.POST, instance=data_profiling)
+        if form.is_valid():
+            form.save()
+            return redirect('data_profiling')
+    else:
+        form = DataProfilingForm(instance=data_profiling)
+    return render(request, 'views/dprofile_update.html', {
+        'form': form,
+        'data_profiling': data_profiling,
+        'username': username,
+        'user_type': user_type,
+        'user_id': user_id
+    })
+
+# Data Profiling Create
+def data_profiling_create(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)
+    user_id = request.session.get('user_id', None)
+    if request.method == 'POST':
+        form = DataProfilingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('data_profiling')
+    else:
+        form = DataProfilingForm()
+    return render(request, 'views/dprofile_create.html', {
+        'form': form,
+        'username': username,
+        'user_type': user_type,
+        'user_id': user_id
     })

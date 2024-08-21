@@ -94,6 +94,24 @@ class SMSNotification(models.Model):
         db_table = 'SMSNotification'
         managed = False
 
+class DataProfiling(models.Model):
+    id = models.AutoField(primary_key=True)
+    address = models.CharField(max_length=255)
+    gender = models.CharField(max_length=6, choices=[('Male', 'Male'), ('Female', 'Female')])
+    age = models.IntegerField()
+    lifestyle_diet = models.BooleanField(default=False)
+    lifestyle_exercise = models.BooleanField(default=False)
+    lifestyle_others = models.CharField(max_length=255, blank=True, null=True)
+    medical_history_past_illness = models.TextField(blank=True, null=True)
+    medical_history_treatments = models.TextField(blank=True, null=True)
+    medical_history_ongoing_medications = models.TextField(blank=True, null=True)
+    medical_history_checkups = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'DataProfiling'
+        managed = False
+
 class PredictiveAnalytics(models.Model):
     analytics_id = models.AutoField(primary_key=True)
     description = models.TextField()

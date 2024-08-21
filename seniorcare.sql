@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2024 at 11:46 AM
+-- Generation Time: Aug 20, 2024 at 07:41 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -31,7 +31,7 @@ CREATE TABLE `activity` (
   `activity_id` int(11) NOT NULL,
   `activity_name` varchar(100) NOT NULL,
   `description` text DEFAULT NULL,
-  `date` date DEFAULT NULL,
+  `date` timestamp NULL DEFAULT current_timestamp(),
   `time` time DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
   `created_by` enum('Admin','HealthWorker') NOT NULL DEFAULT 'Admin',
@@ -44,8 +44,8 @@ CREATE TABLE `activity` (
 --
 
 INSERT INTO `activity` (`activity_id`, `activity_name`, `description`, `date`, `time`, `location`, `created_by`, `creator_id`, `created_at`) VALUES
-(1, 'act name', 'try description', '2024-08-09', '13:03:18', 'Batangas', 'Admin', 1, '2024-08-04 05:03:35'),
-(2, 'asdasda', 'asdasdas', '2024-08-09', '15:16:00', 'sdasda', 'Admin', NULL, '2024-08-04 07:27:06');
+(1, 'act name', 'try description', '2024-08-09 07:00:00', '13:03:18', 'Batangas', 'Admin', 1, '2024-08-04 05:03:35'),
+(2, 'asdasda', 'asdasdas', '2024-08-09 07:00:00', '15:16:00', 'sdasda', 'Admin', NULL, '2024-08-04 07:27:06');
 
 -- --------------------------------------------------------
 
@@ -80,7 +80,7 @@ CREATE TABLE `announcement` (
   `announcement_id` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
   `description` text DEFAULT NULL,
-  `date_posted` date DEFAULT NULL,
+  `date_posted` timestamp NULL DEFAULT current_timestamp(),
   `posted_by` enum('Admin','HealthWorker') DEFAULT NULL,
   `poster_id` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -91,8 +91,8 @@ CREATE TABLE `announcement` (
 --
 
 INSERT INTO `announcement` (`announcement_id`, `title`, `description`, `date_posted`, `posted_by`, `poster_id`, `created_at`) VALUES
-(1, 'try titless', 'description', '2024-08-16', 'Admin', 1, '2024-08-04 04:15:09'),
-(2, 'dfsdf', 'fsfdds', '2024-08-14', 'HealthWorker', 1, '2024-08-04 07:29:46');
+(1, 'try titless', 'description', '2024-08-16 09:00:00', 'Admin', 1, '2024-08-04 04:15:09'),
+(2, 'dfsdf', 'fsfdds', '2024-08-14 07:00:00', 'HealthWorker', 1, '2024-08-04 07:29:46');
 
 -- --------------------------------------------------------
 
@@ -374,6 +374,13 @@ CREATE TABLE `django_session` (
   `session_data` longtext NOT NULL,
   `expire_date` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `django_session`
+--
+
+INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
+('56erqu6y49ffg3q4udzrwrttw4j5yk0f', '.eJyrViotTi2Kz0xRsjLUgbDzEnNTlayUElNyM_PiQSJKUImSygKQhCNIQqkWAFGEFB4:1sgHP0:F5Wuqhn3RMi3HWOeBiqiEieH8b9hXR7kK1jTpbKdwbo', '2024-09-03 05:27:30.564095');
 
 -- --------------------------------------------------------
 

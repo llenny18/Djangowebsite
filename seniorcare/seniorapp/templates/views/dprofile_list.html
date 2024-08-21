@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,17 +10,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- plugins:css -->
 
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="{% static 'vendors/select2/select2.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}.css' %}" />
   </head>
   <body>
     <div class="container-scroller">
@@ -144,65 +138,68 @@
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Register an Activity </h3>
+              <h3 class="page-title"> Data Profilings Management </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Register</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Activity</li>
+                  <li class="breadcrumb-item"><a href="#">Management</a></li>
+                  <li class="breadcrumb-item" aria-current="page">Notifications</li>
                 </ol>
               </nav>
             </div>
-            
-              <div class="col-12 grid-margin stretch-card">
+            <div class="row">
+             
+              <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                 
-                    <h1>Input Credentials</h1>
-                    <form method="post">
-                      {% csrf_token %}
-                      <div class="form-group">
-                          <label for="id_activity_name">Activity Name</label>
-                          <input type="text" class="form-control" id="id_activity_name" name="activity_name" value="{{ form.activity_name.value }}">
-                          {% if form.activity_name.errors %}
-                              <div class="text-danger">{{ form.activity_name.errors }}</div>
-                          {% endif %}
-                      </div>
-                      <div class="form-group">
-                          <label for="id_description">Description</label>
-                          <textarea class="form-control" id="id_description" name="description">{{ form.description.value }}</textarea>
-                          {% if form.description.errors %}
-                              <div class="text-danger">{{ form.description.errors }}</div>
-                          {% endif %}
-                      </div>
-                      <div class="form-group">
-                          <label for="id_date">Date</label>
-                          <input type="date" class="form-control" id="id_date" name="date" value="{{ form.date.value }}">
-                          {% if form.date.errors %}
-                              <div class="text-danger">{{ form.date.errors }}</div>
-                          {% endif %}
-                      </div>
-                      <div class="form-group">
-                          <label for="id_time">Time</label>
-                          <input type="time" class="form-control" id="id_time" name="time" value="{{ form.time.value }}">
-                          {% if form.time.errors %}
-                              <div class="text-danger">{{ form.time.errors }}</div>
-                          {% endif %}
-                      </div>
-                      <div class="form-group">
-                          <label for="id_location">Location</label>
-                          <input type="text" class="form-control" id="id_location" name="location" value="{{ form.location.value }}">
-                          {% if form.location.errors %}
-                              <div class="text-danger">{{ form.location.errors }}</div>
-                          {% endif %}
-                      </div>
-                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                      <a href="{% url 'activities' %}" class="btn btn-light">Cancel</a>
-                  </form>
+                    <h4 class="card-title">Citizens List<a href="{% url 'data_profiling_create' %}" class="btn badge-success m-1">+ Insert new record</a></h4>
                   
+                    </p>
+                    <table class="table table-bordered">
+                      <thead>
+                          <tr>
+                              <th>Address</th>
+                              <th>Gender</th>
+                              <th>Age</th>
+                              <th>Diet</th>
+                              <th>Exercise</th>
+                              <th>Other Lifestyle Factors</th>
+                              <th>Past Illness</th>
+                              <th>Treatments</th>
+                              <th>Ongoing Medications</th>
+                              <th>Checkups</th>
+                              <th>Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for profile in data_profilings %}
+                          <tr>
+                              <td>{{ profile.address }}</td>
+                              <td>{{ profile.gender }}</td>
+                              <td>{{ profile.age }}</td>
+                              <td>{{ profile.lifestyle_diet|yesno:"Yes,No" }}</td>
+                              <td>{{ profile.lifestyle_exercise|yesno:"Yes,No" }}</td>
+                              <td>{{ profile.lifestyle_others }}</td>
+                              <td>{{ profile.medical_history_past_illness }}</td>
+                              <td>{{ profile.medical_history_treatments }}</td>
+                              <td>{{ profile.medical_history_ongoing_medications }}</td>
+                              <td>{{ profile.medical_history_checkups }}</td>
+                              <td>
+                                  <a href="{% url 'data_profiling_update' id=profile.id %}" class="btn btn-primary m-1">Edit</a>
+                              </td>
+                          </tr>
+                          {% empty %}
+                          <tr>
+                              <td colspan="11">No data available.</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
                   
+                    
                   </div>
                 </div>
               </div>
+             
             </div>
           </div>
           <!-- content-wrapper ends -->
@@ -219,8 +216,6 @@
     <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    <script src="{% static 'vendors/select2/select2.min.js' %}"></script>
-    <script src="{% static 'vendors/typeahead.js/typeahead.bundle.min.js' %}"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
     <script src="{% static 'js/off-canvas.js' %}"></script>
@@ -235,9 +230,6 @@
     </script>
     <!-- endinject -->
     <!-- Custom js for this page -->
-    <script src="{% static 'js/file-upload.js' %}"></script>
-    <script src="{% static 'js/typeahead.js' %}"></script>
-    <script src="{% static 'js/select2.js' %}"></script>
     <!-- End custom js for this page -->
   </body>
 </html>

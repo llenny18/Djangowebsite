@@ -33,6 +33,12 @@ urlpatterns = [
     path('sms_notification/create/', views.sms_notification_create, name='sms_notification_create'),
     path('sms_notification/update/<int:id>/', views.sms_notification_update, name='sms_notification_update'),
     
+
+    path('data_profiling/', views.data_profiling_list, name='data_profiling'),
+    path('data_profiling/create/', views.data_profiling_create, name='data_profiling_create'),
+    path('data_profiling/update/<int:id>/', views.data_profiling_update, name='data_profiling_update'),
+   
+
     path('predictive_analytics/create/', views.predictive_analytics_create, name='predictive_analytics_create'),
     path('predictive_analytics/update/<int:id>/', views.predictive_analytics_update, name='predictive_analytics_update'),
 
