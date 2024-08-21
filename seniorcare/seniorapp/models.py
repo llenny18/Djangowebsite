@@ -94,6 +94,29 @@ class SMSNotification(models.Model):
         db_table = 'SMSNotification'
         managed = False
 
+
+class WeeklySMSSent(models.Model):
+    week = models.CharField(max_length=255)
+    sms_sent_count = models.IntegerField()
+
+    class Meta:
+        db_table = 'weekly_sms_sent'
+        managed = False 
+
+class SummaryCounts(models.Model):
+    profile_count = models.IntegerField()
+    activity_count = models.IntegerField()
+    healthworker_count = models.IntegerField()
+    smsnotification_count = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'summary_counts'
+        # Adding this to prevent Django from trying to use an 'id' field
+        # or generate migrations for this model
+        default_permissions = ()
+
+
 class DataProfiling(models.Model):
     id = models.AutoField(primary_key=True)
     address = models.CharField(max_length=255)

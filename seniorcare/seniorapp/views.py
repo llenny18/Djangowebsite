@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling
+from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent
 from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm
 
 from django.contrib.auth import authenticate, login
@@ -48,13 +48,33 @@ def login_view(request):
         form = LoginForm()
 
     return render(request, 'views/login.html', {'form': form, 'user_id': user_id})
+from django.shortcuts import render
+from .models import SummaryCounts
 
 def home(request):
-    username = request.session.get('user_name', 'Guest')  # Default to 'Guest' if no user is logged in
-    user_type = request.session.get('user_type', None) 
-    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
- # Retrieve user_type from the session
-    return render(request, 'views/index.html', {'username': username, 'user_type': user_type, 'user_id': user_id})
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)
+    user_id = request.session.get('user_id', None)
+    
+    summary_data = SummaryCounts.objects.all().first()  # Assuming there's only one row
+    
+    # Fetch data using the model
+    weekly_sms_data = WeeklySMSSent.objects.all()
+    
+    # Process data for chart
+    weeks = [data.week for data in weekly_sms_data]
+    sms_sent_counts = [data.sms_sent_count for data in weekly_sms_data]
+    
+    context = {
+        'username': username,
+        'user_type': user_type,
+        'user_id': user_id,
+        'summary_data': summary_data,
+        'weeks': weeks,
+        'sms_sent_counts': sms_sent_counts,
+    }
+    
+    return render(request, 'views/index.html', context)
 
 # HealthWorker update
 def health_worker_update(request, id):

@@ -155,11 +155,11 @@
                       <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
                         <div class="card">
                           <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Appointments</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">432</h2>
+                            <h5 class="mb-2 text-dark font-weight-normal">Data Profiles</h5>
+                            <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.profile_count }}</h2>
                             <div class="dashboard-progress dashboard-progress-1 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-calendar-month icon-md absolute-center text-dark"></i></div>
-                            <p class="mt-4 mb-0"> Of 452</p>
-                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">Are Finished</h3>
+                            <p class="mt-4 mb-0"> are</p>
+                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">Finished</h3>
                           </div>
                         </div>
                       </div>
@@ -167,10 +167,10 @@
                         <div class="card">
                           <div class="card-body text-center">
                             <h5 class="mb-2 text-dark font-weight-normal">Health Workers</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">45</h2>
+                            <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.healthworker_count }}</h2>
                             <div class="dashboard-progress dashboard-progress-2 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-account-circle icon-md absolute-center text-dark"></i></div>
-                            <p class="mt-4 mb-0"> Of 50</p>
-                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">Are Active</h3>
+                            <p class="mt-4 mb-0"> are</p>
+                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">Active</h3>
                           </div>
                         </div>
                       </div>
@@ -178,10 +178,10 @@
                         <div class="card">
                           <div class="card-body text-center">
                             <h5 class="mb-2 text-dark font-weight-normal">Events</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">145</h2>
+                            <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.activity_count }}</h2>
                             <div class="dashboard-progress dashboard-progress-3 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-calendar-check icon-md absolute-center text-dark"></i></div>
-                            <p class="mt-4 mb-0">Of 150</p>
-                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">Are Finished </h3>
+                            <p class="mt-4 mb-0">are</p>
+                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">Finished </h3>
                           </div>
                         </div>
                       </div>
@@ -189,9 +189,9 @@
                         <div class="card">
                           <div class="card-body text-center">
                             <h5 class="mb-2 text-dark font-weight-normal">Messages</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">701</h2>
+                            <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.smsnotification_count }}</h2>
                             <div class="dashboard-progress dashboard-progress-4 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-email-open icon-md absolute-center text-dark"></i></div>
-                            <p class="mt-4 mb-0">Of 746</p>
+                            <p class="mt-4 mb-0">are</p>
                             <h3 class="mb-0 font-weight-bold mt-2 text-dark">Sent Successfully</h3>
                           </div>
                         </div>
@@ -199,31 +199,8 @@
                     </div>
                     
                     <div class="row">
-                      <div class="col-sm-4 grid-margin stretch-card">
-                        <div class="card card-danger-gradient">
-                          <div class="card-body mb-4">
-                            <h4 class="card-title text-white">Appointments Consistency</h4>
-                            <canvas id="account-retension"></canvas>
-                          </div>
-                          <div class="card-body bg-white pt-4">
-                            <div class="row pt-4">
-                              <div class="col-sm-6">
-                                <div class="text-center border-right border-md-0">
-                                  <h4>Completed </h4>
-                                  <h1 class="text-dark font-weight-bold mb-md-3">432</h1>
-                                </div>
-                              </div>
-                              <div class="col-sm-6">
-                                <div class="text-center">
-                                  <h4>Cancelled</h4>
-                                  <h1 class="text-dark font-weight-bold">20</h1>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-8  grid-margin stretch-card">
+                      
+                      <div class="col-sm-12  grid-margin stretch-card">
                         <div class="card">
                           <div class="card-body">
                             <div class="d-xl-flex justify-content-between mb-2">
@@ -1196,26 +1173,11 @@
     
         if ($("#page-view-analytic").length) {
           var pageiVewAnalyticData = {
-            labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28"],
-            datasets: [{
-                label: 'This week',
-                data: [46, 49, 51, 58, 63.61, 65, 64, 69, 70, 78, 80, 80, 90, 85, 87, 92, 97, 102, 107, 109, 111, 111, 120, 130, 132, 136, 140, 145],
-                backgroundColor: [
-                  'rgba(216,247,234, 0.19)',
-                ],
-                borderColor: [
-                  '#3dd597'
-                ],
-                borderWidth: 2,
-                fill: true,
-                pointBorderColor: "#fff",
-                pointBackgroundColor: "#3dd597",
-                pointBorderWidth: 2,
-                pointRadius: 4,
-              },
+            labels: {{ weeks|safe }},
+            datasets: [
               {
-                label: 'Current week',
-                data: [16, 19, 21, 28, 33.31, 35, 34, 39, 40, 48, 50, 50, 51, 55, 57, 62, 67, 69, 68, 70, 72, 75, 74, 80, 79, 80, 84, 90],
+                label: 'Weekly Sms sent',
+                data: {{ sms_sent_counts|safe }},
                 backgroundColor: [
                   'rgba(216,247,234, 0.19)',
                 ],
