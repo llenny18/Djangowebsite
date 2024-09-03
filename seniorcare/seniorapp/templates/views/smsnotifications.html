@@ -10,6 +10,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- plugins:css -->
 
+ <!-- DataTables CSS -->
+ <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.min.css">
+ <!-- jQuery -->
+ <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <!-- End layout styles -->
@@ -18,122 +22,7 @@
   <body>
     <div class="container-scroller">
       <!-- partial:../../partials/_navbar.html -->
-      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-          <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="height: 70px;">
-          <a class="navbar-brand brand-logo"  href={% url 'index' %}><img style="width: 60px;height: 60px;" src="{% static 'images/logo.png' %}" alt="logo" /></a>
-          <a class="navbar-brand brand-logo-mini" href={% url 'index' %}><img src="{% static 'images/logo-mini.svg' %}" alt="logo" /></a>
-        </div>
-        <div class="navbar-menu-wrapper d-flex align-items-stretch">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-            <span class="mdi mdi-menu"></span>
-          </button>
-          <div class="search-field d-none d-xl-block">
-          
-          </div>
-          <ul class="navbar-nav navbar-nav-right">
-           
-            <li class="nav-item nav-profile dropdown">
-              <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                <div class="nav-profile-img">
-                  <img src="{% static 'images/faces/face28.png' %}" alt="image">
-                </div>
-                <div class="nav-profile-text">
-                  <p class="mb-1 text-black">{{ username }}</p>
-                </div>
-              </a>
-              <div class="dropdown-menu navbar-dropdown dropdown-menu-right p-0 border-0 font-size-sm" aria-labelledby="profileDropdown" data-x-placement="bottom-end">
-                <div class="p-3 text-center bg-primary">
-                  <img class="img-avatar img-avatar48 img-avatar-thumb" src="{% static 'images/faces/face28.png' %}" alt="">
-                </div>
-                <div class="p-2">
-                  <h5 class="dropdown-header text-uppercase pl-2 text-dark">User Options</h5>
-                 <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="{% if user_type == 'HealthWorker' %}
-                  {% url 'health_worker_update' id=user_id %}
-                  {% else %}
-                  {% url 'admin_update' id=user_id %}
-                  {% endif %}">
-
-                    <span>Profile</span>
-                    <span class="p-0">
-                      <span class="badge badge-success">1</span>
-                      <i class="mdi mdi-account-outline ml-1"></i>
-                    </span>
-                  </a>
-                  <div role="separator" class="dropdown-divider"></div>
-                  <h5 class="dropdown-header text-uppercase  pl-2 text-dark mt-2">Actions</h5>
-                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="{% url 'logout' %}">
-                    <span>Log Out</span>
-                    <i class="mdi mdi-logout ml-1"></i>
-                  </a>
-                </div>
-              </div>
-            </li>
-           
-            
-          </ul>
-          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-            <span class="mdi mdi-menu"></span>
-          </button>
-        </div>
-      </nav>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_sidebar.html -->
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <ul class="nav">
-            <li class="nav-item nav-category">Home</li>
-            <li class="nav-item">
-              <a class="nav-link" href={% url 'index' %}>
-                <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
-                <span class="menu-title">Dashboard</span>
-              </a>
-            </li>
-            {% if user_type == 'Admin' %}
-<li class="nav-item">
-    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-        <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
-        <span class="menu-title">Users</span>
-        <i class="menu-arrow"></i>
-    </a>
-    <div class="collapse" id="ui-basic">
-        <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{% url 'admins' %}">Administrators</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{% url 'healthworkers' %}">Health Workers</a></li>
-        </ul>
-    </div>
-</li>
-{% endif %}
-
-            <li class="nav-item nav-category">System Management</li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'data_profiling' %}">
-                <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-                <span class="menu-title">Data Profiles</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'announcements' %}">
-                <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-                <span class="menu-title">Announcements</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'activities' %}">
-                <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
-                <span class="menu-title">Activities</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'smsnotifications' %}">
-                <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
-                <span class="menu-title">SMS Notifications</span>
-              </a>
-            </li>
-            
-          
-            
-          </ul>
-        </nav>
+    {% include 'views/nav.html' %}
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
@@ -149,12 +38,12 @@
             <div class="row">
              
               <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
+                <div class="card" style="width: 1000px; overflow-y: scroll;overflow-x: scroll;">
                   <div class="card-body">
                     <h4 class="card-title">Citizens List<a href="{% url 'sms_notification_create' %}" class="btn badge-success m-1">+ Insert new record</a></h4>
                   
                     </p>
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="table">
                       <thead>
                           <tr>
                               <th>SMS ID</th>
@@ -197,7 +86,12 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
+     <script src="https://cdn.datatables.net/2.1.5/js/dataTables.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      new DataTable('#table');
+  </script>
     <!-- plugins:js -->
     <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
     <!-- endinject -->
