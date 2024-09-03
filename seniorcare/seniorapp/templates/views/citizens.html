@@ -40,7 +40,7 @@
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card" style="width: 1000px; overflow-y: scroll;overflow-x: scroll;">
                   <div class="card-body">
-                    <h4 class="card-title">Citizens List<a href="" class="btn badge-success m-1">+ Insert new record</a></h4>
+                    <h4 class="card-title">Citizens List<a href="{% url 'senior_citizen_create' %}" class="btn badge-success m-1">+ Insert new record</a></h4>
                   
                     </p>
                     <table class="table table-bordered" id="table">
@@ -70,7 +70,7 @@
                             <td>{{ senior.address }}</td>
                             <td>{{ senior.phone }}</td>
                             <td>{{ senior.created_at }}</td>
-                            <td><a href="" class="btn badge-primary m-1">Edit</a><br><a href="" class="btn badge-danger m-1">Delete</a></td>
+                            <td><a href="{% url 'senior_citizen_update' id=senior.citizen_id %}" class="btn badge-primary m-1">Edit</a><br><a href="" class="btn badge-danger m-1">Delete</a></td>
                         </tr>
                         {% endfor %}
                       </tbody>

@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Predictive Analytics Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'vendors/select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+</head>
+<body>
+    <div class="container-scroller">
+        {% include 'views/nav.html' %}
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h3 class="page-title">Predictive Analytics Report</h3>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Reports</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Predictive Analytics</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <script>
+                  function extractWeekNumber(dateString) {
+                    const weekPart = dateString.split('-W')[1];
+                    return parseInt(weekPart, 10);
+                }
+                
+                function updateDateRangeFields() {
+                    const formatSelect = document.getElementById('formatSelect');
+                    const dateRangeDiv = document.getElementById('dateRangeDiv');
+                    const startDateInput = document.getElementById('startDateDiv');
+                    const endDateInput = document.getElementById('endDateDiv');
+                    const weekDiv = document.getElementById('weekDiv');
+                    const monthDiv = document.getElementById('monthDiv');
+                    const yearDiv = document.getElementById('yearDiv');
+                
+                    dateRangeDiv.style.display = 'block';
+                    startDateInput.style.display = 'none';
+                    endDateInput.style.display = 'none';
+                    weekDiv.style.display = 'none';
+                    monthDiv.style.display = 'none';
+                    yearDiv.style.display = 'none';
+                
+                    if (formatSelect.value === 'Daily') {
+                        startDateInput.style.display = 'block';
+                        endDateInput.style.display = 'block';
+                    } else if (formatSelect.value === 'Weekly') {
+                        weekDiv.style.display = 'block';
+                    } else if (formatSelect.value === 'Monthly') {
+                        monthDiv.style.display = 'block';
+                    } else if (formatSelect.value === 'Yearly') {
+                        yearDiv.style.display = 'block';
+                    }
+                
+                    filterTable();  // Trigger filtering on format change
+                }
+                
+                function convertToYYYYMM(dateString) {
+                    const date = new Date(dateString);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    return `${year}-${month}`;
+                }
+                
+                function filterTable() {
+                    const formatSelect = document.getElementById('formatSelect');
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    const startWeek = document.getElementById('startWeek').value;
+                    const endWeek = document.getElementById('endWeek').value;
+                    const startMonth = document.getElementById('startMonth').value;
+                    const endMonth = document.getElementById('endMonth').value;
+                    const startYear = document.getElementById('startYear').value;
+                    const endYear = document.getElementById('endYear').value;
+                
+                    console.log("Filtering table with:", {
+                        format: formatSelect.value,
+                        startDate, endDate,
+                        startWeek, endWeek,
+                        startMonth, endMonth,
+                        startYear, endYear
+                    });
+                
+                    const table = document.getElementById('table');
+                    const rows = table.querySelectorAll('tbody tr');
+                
+                    rows.forEach(row => {
+                        const createdDate = row.cells[6].innerText;
+                        const createdWeek = row.cells[10].innerText;
+                        const createdMonth = row.cells[8].innerText;
+                        const createdYear = row.cells[9].innerText;
+                
+                        let showRow = true;
+                
+                        console.log("Row data:", {
+                            createdDate, createdWeek, createdMonth, createdYear
+                        });
+                
+                        if (formatSelect.value === 'Daily') {
+                            if (startDate && endDate) {
+                                const rowDate = new Date(createdDate);
+                                showRow = rowDate >= new Date(startDate) && rowDate <= new Date(endDate);
+                            }
+                        } else if (formatSelect.value === 'Weekly') {
+                            if (startWeek && endWeek) {
+                                const rowWeek = createdWeek;
+                                showRow = rowWeek >= extractWeekNumber(startWeek) && rowWeek <= extractWeekNumber(endWeek);
+                            }
+                        } else if (formatSelect.value === 'Monthly') {
+                            if (startMonth && endMonth) {
+                                const rowMonth = convertToYYYYMM(createdMonth);
+                                showRow = rowMonth >= startMonth && rowMonth <= endMonth;
+                            }
+                        } else if (formatSelect.value === 'Yearly') {
+                            if (startYear && endYear) {
+                                const rowYear = parseInt(createdYear);
+                                const startY = parseInt(startYear);
+                                const endY = parseInt(endYear);
+                                showRow = rowYear >= startY && rowYear <= endY;
+                            }
+                        }
+                
+                        row.style.display = showRow ? '' : 'none';
+                    });
+                }
+                
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('formatSelect').addEventListener('change', updateDateRangeFields);
+                    document.getElementById('startDate').addEventListener('change', filterTable);
+                    document.getElementById('endDate').addEventListener('change', filterTable);
+                    document.getElementById('startWeek').addEventListener('change', filterTable);
+                    document.getElementById('endWeek').addEventListener('change', filterTable);
+                    document.getElementById('startMonth').addEventListener('change', filterTable);
+                    document.getElementById('endMonth').addEventListener('change', filterTable);
+                    document.getElementById('startYear').addEventListener('change', filterTable);
+                    document.getElementById('endYear').addEventListener('change', filterTable);
+                });
+                
+                </script>
+
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>Predictive Analytics Report</h1>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="formatSelect" class="form-label">Format:</label>
+                                        <select id="formatSelect" class="form-control">
+                                            <option value="">-- Select --</option>
+                                            <option value="Daily">Daily</option>
+                                            <option value="Weekly">Weekly</option>
+                                            <option value="Monthly">Monthly</option>
+                                            <option value="Yearly">Yearly</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row m-3" id="dateRangeDiv" style="display: none;">
+                                    <div class="col-md-6" id="startDateDiv">
+                                        <label for="startDate" class="form-label">Start Date:</label>
+                                        <input type="date" id="startDate" class="form-control">
+                                    </div>
+                                    <div class="col-md-6" id="endDateDiv">
+                                        <label for="endDate" class="form-label">End Date:</label>
+                                        <input type="date" id="endDate" class="form-control">
+                                    </div>
+                                    <div class="col-md-6" id="weekDiv" style="display: none;">
+                                        <label for="startWeek" class="form-label">Start Week:</label>
+                                        <input type="week" id="startWeek" class="form-control">
+                                        <hr>
+                                        <label for="endWeek" class="form-label">End Week:</label>
+                                        <input type="week" id="endWeek" class="form-control">
+                                    </div>
+                                    <div class="col-md-6" id="monthDiv" style="display: none;">
+                                        <label for="startMonth" class="form-label">Start Month:</label>
+                                        <input type="month" id="startMonth" class="form-control">
+                                        <hr>
+                                        <label for="endMonth" class="form-label">End Month:</label>
+                                        <input type="month" id="endMonth" class="form-control">
+                                    </div>
+                                    <div class="col-md-6" id="yearDiv" style="display: none;">
+                                        <label for="startYear" class="form-label">Start Year:</label>
+                                        <input type="number" id="startYear" class="form-control">
+                                        <hr>
+                                        <label for="endYear" class="form-label">End Year:</label>
+                                        <input type="number" id="endYear" class="form-control">
+                                    </div>
+                                </div>
+                            </form>
+                            <table id="table" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Analytics ID</th>
+                                        <th>Description</th>
+                                        <th>Results</th>
+                                        <th>Created By</th>
+                                        <th>Creator ID</th>
+                                        <th>Created At</th>
+                                        <th>Created Date</th>
+                                        <th>Created Week</th>
+                                        <th>Created Month</th>
+                                        <th>Created Year</th>
+                                        <th>Created Week Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for report in reports %}
+                                    <tr>
+                                        <td>{{ report.analytics_id }}</td>
+                                        <td>{{ report.description }}</td>
+                                        <td>{{ report.results }}</td>
+                                        <td>{{ report.created_by }}</td>
+                                        <td>{{ report.creator_id }}</td>
+                                        <td>{{ report.created_at }}</td>
+                                        <td>{{ report.created_date }}</td>
+                                        <td>{{ report.created_week }}</td>
+                                        <td>{{ report.created_month }} {{ report.created_year }}</td>
+                                        <td>{{ report.created_year }}</td>
+                                        <td>{{ report.created_week_number }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="11" class="text-center">No data available</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

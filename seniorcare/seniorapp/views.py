@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent
+from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView
 from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm
 
 from django.contrib.auth import authenticate, login
@@ -75,6 +75,45 @@ def home(request):
     }
     
     return render(request, 'views/index.html', context)
+
+
+
+def profile_reports(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)
+    user_id = request.session.get('user_id', None)
+    Reports = DataProfilingView.objects.all()
+    
+    
+    
+    context = {
+        'username': username,
+        'user_type': user_type,
+        'user_id': user_id,
+        'reports' : Reports
+    }
+    
+    return render(request, 'views/profile_report.html', context)
+
+
+
+def analytic_reports(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)
+    user_id = request.session.get('user_id', None)
+    Reports = PredictiveAnalyticsView.objects.all()
+    
+    
+    context = {
+        'username': username,
+        'user_type': user_type,
+        'user_id': user_id,
+        'reports' : Reports
+    }
+    
+    return render(request, 'views/analytic_report.html', context)
+
+
 
 # HealthWorker update
 def health_worker_update(request, id):

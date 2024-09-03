@@ -56,3 +56,5 @@ class PredictiveAnalyticsForm(forms.ModelForm):
     class Meta:
         model = PredictiveAnalytics
         fields = '__all__'
+
+

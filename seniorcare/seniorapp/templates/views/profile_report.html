@@ -1,0 +1,279 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Senior Citizen MIS - Data Profiling Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'vendors/select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+</head>
+<body>
+    <div class="container-scroller">
+        {% include 'views/nav.html' %}
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h3 class="page-title">Data Profiling Report</h3>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Register</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Report</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <script>
+                  function extractWeekNumber(dateString) {
+                    // Split the string to isolate the week part
+                    const weekPart = dateString.split('-W')[1];
+                
+                    // Convert the week part to an integer
+                    const weekNumber = parseInt(weekPart, 10);
+                
+                    return weekNumber;
+                }
+                
+                
+
+
+                  function updateDateRangeFields() {
+                    const formatSelect = document.getElementById('formatSelect');
+                    const dateRangeDiv = document.getElementById('dateRangeDiv');
+                    const startDateInput = document.getElementById('startDateDiv');
+                    const endDateInput = document.getElementById('endDateDiv');
+                    const weekDiv = document.getElementById('weekDiv');
+                    const monthDiv = document.getElementById('monthDiv');
+                    const yearDiv = document.getElementById('yearDiv');
+                
+                    // Hide all input fields initially
+                    dateRangeDiv.style.display = 'block';
+                    startDateInput.style.display = 'none';
+                    endDateInput.style.display = 'none';
+                    weekDiv.style.display = 'none';
+                    monthDiv.style.display = 'none';
+                    yearDiv.style.display = 'none';
+                
+                    // Show relevant input fields based on selected format
+                    if (formatSelect.value === 'Daily') {
+                        startDateInput.style.display = 'block';
+                        endDateInput.style.display = 'block';
+                    } else if (formatSelect.value === 'Weekly') {
+                        weekDiv.style.display = 'block';
+                    } else if (formatSelect.value === 'Monthly') {
+                        monthDiv.style.display = 'block';
+                    } else if (formatSelect.value === 'Yearly') {
+                        yearDiv.style.display = 'block';
+                    }
+                
+                    filterTable();  // Trigger filtering on format change
+                }
+                
+
+                function convertToYYYYMM(dateString) {
+                  // Create a new Date object from the date string
+                  const date = new Date(dateString);
+              
+                  // Get the year and month
+                  const year = date.getFullYear();
+                  const month = String(date.getMonth() + 1).padStart(2, '0');
+              
+                  // Return the formatted date in YYYY-MM format
+                  return `${year}-${month}`;
+              }
+
+
+                function filterTable() {
+                    const formatSelect = document.getElementById('formatSelect');
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    const startWeek = document.getElementById('startWeek').value;
+                    const endWeek = document.getElementById('endWeek').value;
+                    const startMonth = document.getElementById('startMonth').value;
+                    const endMonth = document.getElementById('endMonth').value;
+                    const startYear = document.getElementById('startYear').value;
+                    const endYear = document.getElementById('endYear').value;
+                
+                    const table = document.getElementById('table');
+                    const rows = table.querySelectorAll('tbody tr');
+                
+                    rows.forEach(row => {
+                        const createdDate = row.cells[12].innerText;  // Assuming created_date is at cell index 12
+                        const createdWeek = row.cells[16].innerText;  // Assuming created_week is at cell index 13
+                        const createdMonth = row.cells[14].innerText; // Assuming created_month is at cell index 14
+                        const createdYear = row.cells[15].innerText;  // Assuming created_year is at cell index 15
+                
+                        let showRow = true;
+                
+                        if (formatSelect.value === 'Daily') {
+                            if (startDate && endDate) {
+                                const rowDate = new Date(createdDate);
+                                showRow = rowDate >= new Date(startDate) && rowDate <= new Date(endDate);
+                            }
+                        } else if (formatSelect.value === 'Weekly') {
+                            if (startWeek && endWeek) {
+                                const rowWeek = createdWeek;  // Make sure rowWeek is in the correct 'yyyy-WXX' format
+                                console.log(createdWeek)
+                                showRow = rowWeek >= extractWeekNumber(startWeek) && rowWeek <= extractWeekNumber(endWeek);
+                            }
+                        } else if (formatSelect.value === 'Monthly') {
+                            if (startMonth && endMonth) {
+                                const rowMonth = convertToYYYYMM(createdMonth);  // Make sure rowMonth is in 'yyyy-MM' format
+                                showRow = rowMonth >= startMonth && rowMonth <= endMonth;
+                            }
+                        } else if (formatSelect.value === 'Yearly') {
+                            if (startYear && endYear) {
+                                const rowYear = parseInt(createdYear);
+                                const startY = parseInt(startYear);
+                                const endY = parseInt(endYear);
+                                showRow = rowYear >= startY && rowYear <= endY;
+                            }
+                        }
+                
+                        row.style.display = showRow ? '' : 'none';
+                    });
+                }
+                
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('formatSelect').addEventListener('change', updateDateRangeFields);
+                    document.getElementById('startDate').addEventListener('change', filterTable);
+                    document.getElementById('endDate').addEventListener('change', filterTable);
+                    document.getElementById('startWeek').addEventListener('change', filterTable);
+                    document.getElementById('endWeek').addEventListener('change', filterTable);
+                    document.getElementById('startMonth').addEventListener('change', filterTable);
+                    document.getElementById('endMonth').addEventListener('change', filterTable);
+                    document.getElementById('startYear').addEventListener('change', filterTable);
+                    document.getElementById('endYear').addEventListener('change', filterTable);
+                });
+                
+                </script>
+
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>Data Profiling Report</h1>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="formatSelect" class="form-label">Format:</label>
+                                        <select id="formatSelect" class="form-control">
+                                            <option value="">-- Select --</option>
+                                            <option value="Daily">Daily</option>
+                                            <option value="Weekly">Weekly</option>
+                                            <option value="Monthly">Monthly</option>
+                                            <option value="Yearly">Yearly</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row m-3" id="dateRangeDiv" style="display: none;">
+                                    <div class="col-md-6" id="startDateDiv">
+                                        <label for="startDate" class="form-label">Start Date:</label>
+                                        <input type="date" id="startDate" class="form-control">
+                                    </div>
+                                    <div class="col-md-6" id="endDateDiv">
+                                        <label for="endDate" class="form-label">End Date:</label>
+                                        <input type="date" id="endDate" class="form-control">
+                                    </div>
+                                    <div class="col-md-6" id="weekDiv" style="display: none;">
+                                        <label for="startWeek" class="form-label">Start Week:</label>
+                                        <input type="week" id="startWeek" class="form-control">
+                                   <hr>
+                                        <label for="endWeek" class="form-label">End Week:</label>
+                                        <input type="week" id="endWeek" class="form-control">
+                                    </div>
+                                    <div class="col-md-6" id="monthDiv" style="display: none;">
+                                        <label for="startMonth" class="form-label">Start Month:</label>
+                                        <input type="month" id="startMonth" class="form-control">
+                                        <hr>
+                                        <label for="endMonth" class="form-label">End Month:</label>
+                                        <input type="month" id="endMonth" class="form-control">
+                                    </div>
+                                    <div class="col-md-6" id="yearDiv" style="display: none;">
+                                        <label for="startYear" class="form-label">Start Year:</label>
+                                        <input type="number" id="startYear" class="form-control" min="1900" max="2100">
+                                        <hr>
+
+                                        <label for="endYear" class="form-label">End Year:</label>
+                                        <input type="number" id="endYear" class="form-control" min="1900" max="2100">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="col-lg-12 grid-margin stretch-card">
+                                    <div class="card" style="width: 1000px; overflow-y: scroll; overflow-x: scroll;">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Data Profiling Reports List</h4>
+                                            <table class="table table-bordered" id="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Address</th>
+                                                        <th>Gender</th>
+                                                        <th>Age</th>
+                                                        <th>Lifestyle Diet</th>
+                                                        <th>Lifestyle Exercise</th>
+                                                        <th>Lifestyle Others</th>
+                                                        <th>Medical History Past Illness</th>
+                                                        <th>Medical History Treatments</th>
+                                                        <th>Medical History Ongoing Medications</th>
+                                                        <th>Medical History Checkups</th>
+                                                        <th>Created At</th>
+                                                        <th>Created Date</th>
+                                                        <th>Created Week</th>
+                                                        <th>Created Month</th>
+                                                        <th>Created Year</th>
+                                                        <th>Created Week Number</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for profiling in reports %}
+                                                    <tr>
+                                                        <td>{{ profiling.id }}</td>
+                                                        <td>{{ profiling.address }}</td>
+                                                        <td>{{ profiling.gender }}</td>
+                                                        <td>{{ profiling.age }}</td>
+                                                        <td>{{ profiling.lifestyle_diet }}</td>
+                                                        <td>{{ profiling.lifestyle_exercise }}</td>
+                                                        <td>{{ profiling.lifestyle_others }}</td>
+                                                        <td>{{ profiling.medical_history_past_illness }}</td>
+                                                        <td>{{ profiling.medical_history_treatments }}</td>
+                                                        <td>{{ profiling.medical_history_ongoing_medications }}</td>
+                                                        <td>{{ profiling.medical_history_checkups }}</td>
+                                                        <td>{{ profiling.created_at }}</td>
+                                                        <td>{{ profiling.created_date }}</td>
+                                                        <td>{{ profiling.created_week }} </td>
+                                                        <td>{{ profiling.created_month }} {{ profiling.created_year }}</td>
+                                                        <td>{{ profiling.created_year }}</td>
+                                                        <td>{{ profiling.created_week_number }}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+    <script src="{% static 'vendors/select2/select2.min.js' %}"></script>
+    <script src="{% static 'vendors/typeahead.js/typeahead.bundle.min.js' %}"></script>
+    <script src="{% static 'js/off-canvas.js' %}"></script>
+    <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'js/misc.js' %}"></script>
+    <script src="{% static 'js/file-upload.js' %}"></script>
+    <script src="{% static 'js/typeahead.js' %}"></script>
+    <script src="{% static 'js/select2.js' %}"></script>
+    <script src="{% static 'js/data-table.js' %}"></script>
+</body>
+</html>

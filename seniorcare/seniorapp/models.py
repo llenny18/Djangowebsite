@@ -1,5 +1,47 @@
 from django.db import models
 
+
+class PredictiveAnalyticsView(models.Model):
+    analytics_id = models.IntegerField(primary_key=True)
+    description = models.TextField()
+    results = models.TextField()
+    created_by = models.CharField(max_length=15, choices=[('Admin', 'Admin'), ('HealthWorker', 'HealthWorker')])
+    creator_id = models.IntegerField()
+    created_at = models.DateTimeField()
+    created_date = models.DateField()
+    created_week = models.CharField(max_length=10)
+    created_month = models.CharField(max_length=10)
+    created_year = models.CharField(max_length=10)
+    created_week_number = models.IntegerField()
+
+    class Meta:
+        db_table = 'predictiveanalytics_view'
+        managed = False
+
+class DataProfilingView(models.Model):
+    id = models.AutoField(primary_key=True)
+    address = models.CharField(max_length=255)
+    gender = models.CharField(max_length=6, choices=[('Male', 'Male'), ('Female', 'Female')])
+    age = models.IntegerField()
+    lifestyle_diet = models.BooleanField(default=False)
+    lifestyle_exercise = models.BooleanField(default=False)
+    lifestyle_others = models.CharField(max_length=255, blank=True, null=True)
+    medical_history_past_illness = models.TextField(blank=True, null=True)
+    medical_history_treatments = models.TextField(blank=True, null=True)
+    medical_history_ongoing_medications = models.TextField(blank=True, null=True)
+    medical_history_checkups = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField()
+    created_date = models.DateField()
+    created_week = models.CharField(max_length=10)
+    created_month = models.CharField(max_length=10)
+    created_year = models.CharField(max_length=10)
+    created_week_number = models.IntegerField()
+
+    class Meta:
+        db_table = 'dataprofiling_view'
+        managed = False
+
+
 class Admin(models.Model):
     admin_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50, unique=True)

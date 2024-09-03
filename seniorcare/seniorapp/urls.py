@@ -21,6 +21,9 @@ urlpatterns = [
     path('senior_citizen/create/', views.senior_citizen_create, name='senior_citizen_create'),
     path('senior_citizen/update/<int:id>/', views.senior_citizen_update, name='senior_citizen_update'),
     
+    path('analytic_reports', views.analytic_reports, name='analytic_reports'),
+    path('profile_reports', views.profile_reports, name='profile_reports'),
+    
     path('activity/create/', views.activity_create, name='activity_create'),
     path('activity/update/<int:id>/', views.activity_update, name='activity_update'),
     
