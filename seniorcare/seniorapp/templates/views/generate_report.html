@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Senior Citizen MIS - Create Senior Citizen</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- plugins:css -->
+
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'vendors/select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+    {% include 'views/nav.html' %}
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Register an Senior Citizen </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Register</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Senior Citizen</li>
+                </ol>
+              </nav>
+            </div>
+            
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                 
+                    <h1>Input Credentials</h1>
+                    <form method="post">
+                      {% csrf_token %}
+                      <div class="form-group">
+                          <label for="id_first_name">First Name</label>
+                          <input type="text" class="form-control" id="id_first_name" name="first_name" value="{{ form.first_name.value }}">
+                          {% if form.first_name.errors %}
+                              <div class="text-danger">{{ form.first_name.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_last_name">Last Name</label>
+                          <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ form.last_name.value }}">
+                          {% if form.last_name.errors %}
+                              <div class="text-danger">{{ form.last_name.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_date_of_birth">Date of Birth</label>
+                          <input type="date" class="form-control" id="id_date_of_birth" name="date_of_birth" value="{{ form.date_of_birth.value }}">
+                          {% if form.date_of_birth.errors %}
+                              <div class="text-danger">{{ form.date_of_birth.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_gender">Gender</label>
+                          <select class="form-control" id="id_gender" name="gender">
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                          </select>
+                          {% if form.gender.errors %}
+                              <div class="text-danger">{{ form.gender.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_health_condition">Health Condition</label>
+                          <textarea class="form-control" id="id_health_condition" name="health_condition">{{ form.health_condition.value }}</textarea>
+                          {% if form.health_condition.errors %}
+                              <div class="text-danger">{{ form.health_condition.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_address">Address</label>
+                          <input type="text" class="form-control" id="id_address" name="address" value="{{ form.address.value }}">
+                          {% if form.address.errors %}
+                              <div class="text-danger">{{ form.address.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_phone">Phone</label>
+                          <input type="text" class="form-control" id="id_phone" name="phone" value="{{ form.phone.value }}">
+                          {% if form.phone.errors %}
+                              <div class="text-danger">{{ form.phone.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <a href="{% url 'citizens' %}" class="btn btn-light">Cancel</a>
+                  </form>
+                  
+                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'vendors/select2/select2.min.js' %}"></script>
+    <script src="{% static 'vendors/typeahead.js/typeahead.bundle.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'js/off-canvas.js' %}"></script>
+    <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+     <script src="{% static 'js/misc.js' %}"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var username = "{{ username }}";
+            if (username === 'Guest') {
+                window.location.href ='login'; alert('Login is required.'); 
+            }
+        });
+    </script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'js/file-upload.js' %}"></script>
+    <script src="{% static 'js/typeahead.js' %}"></script>
+    <script src="{% static 'js/select2.js' %}"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>
