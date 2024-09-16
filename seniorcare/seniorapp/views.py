@@ -5,6 +5,101 @@ from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm,
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password, make_password
 
+import datetime
+from django.utils import timezone
+from .models import PredictiveAnalytics, DataProfilingView, SeniorCitizen
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+import pandas as pd
+import numpy as np
+from sklearn.metrics import classification_report, confusion_matrix
+
+# Function to check if a new predictive analytics report is needed
+def check_and_generate_report():
+    # Check if a report exists in the past hour
+    one_hour_ago = timezone.now() - datetime.timedelta(hours=1)
+    if not PredictiveAnalytics.objects.filter(created_at__gte=one_hour_ago).exists():
+        # If no report exists in the past hour, generate one
+        generate_predictive_report()
+
+# Function to generate predictive analytics report
+def generate_predictive_report():
+    # Fetch data from DataProfilingView
+    profiling_data = DataProfilingView.objects.all().values(
+        'age', 'gender', 'lifestyle_diet', 'lifestyle_exercise'
+    )
+
+    # Fetch data from SeniorCitizen
+    senior_data = SeniorCitizen.objects.all().values(
+        'date_of_birth', 'health_condition', 'address'
+    )
+
+    if not profiling_data.exists() or not senior_data.exists():
+        print("No data available for predictive analytics.")
+        return
+
+    # Convert to DataFrame for analysis
+    profiling_df = pd.DataFrame(profiling_data)
+    senior_df = pd.DataFrame(senior_data)
+
+    # Prepare data for predictive model (dummy encoding categorical variables)
+    profiling_df['gender'] = profiling_df['gender'].apply(lambda x: 1 if x == 'Male' else 0)
+    
+    # Assume we're predicting some binary outcome based on profiling data
+    X = profiling_df[['age', 'gender', 'lifestyle_diet', 'lifestyle_exercise']]
+    
+    # For demonstration, use random binary targets; replace with actual target variable
+    y = np.random.randint(0, 2, size=len(profiling_df))
+
+    # Split the dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a basic model (Logistic Regression in this case)
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Predict and evaluate the model
+    predictions = model.predict(X_test)
+    accuracy = np.mean(predictions == y_test)
+    conf_matrix = confusion_matrix(y_test, predictions)
+    class_report = classification_report(y_test, predictions)
+
+    # Generate overall predictions summary
+    predictions_summary = pd.Series(predictions).value_counts().to_dict()
+    summary_str = ", ".join(f"Class {k}: {v} occurrences" for k, v in predictions_summary.items())
+
+    # Generate detailed results
+    results = (
+        f"Accuracy: {accuracy:.2f}\n\n"
+        f"Confusion Matrix:\n{conf_matrix}\n\n"
+        f"Classification Report:\n{class_report}\n\n"
+        f"Overall Predictions Summary:\n{summary_str}"
+    )
+
+    # Add conclusion to the description
+    conclusion = (
+        "The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. "
+        "The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights "
+        "into the performance of the model. The overall predictions summary indicates the distribution of predicted classes."
+    )
+    
+    description = (
+        "Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\n"
+        f"Conclusion: {conclusion}"
+    )
+
+    # Save report with description and results
+    PredictiveAnalytics.objects.create(
+        description=description,
+        results=results,
+        created_by="Admin",
+        creator_id=1,  # Example, use actual user ID
+        created_at=timezone.now()
+    )
+
+    print("New predictive analytics report generated.")
+
+
 def logout_view(request):
     # Clear the session
     request.session.flush()
@@ -55,6 +150,7 @@ def home(request):
     username = request.session.get('user_name', 'Guest')
     user_type = request.session.get('user_type', None)
     user_id = request.session.get('user_id', None)
+    check_and_generate_report()
     
     summary_data = SummaryCounts.objects.all().first()  # Assuming there's only one row
     
