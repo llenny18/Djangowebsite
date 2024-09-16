@@ -195,6 +195,13 @@
                                     </div>
                                 </div>
                             </form>
+                            <hr>
+                            <!-- Action buttons -->
+        <button class="btn btn-primary" onclick="printTable()">Print Table</button>
+        <button class="btn btn-success" onclick="exportTableToExcel()">Export to Excel</button>
+
+                            <hr>
+                            <div class="cont">
                             <table id="table" class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -235,9 +242,73 @@
                             </table>
                         </div>
                     </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.3.1/js/dataTables.buttons.min.js"></script>
+
+    <!-- JSZip for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- SheetJS (for Excel export) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('#table tbody tr');
+        
+            rows.forEach(row => {
+                const tdCells = row.querySelectorAll('td'); // Changed to 'tdCells'
+        
+                tdCells.forEach(cell => {
+                    cell.style.fontSize = '10px';    // Set font size to 10px
+                    cell.style.margin = '1px';       // Set margin to 1px
+                    cell.style.whiteSpace = 'pre-wrap'; // Make text break at whitespace
+                });
+    
+                const thCells = row.querySelectorAll('th'); // Changed to 'thCells'
+        
+                thCells.forEach(cell => {
+                    cell.style.fontSize = '12px';    // Set font size to 12px for headers
+                    cell.style.margin = '1px';       // Set margin to 1px
+                    cell.style.whiteSpace = 'pre-wrap'; // Make text break at whitespace
+                });
+            });
+        });
+    </script>
+    
+        
+    <!-- JavaScript code -->
+    <script>
+       
+
+        // Print Table Function
+        function printTable() {
+            var printContent = document.querySelector('.cont').innerHTML;
+            var originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = printContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+            window.location.reload();
+        }
+
+        // Export Table to Excel Function
+        function exportTableToExcel() {
+            var wb = XLSX.utils.table_to_book(document.getElementById('table'), { sheet: "Sheet1" });
+            XLSX.writeFile(wb, 'Analytics Report.xlsx');
+        }
+    </script>
 </body>
 </html>

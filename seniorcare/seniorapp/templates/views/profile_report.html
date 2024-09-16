@@ -11,6 +11,40 @@
     <link rel="stylesheet" href="{% static 'vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+   
+      
+    <style>
+        /* Default styles */
+        th {
+            font-size: 14px;
+        }
+
+        table {
+            margin: 20px 0; /* Adjust table margin */
+        }
+
+        /* Print-specific styles */
+        @media print {
+            th {
+                font-size: 8px; /* Smaller font size for print */
+            }
+
+            table {
+                margin: 0; /* Remove margins for print */
+                width: 100%; /* Ensure table takes full width */
+                border-collapse: collapse; /* Collapse borders for a cleaner look */
+            }
+
+            .container-scroller, .main-panel, .content-wrapper {
+                display: none; /* Hide non-essential content */
+            }
+
+            .card-body, .card {
+                border: 1px solid #000; /* Add border to card for printing */
+            }
+        }
+    </style>
+
 </head>
 <body>
     <div class="container-scroller">
@@ -102,10 +136,10 @@
                     const rows = table.querySelectorAll('tbody tr');
                 
                     rows.forEach(row => {
-                        const createdDate = row.cells[12].innerText;  // Assuming created_date is at cell index 12
-                        const createdWeek = row.cells[16].innerText;  // Assuming created_week is at cell index 13
-                        const createdMonth = row.cells[14].innerText; // Assuming created_month is at cell index 14
-                        const createdYear = row.cells[15].innerText;  // Assuming created_year is at cell index 15
+                        const createdDate = row.cells[10].innerText;  // Assuming created_date is at cell index 12
+                        const createdWeek = row.cells[14].innerText;  // Assuming created_week is at cell index 13
+                        const createdMonth = row.cells[12].innerText; // Assuming created_month is at cell index 14
+                        const createdYear = row.cells[13].innerText;  // Assuming created_year is at cell index 15
                 
                         let showRow = true;
                 
@@ -202,37 +236,42 @@
                                     </div>
                                 </div>
                             </form>
+                            <hr>
+                            <!-- Action buttons -->
+        <button class="btn btn-primary" onclick="printTable()">Print Table</button>
+        <button class="btn btn-success" onclick="exportTableToExcel()">Export to Excel</button>
+
+                            <hr>
                             <div class="row">
                                 <div class="col-lg-12 grid-margin stretch-card">
-                                    <div class="card" style="width: 1000px; overflow-y: scroll; overflow-x: scroll;">
-                                        <div class="card-body">
+                                    <div class="card" style="width: 1000px; overflow-y: scroll; overflow-x: scroll; ">
+                                        
+                                        <div class="card-body cont">
                                             <h4 class="card-title">Data Profiling Reports List</h4>
-                                            <table class="table table-bordered" id="table">
+                                            <table class="table table-bordered" id="table"> 
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
                                                         <th>Address</th>
                                                         <th>Gender</th>
                                                         <th>Age</th>
-                                                        <th>Lifestyle Diet</th>
-                                                        <th>Lifestyle Exercise</th>
-                                                        <th>Lifestyle Others</th>
-                                                        <th>Medical History Past Illness</th>
-                                                        <th>Medical History Treatments</th>
-                                                        <th>Medical History Ongoing Medications</th>
-                                                        <th>Medical History Checkups</th>
-                                                        <th>Created At</th>
-                                                        <th>Created Date</th>
-                                                        <th>Created Week</th>
-                                                        <th>Created Month</th>
-                                                        <th>Created Year</th>
-                                                        <th>Created Week Number</th>
+                                                        <th>Lifestyle<br> Diet</th>
+                                                        <th>Lifestyle <br>Exercise</th>
+                                                        <th>Lifestyle<br> Others</th>
+                                                        <th>Medical<br> History<br> Past<br> Illness</th>
+                                                        <th>Medical<br> History<br> Treatments</th>
+                                                        <th>Medical<br> History<br> Ongoing<br> Medications</th>
+                                                        <th>Medical<br> History<br> Checkups</th>
+                                                   
+                                                        <th>Created<br> Date</th>
+                                                        <th>Created<br> Week</th>
+                                                        <th>Created<br> Month</th>
+                                                        <th>Created<br> Year</th>
+                                                        <th>Created<br> Week Number</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {% for profiling in reports %}
                                                     <tr>
-                                                        <td>{{ profiling.id }}</td>
                                                         <td>{{ profiling.address }}</td>
                                                         <td>{{ profiling.gender }}</td>
                                                         <td>{{ profiling.age }}</td>
@@ -243,7 +282,7 @@
                                                         <td>{{ profiling.medical_history_treatments }}</td>
                                                         <td>{{ profiling.medical_history_ongoing_medications }}</td>
                                                         <td>{{ profiling.medical_history_checkups }}</td>
-                                                        <td>{{ profiling.created_at }}</td>
+                                            
                                                         <td>{{ profiling.created_date }}</td>
                                                         <td>{{ profiling.created_week }} </td>
                                                         <td>{{ profiling.created_month }} {{ profiling.created_year }}</td>
@@ -275,5 +314,67 @@
     <script src="{% static 'js/typeahead.js' %}"></script>
     <script src="{% static 'js/select2.js' %}"></script>
     <script src="{% static 'js/data-table.js' %}"></script>
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.3.1/js/dataTables.buttons.min.js"></script>
+
+    <!-- JSZip for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- SheetJS (for Excel export) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('#table tbody tr');
+        
+            rows.forEach(row => {
+                const tdCells = row.querySelectorAll('td'); // Changed to 'tdCells'
+        
+                tdCells.forEach(cell => {
+                    cell.style.fontSize = '10px';    // Set font size to 10px
+                    cell.style.margin = '1px';       // Set margin to 1px
+                    cell.style.whiteSpace = 'pre-wrap'; // Make text break at whitespace
+                });
+    
+                const thCells = row.querySelectorAll('th'); // Changed to 'thCells'
+        
+                thCells.forEach(cell => {
+                    cell.style.fontSize = '12px';    // Set font size to 12px for headers
+                    cell.style.margin = '1px';       // Set margin to 1px
+                    cell.style.whiteSpace = 'pre-wrap'; // Make text break at whitespace
+                });
+            });
+        });
+    </script>
+    
+        
+    <!-- JavaScript code -->
+    <script>
+       
+
+        // Print Table Function
+        function printTable() {
+            var printContent = document.querySelector('.cont').innerHTML;
+            var originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = printContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+            window.location.reload();
+        }
+
+        // Export Table to Excel Function
+        function exportTableToExcel() {
+            var wb = XLSX.utils.table_to_book(document.getElementById('table'), { sheet: "Sheet1" });
+            XLSX.writeFile(wb, 'Data Profiling Report.xlsx');
+        }
+    </script>
 </body>
 </html>
