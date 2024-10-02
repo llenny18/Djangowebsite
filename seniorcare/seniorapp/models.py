@@ -1,6 +1,31 @@
 from django.db import models
 
 
+class UserLogs(models.Model):
+    logs = models.AutoField(primary_key=True)  # For auto-incrementing Logs field
+    user_id = models.IntegerField()  # user_id is an integer
+    user_type = models.CharField(max_length=255)  # user_type is a varchar with a max length of 255
+    login_time = models.DateTimeField()  # login_time is a datetime
+    logout_time = models.DateTimeField()  # logout_time is a datetime
+
+    class Meta:
+        db_table = 'user_logs'  # The database table name
+        managed = False  # Specify if the model should be managed by Django or not
+        
+
+class UserActivityLog(models.Model):
+    logs = models.IntegerField(primary_key=True)  # Corresponding to 'Logs'
+    username = models.CharField(max_length=255)  # Computed field for 'username'
+    email = models.CharField(max_length=255)  # Computed field for 'email'
+    user_type = models.CharField(max_length=255)  # user_type from user_logs
+    login_time = models.DateTimeField()  # login_time from user_logs
+    logout_time = models.DateTimeField()  # logout_time from user_logs
+
+    class Meta:
+        db_table = 'user_activity_log'  # Referencing the view in the database
+        managed = False  # Since it's a view, Django won't manage it (no migrations)
+
+
 class PredictiveAnalyticsView(models.Model):
     analytics_id = models.IntegerField(primary_key=True)
     description = models.TextField()
@@ -51,7 +76,7 @@ class Admin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'Admin'
+        db_table = 'admin'
         managed = False
 
 class HealthWorker(models.Model):
@@ -63,7 +88,7 @@ class HealthWorker(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'HealthWorker'
+        db_table = 'healthworker'
         managed = False
 
 class SeniorCitizen(models.Model):
@@ -78,7 +103,7 @@ class SeniorCitizen(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'SeniorCitizen'
+        db_table = 'seniorcitizen'
         managed = False
 
 class Activity(models.Model):
@@ -106,7 +131,7 @@ class Announcement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'Announcement'
+        db_table = 'announcement'
         managed = False
 
 class Profile(models.Model):
@@ -121,7 +146,7 @@ class Profile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'Profile'
+        db_table = 'profile'
         managed = False
 
 class SMSNotification(models.Model):
@@ -133,7 +158,7 @@ class SMSNotification(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'SMSNotification'
+        db_table = 'smsnotification'
         managed = False
 
 
@@ -174,7 +199,7 @@ class DataProfiling(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'DataProfiling'
+        db_table = 'dataprofiling'
         managed = False
 
 class PredictiveAnalytics(models.Model):
@@ -186,7 +211,7 @@ class PredictiveAnalytics(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'PredictiveAnalytics'
+        db_table = 'predictiveanalytics'
         managed = False
 
 class Appointment(models.Model):

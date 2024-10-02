@@ -1,0 +1,112 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Senior Citizen MIS - User Logs</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- plugins:css -->
+
+ <!-- DataTables CSS -->
+ <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.min.css">
+ <!-- jQuery -->
+ <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+   {% include 'views/nav.html' %}
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> User Log Record </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Record</a></li>
+                  <li class="breadcrumb-item" aria-current="page">User Logs</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="row">
+             
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card" style="width: 1000px; overflow-y: scroll;overflow-x: scroll;">
+                  <div class="card-body">
+                    <h4 class="card-title">User Logs List</h4>
+                  
+                    </p>
+                    <table class="table table-bordered" id="table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>User Type</th>
+                              <th>Login Time</th>
+                              <th>Logout Time</th>
+                    
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for log in user_logs %}
+                          <tr>
+                              <td>{{ log.username }}</td>
+                              <td>{{ log.email }}</td>
+                              <td>{{ log.user_type }}</td>
+                              <td>{{ log.login_time }}</td>
+                              <td>{{ log.logout_time }}</td>
+                            </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+                  
+                    
+                  </div>
+                </div>
+              </div>
+             
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+     <script src="https://cdn.datatables.net/2.1.5/js/dataTables.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      new DataTable('#table');
+  </script>
+    <!-- plugins:js -->
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'js/off-canvas.js' %}"></script>
+    <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+     <script src="{% static 'js/misc.js' %}"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var username = "{{ username }}";
+            if (username === 'Guest') {
+                window.location.href ='login'; alert('Login is required.'); 
+            }
+        });
+    </script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <!-- End custom js for this page -->
+  </body>
+</html>

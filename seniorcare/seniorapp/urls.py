@@ -10,6 +10,7 @@ urlpatterns = [
 
 
     path('citizens', views.citizens, name='citizens'),
+    path('userlogs', views.userlogs, name='userlogs'),
     path('announcements', views.announcements, name='announcements'),
     path('admins', views.admins, name='admins'),
     path('admins/<int:id>/update/', views.admin_update, name='admin_update'),

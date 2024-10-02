@@ -8,8 +8,19 @@ class DataProfilingForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
-    password = forms.CharField(max_length=255, widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg'}))
+    username = forms.CharField(
+        max_length=50, 
+        required=True,  
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'})
+    )
+    password = forms.CharField(
+        max_length=255, 
+        required=True,  
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control form-control-lg', 
+            'id': 'password'  # Add an ID to target it in the template
+        })
+    )
 
 class AppointmentForm(forms.ModelForm):
     class Meta:

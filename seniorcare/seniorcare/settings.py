@@ -26,7 +26,13 @@ SECRET_KEY = 'django-insecure-j8+th9uu=(pia%hzs^ng*-niy8*$w^x%h3dl+@ta)0_yi_g6&m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['185.170.58.95','seniorcitizencare.site','www.seniorcitizencare.site']
+
+CSRF_TRUSTED_ORIGINS = ['https://seniorcitizencare.site', 'https://www.seniorcitizencare.site']
+
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
 
 
 # Application definition
@@ -78,11 +84,11 @@ WSGI_APPLICATION = 'seniorcare.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'seniorcare',
-        'USERNAME' :'Felynno',
-        'PASSWORD' :'',
+        'NAME': 'u555923667_seniorcare',
+        'USER' :'u555923667_seniorciticare',
+        'PASSWORD' :'SeniorCare#123',
+ 	'HOST':'193.203.168.138',
         'PORT':'3306',
-        'HOST':'localhost',
     }
 }
 
@@ -123,6 +129,13 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+
+
+SESSION_COOKIE_AGE = 10800  # Set the session to expire after 3 hours
+
+# Do not expire the session when the user closes the browser
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
 # Default primary key field type

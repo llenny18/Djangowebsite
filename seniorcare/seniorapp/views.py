@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView
+from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView, UserLogs, UserActivityLog
 from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm
 
 from django.contrib.auth import authenticate, login
@@ -101,13 +101,29 @@ def generate_predictive_report():
 
 
 def logout_view(request):
+    user_id = request.session.get('user_id')  # Get the user_id from the session
+    user_type = request.session.get('user_type')  # Get the user_type from the session
+
+    if user_id and user_type:
+        # Find the most recent log entry for this user where logout_time is not set yet
+        try:
+            last_log = UserLogs.objects.filter(user_id=user_id, user_type=user_type).latest('login_time')
+            if last_log.logout_time is None:  # Ensure it's the correct log (i.e., no logout time yet)
+                last_log.logout_time = timezone.now()  # Set the logout time
+                last_log.save()  # Save the updated log entry
+        except UserLogs.DoesNotExist:
+            pass  # If no log exists, ignore (though this case should not happen)
+
     # Clear the session
     request.session.flush()
+
     # Redirect to the login page
     return redirect('login')
 
 def login_view(request):
     user_id = request.session.get('user_id', 'None')  # Retrieve user_id from the session
+    error_message = None  # Initialize error_message variable
+
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -121,9 +137,16 @@ def login_view(request):
                     request.session['user_id'] = user.admin_id
                     request.session['user_name'] = user.username
                     request.session['user_type'] = 'Admin'
+
+                    # Log the login event
+                    UserLogs.objects.create(
+                        user_id=user.admin_id,
+                        user_type='Admin',
+                        login_time=timezone.now()
+                    )
                     return redirect('index')
             except Admin.DoesNotExist:
-                pass
+                pass  # Continue to check HealthWorker
 
             # Check if the user is a HealthWorker
             try:
@@ -132,17 +155,27 @@ def login_view(request):
                     request.session['user_id'] = user.worker_id
                     request.session['user_name'] = user.username
                     request.session['user_type'] = 'HealthWorker'
+
+                    # Log the login event
+                    UserLogs.objects.create(
+                        user_id=user.worker_id,
+                        user_type='HealthWorker',
+                        login_time=timezone.now()
+                    )
                     return redirect('index')
             except HealthWorker.DoesNotExist:
-                pass
+                pass  # No action needed; we will show the error below
 
-            # If user does not exist or password is incorrect
-            return render(request, 'views/login.html', {'form': form, 'error_message': 'Invalid username or password'})
+            # If the user does not exist or password is incorrect
+            error_message = 'Invalid username or password. Please try again.'
 
     else:
         form = LoginForm()
 
-    return render(request, 'views/login.html', {'form': form, 'user_id': user_id})
+    return render(request, 'views/login.html', {'form': form, 'user_id': user_id, 'error_message': error_message})
+
+
+
 from django.shortcuts import render
 from .models import SummaryCounts
 
@@ -502,6 +535,23 @@ def activities(request):
         'username': username, 
         'user_type': user_type, 'user_id': user_id
     })
+    
+    
+    
+
+def userlogs(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    user_logs = UserActivityLog.objects.all()
+    return render(request, 'views/user_logs.html', {
+        'user_logs': user_logs, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+    
+    
 
 def citizens(request):
     username = request.session.get('user_name', 'Guest')

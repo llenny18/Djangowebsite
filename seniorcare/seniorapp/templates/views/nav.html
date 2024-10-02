@@ -7,7 +7,13 @@
   <div class="navbar-menu-wrapper d-flex align-items-stretch">
     <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
       <span class="mdi mdi-menu"></span>
+     
     </button>
+    <button class="navbar-toggler navbar-toggler align-self-center" style="color: black;" type="button" data-toggle="minimize">
+      <h3>Barangay Duhatan Senior Citizen Care</h3>
+     
+    </button>
+ 
     <div class="search-field d-none d-xl-block">
     
     </div>
@@ -80,6 +86,7 @@
   <ul class="nav flex-column sub-menu">
       <li class="nav-item"> <a class="nav-link" href="{% url 'admins' %}">Administrators</a></li>
       <li class="nav-item"> <a class="nav-link" href="{% url 'healthworkers' %}">Health Workers</a></li>
+      <li class="nav-item"> <a class="nav-link" href="{% url 'userlogs' %}">Logs</a></li>
   </ul>
 </div>
 </li>
@@ -89,7 +96,7 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'data_profiling' %}">
           <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-          <span class="menu-title">Data Profiles</span>
+          <span class="menu-title">Data Profiling</span>
         </a>
       </li>
       

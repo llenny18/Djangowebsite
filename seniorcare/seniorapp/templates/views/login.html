@@ -29,21 +29,47 @@
           <div class="row flex-grow">
             <div class="col-lg-4 mx-auto">
               <div class="auth-form-light text-left p-5">
-                <div class="brand-logo">
-                  <img src="{% static 'images/logo-dark.svg' %}">
+                <div class="brand-logo text-center" >
+                  <img src="{% static 'images/logo.png' %}">
                 </div>
-                <h4>Senior Citizen Management App Login </h4>
-                <h6 class="font-weight-light">Input your credentials.</h6>
-                <form method="POST" action="{% url 'login' %}">
+                <h4 style="color: black;" class="text-center mb-3">BRGY. Pinagbuhatan Senior Citizen Management App Login </h4>
+                <h6 class="font-weight-light text-center" style="color: black;">Input your credentials.</h6>
+                <form method="POST" action="{% url 'login' %}" id="myForm" style="color: black;">
                   {% csrf_token %}
-                  {{ form.as_p }}
+                  
+                  <!-- Username Field -->
+                  <div class="form-group">
+                      <label for="username">Username</label>
+                      {{ form.username }}
+                  </div>
+           
+                  <!-- Password Field with Eye Icon -->
+                  <div class="form-group position-relative">
+                      <label for="password">Password</label>
+                      {{ form.password }}
+                      <i class="mdi mdi-eye-off position-absolute" id="togglePassword" style="cursor: pointer; top: 70%; right: 10px; transform: translateY(-50%);"></i>
+                  </div>
+                  {% if error_message %}
+                  <p style="color: red;">{{ error_message }}</p>
+
+                  <script>
+                    const form = document.getElementById('myForm');
+                    const inputs = form.querySelectorAll('input');
+            
+                    // Change border color to red on focus
+                    inputs.forEach(input => {
+                     
+                            input.style.borderColor = 'red';
+                    
+                    });
+                </script>
+              {% endif %}
                   <div class="mt-3">
                       <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN IN</button>
                   </div>
               </form>
-              {% if error_message %}
-                  <p style="color: red;">{{ error_message }}</p>
-              {% endif %}
+              
+            
               
               
               </div>
@@ -60,6 +86,20 @@
     <!-- endinject -->
     <!-- Plugin js for this page -->
     <!-- End plugin js for this page -->
+
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function () {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.classList.toggle('mdi-eye-off');
+        this.classList.toggle('mdi-eye');
+    });
+</script>
+
+
     <!-- inject:js -->
     <script src="{% static 'js/off-canvas.js' %}"></script>
     <script src="{% static 'js/hoverable-collapse.js' %}"></script>
