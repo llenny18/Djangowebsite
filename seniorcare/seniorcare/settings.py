@@ -132,7 +132,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
 
-SESSION_COOKIE_AGE = 10800  # Set the session to expire after 3 hours
+SESSION_COOKIE_AGE = 5400  # Set the session to expire after 3 hours
 
 # Do not expire the session when the user closes the browser
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False

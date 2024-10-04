@@ -16,6 +16,12 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix
 
+from django.db import connection
+
+import requests
+from django.http import JsonResponse
+
+
 # Function to check if a new predictive analytics report is needed
 def check_and_generate_report():
     # Check if a report exists in the past hour
@@ -106,15 +112,22 @@ def logout_view(request):
     user_id = request.session.get('user_id')  # Get the user_id from the session
     user_type = request.session.get('user_type')  # Get the user_type from the session
 
-    timezone_offset = pytz.timezone('Asia/Singapore')
-                        
     if user_id and user_type:
         # Find the most recent log entry for this user where logout_time is not set yet
         try:
             last_log = UserLogs.objects.filter(user_id=user_id, user_type=user_type).latest('login_time')
             if last_log.logout_time is None:  # Ensure it's the correct log (i.e., no logout time yet)
-                last_log.logout_time = datetime.now(timezone_offset)  # Set the logout time
-                last_log.save()  # Save the updated log entry
+
+                # Update the logout time using raw SQL with CONVERT_TZ
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        UPDATE user_logs 
+                        SET logout_time = CONVERT_TZ(NOW(), '+00:00', '+08:00')
+                        WHERE user_id = %s
+                        """, [last_log.user_id]
+                    )
+
         except UserLogs.DoesNotExist:
             pass  # If no log exists, ignore (though this case should not happen)
 
@@ -124,12 +137,11 @@ def logout_view(request):
     # Redirect to the login page
     return redirect('login')
 
+
+
 def login_view(request):
     user_id = request.session.get('user_id', 'None')  # Retrieve user_id from the session
     error_message = None  # Initialize error_message variable
-
-    # Define the timezone for +08:00 (Asia/Singapore is UTC+08:00)
-    timezone_offset = pytz.timezone('Asia/Singapore')
 
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -145,12 +157,15 @@ def login_view(request):
                     request.session['user_name'] = user.username
                     request.session['user_type'] = 'Admin'
 
-                    # Log the login event with the +08:00 timezone
-                    UserLogs.objects.create(
-                        user_id=user.admin_id,
-                        user_type='Admin',
-                        login_time=timezone.now().astimezone(timezone_offset)
-                    )
+                    # Insert login time using raw SQL with CONVERT_TZ
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            """
+                            INSERT INTO user_logs (user_id, user_type, login_time)
+                            VALUES (%s, %s, CONVERT_TZ(NOW(), '+00:00', '+08:00'))
+                            """, [user.admin_id, 'Admin']
+                        )
+
                     return redirect('index')
             except Admin.DoesNotExist:
                 pass  # Continue to check HealthWorker
@@ -163,12 +178,15 @@ def login_view(request):
                     request.session['user_name'] = user.username
                     request.session['user_type'] = 'HealthWorker'
 
-                    # Log the login event with the +08:00 timezone
-                    UserLogs.objects.create(
-                        user_id=user.worker_id,
-                        user_type='HealthWorker',
-                        login_time=timezone.now().astimezone(timezone_offset)
-                    )
+                    # Insert login time using raw SQL with CONVERT_TZ
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            """
+                            INSERT INTO user_logs (user_id, user_type, login_time)
+                            VALUES (%s, %s, CONVERT_TZ(NOW(), '+00:00', '+08:00'))
+                            """, [user.worker_id, 'HealthWorker']
+                        )
+
                     return redirect('index')
             except HealthWorker.DoesNotExist:
                 pass  # No action needed; we will show the error below
@@ -180,6 +198,7 @@ def login_view(request):
         form = LoginForm()
 
     return render(request, 'views/login.html', {'form': form, 'user_id': user_id, 'error_message': error_message})
+
 
 
 
@@ -471,25 +490,61 @@ def sms_notification_update(request, id):
         'username': username, 
         'user_type': user_type, 'user_id': user_id
     })
+    
+import requests
+
+# Function to send SMS via Semaphore
+def send_sms_via_semaphore(phone_number, message):
+    url = 'https://api.semaphore.co/api/v4/messages'
+    payload = {
+        'apikey': "3cbb7512ba20c029b92cbacf3fb22191",  # Replace with your actual API key
+        'number': phone_number,
+        'message': message
+    }
+
+    response = requests.post(url, data=payload)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None  # Handle error cases in a better way
 
 # SMSNotification create
 def sms_notification_create(request):
     username = request.session.get('user_name', 'Guest')
-    user_type = request.session.get('user_type', None) 
+    user_type = request.session.get('user_type', None)
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
- # Retrieve user_type from the session
+    seniors = SeniorCitizen.objects.all()
+
     if request.method == 'POST':
         form = SMSNotificationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('smsnotifications')
+            # Extract the data from the form
+            recipient_phone = form.cleaned_data['recipient_phone']
+            message = form.cleaned_data['message']
+            
+            # First, try to send the SMS
+            sms_response = send_sms_via_semaphore(recipient_phone, message)
+            
+            if sms_response:  # If the SMS is successfully sent
+                # Save the SMS notification data in the database
+                form.save()
+                return redirect('smsnotifications')
+            else:
+                # Handle the case where SMS sending fails
+                form.add_error(None, 'Failed to send SMS. Please try again.')
     else:
         form = SMSNotificationForm()
+
     return render(request, 'views/sms_notification_create.html', {
         'form': form, 
         'username': username, 
-        'user_type': user_type, 'user_id': user_id
+        'user_type': user_type, 
+        'user_id': user_id, 
+        'seniors': seniors
     })
+
+
 
 # PredictiveAnalytics update
 def predictive_analytics_update(request, id):

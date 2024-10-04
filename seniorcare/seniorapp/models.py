@@ -99,6 +99,8 @@ class SeniorCitizen(models.Model):
     gender = models.CharField(max_length=10)
     health_condition = models.TextField()
     address = models.CharField(max_length=255)
+    treatments = models.CharField(max_length=255)
+    checkups = models.CharField(max_length=255)
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

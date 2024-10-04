@@ -141,3 +141,27 @@
       
     </ul>
   </nav>
+
+<!-- nav.html -->
+<script>
+  // JavaScript code for detecting tab change and logging out
+  const logoutURL = "{% url 'logout' %}";  // Django's URL template tag
+
+  let tabSwitched = false;
+
+  window.onblur = function() {
+    tabSwitched = true;
+  };
+
+  window.onfocus = function() {
+    tabSwitched = false;
+  };
+
+  setInterval(function() {
+    if (tabSwitched) {
+      window.location.href = logoutURL;
+    }
+  }, 1000);
+</script>
+
+  

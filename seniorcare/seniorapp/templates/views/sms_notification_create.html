@@ -28,62 +28,7 @@
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_sidebar.html -->
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <ul class="nav">
-            <li class="nav-item nav-category">Home</li>
-            <li class="nav-item">
-              <a class="nav-link" href={% url 'index' %}>
-                <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
-                <span class="menu-title">Dashboard</span>
-              </a>
-            </li>
-            {% if user_type == 'Admin' %}
-<li class="nav-item">
-    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-        <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
-        <span class="menu-title">Users</span>
-        <i class="menu-arrow"></i>
-    </a>
-    <div class="collapse" id="ui-basic">
-        <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{% url 'admins' %}">Administrators</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{% url 'healthworkers' %}">Health Workers</a></li>
-        </ul>
-    </div>
-</li>
-{% endif %}
-
-            <li class="nav-item nav-category">System Management</li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'data_profiling' %}">
-                <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-                <span class="menu-title">Data Profiles</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'announcements' %}">
-                <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-                <span class="menu-title">Announcements</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'activities' %}">
-                <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
-                <span class="menu-title">Activities</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'smsnotifications' %}">
-                <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
-                <span class="menu-title">SMS Notifications</span>
-              </a>
-            </li>
-            
-          
-            
-          </ul>
-        </nav>
+       
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
@@ -106,7 +51,12 @@
                       {% csrf_token %}
                       <div class="form-group">
                           <label for="id_recipient_phone">Recipient Phone</label>
-                          <input type="text" class="form-control" id="id_recipient_phone" name="recipient_phone" value="{{ form.recipient_phone.value }}">
+                          <select class="form-control" id="id_recipient_phone" name="recipient_phone">
+                          {% for senior in seniors %}
+                          <option value="{{ senior.phone }}">{{ senior.first_name }} {{ senior.last_name }} - {{ senior.phone }}</option>
+                           {% endfor %} 
+                          </select >
+
                           {% if form.recipient_phone.errors %}
                               <div class="text-danger">{{ form.recipient_phone.errors }}</div>
                           {% endif %}
@@ -130,7 +80,7 @@
                       </div>
                       <div class="form-group">
                           <label for="id_sender_id">Sender ID</label>
-                          <input type="number" class="form-control" id="id_sender_id" name="sender_id" value="{{ form.sender_id.value }}">
+                          <input type="number" class="form-control" id="id_sender_id" name="sender_id" value="{{ user_id }}">
                           {% if form.sender_id.errors %}
                               <div class="text-danger">{{ form.sender_id.errors }}</div>
                           {% endif %}

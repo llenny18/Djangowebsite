@@ -54,6 +54,8 @@
                           <th>Health Condition</th>
                           <th>Address</th>
                           <th>Phone</th>
+                          <th>Treatments</th>
+                          <th>Checkups</th>
                           <th>Created At</th>
                           <th>Action</th>
                         </tr>
@@ -69,6 +71,8 @@
                             <td>{{ senior.health_condition }}</td>
                             <td>{{ senior.address }}</td>
                             <td>{{ senior.phone }}</td>
+                            <td>{{ senior.treatments }}</td>
+                            <td>{{ senior.checkups }}</td>
                             <td>{{ senior.created_at }}</td>
                             <td><a href="{% url 'senior_citizen_update' id=senior.citizen_id %}" class="btn badge-primary m-1">Edit</a><br><a href="" class="btn badge-danger m-1">Delete</a></td>
                         </tr>
