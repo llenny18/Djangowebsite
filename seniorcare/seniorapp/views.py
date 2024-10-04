@@ -5,6 +5,8 @@ from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm,
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password, make_password
 
+from django.utils import timezone
+import pytz
 import datetime
 from django.utils import timezone
 from .models import PredictiveAnalytics, DataProfilingView, SeniorCitizen
@@ -104,12 +106,14 @@ def logout_view(request):
     user_id = request.session.get('user_id')  # Get the user_id from the session
     user_type = request.session.get('user_type')  # Get the user_type from the session
 
+    timezone_offset = pytz.timezone('Asia/Singapore')
+                        
     if user_id and user_type:
         # Find the most recent log entry for this user where logout_time is not set yet
         try:
             last_log = UserLogs.objects.filter(user_id=user_id, user_type=user_type).latest('login_time')
             if last_log.logout_time is None:  # Ensure it's the correct log (i.e., no logout time yet)
-                last_log.logout_time = timezone.now()  # Set the logout time
+                last_log.logout_time = datetime.now(timezone_offset)  # Set the logout time
                 last_log.save()  # Save the updated log entry
         except UserLogs.DoesNotExist:
             pass  # If no log exists, ignore (though this case should not happen)
@@ -123,6 +127,9 @@ def logout_view(request):
 def login_view(request):
     user_id = request.session.get('user_id', 'None')  # Retrieve user_id from the session
     error_message = None  # Initialize error_message variable
+
+    # Define the timezone for +08:00 (Asia/Singapore is UTC+08:00)
+    timezone_offset = pytz.timezone('Asia/Singapore')
 
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -138,11 +145,11 @@ def login_view(request):
                     request.session['user_name'] = user.username
                     request.session['user_type'] = 'Admin'
 
-                    # Log the login event
+                    # Log the login event with the +08:00 timezone
                     UserLogs.objects.create(
                         user_id=user.admin_id,
                         user_type='Admin',
-                        login_time=timezone.now()
+                        login_time=timezone.now().astimezone(timezone_offset)
                     )
                     return redirect('index')
             except Admin.DoesNotExist:
@@ -156,11 +163,11 @@ def login_view(request):
                     request.session['user_name'] = user.username
                     request.session['user_type'] = 'HealthWorker'
 
-                    # Log the login event
+                    # Log the login event with the +08:00 timezone
                     UserLogs.objects.create(
                         user_id=user.worker_id,
                         user_type='HealthWorker',
-                        login_time=timezone.now()
+                        login_time=timezone.now().astimezone(timezone_offset)
                     )
                     return redirect('index')
             except HealthWorker.DoesNotExist:

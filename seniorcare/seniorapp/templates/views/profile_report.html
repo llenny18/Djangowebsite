@@ -43,6 +43,35 @@
                 border: 1px solid #000; /* Add border to card for printing */
             }
         }
+        <style>
+            .header {
+                background-color: #333;
+                color: white;
+                padding: 20px 0;
+                text-align: center;
+            }
+            .header .barangay-logo, .header .city-logo {
+                width: 100px;
+            }
+            .header h2 {
+                margin: 0;
+                font-size: 1.5rem;
+            }
+            .header h3 {
+                margin: 0;
+                font-size: 1.2rem;
+                font-weight: 400;
+            }
+            .header p {
+                margin: 5px 0 0;
+            }
+            .divider {
+                height: 1px;
+                background-color: white;
+                margin: 20px auto;
+                width: 80%;
+            }
+        </style>
     </style>
 
 </head>
@@ -242,12 +271,33 @@
         <button class="btn btn-success" onclick="exportTableToExcel()">Export to Excel</button>
 
                             <hr>
+                         
                             <div class="row">
                                 <div class="col-lg-12 grid-margin stretch-card">
                                     <div class="card" style="width: 1000px; overflow-y: scroll; overflow-x: scroll; ">
                                         
                                         <div class="card-body cont">
-                                            <h4 class="card-title">Data Profiling Reports List</h4>
+                                            <hr>
+                                            <div class="header">
+                                                <div class="container">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-md-3 text-center">
+                                                            <img src="{% static 'images/favicon.png' %}" alt="Barangay Logo" class="barangay-logo" >
+                                                        </div>
+                                                        <div class="col-md-6 text-center">
+                                                            <h2 class="text-black">REPUBLIC OF THE PHILIPPINES</h2>
+                                                            <h3 class="text-black">City of Pasig</h3>
+                                                            <p class="text-black">OFFICE OF THE BARANGAY PINAGBUHATAN</p>
+                                                        </div>
+                                                        <div class="col-md-3 text-center">
+                                                            <img src="{% static 'images/Pasig_City_Logo.png' %}" alt="City Logo" class="city-logo">
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider"></div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <h4 class="card-title text-center text-uppercase">Data Profiling Reports List</h4>
                                             <table class="table table-bordered" id="table"> 
                                                 <thead>
                                                     <tr>
@@ -361,13 +411,39 @@
 
         // Print Table Function
         function printTable() {
+            // Get the content to print (including images)
             var printContent = document.querySelector('.cont').innerHTML;
             var originalContent = document.body.innerHTML;
-
-            document.body.innerHTML = printContent;
-            window.print();
-            document.body.innerHTML = originalContent;
-            window.location.reload();
+    
+            // Create a new window to load the content and print
+            var printWindow = window.open('', '_blank', 'width=800,height=600');
+            printWindow.document.write('<html><head><title>Print Table</title>');
+    
+            // Add CSS references for the print styles
+            printWindow.document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />');
+            printWindow.document.write('<style> /* Default styles */ th { font-size: 14px; } table { margin: 20px 0; /* Adjust table margin */ } /* Print-specific styles */ @media print { th { font-size: 8px; /* Smaller font size for print */ } table { margin: 0; /* Remove margins for print */ width: 100%; /* Ensure table takes full width */ border-collapse: collapse; /* Collapse borders for a cleaner look */ } .container-scroller, .main-panel, .content-wrapper { display: none; /* Hide non-essential content */ } .card-body, .card { border: 1px solid #000; /* Add border to card for printing */ } } <style> .header { background-color: #333; color: white; padding: 20px 0; text-align: center; } .header .barangay-logo, .header .city-logo { width: 100px; } .header h2 { margin: 0; font-size: 1.5rem; } .header h3 { margin: 0; font-size: 1.2rem; font-weight: 400; } .header p { margin: 5px 0 0; } .divider { height: 1px; background-color: white; margin: 20px auto; width: 80%;} </style>');
+            printWindow.document.write('<style>@media print { .card { border: 1px solid #000; } }</style>');
+            printWindow.document.write("<link rel='stylesheet' href='{% static 'vendors/select2/select2.min.css' %}'>");
+            printWindow.document.write("<link rel='stylesheet' href='{% static 'vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}'>");
+            printWindow.document.write("<link rel='stylesheet' href='{% static 'css/style.css' %}'>");
+            
+            
+            
+            printWindow.document.write('</head><body>');
+            
+            // Write the print content into the new window
+            printWindow.document.write(printContent);
+            printWindow.document.write('</body></html>');
+            
+            // Close the document to finish loading and trigger the print dialog
+            printWindow.document.close();
+            printWindow.focus();
+    
+            // Wait for the content to load before printing
+            printWindow.onload = function() {
+                printWindow.print();
+                printWindow.close();
+            };
         }
 
         // Export Table to Excel Function
