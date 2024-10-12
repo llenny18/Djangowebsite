@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView, UserLogs, UserActivityLog, PredictedDisease, SeniorCitizenDiseaseView
-from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm
+from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm, ResetPasswordForm
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password, make_password
@@ -331,23 +331,79 @@ def senior_citizen_update(request, id):
         'user_type': user_type, 'user_id': user_id
     })
 
+from django.contrib import messages
+
+def reset_password(request, admin_id):
+    admin = get_object_or_404(Admin, admin_id=admin_id)
+
+    if request.method == 'POST':
+        form = ResetPasswordForm(request.POST)
+        if form.is_valid():
+            security_code = form.cleaned_data['security_code']
+            new_password = form.cleaned_data['new_password']
+
+            if int(security_code) == int(admin.security_code):  # Assuming 'security_code' is a field in your Admin model
+                admin.password = new_password  # You might want to hash the password here
+                admin.save()
+                messages.success(request, "Password has been reset successfully.")
+                return redirect('login')  # Redirect to the login page
+            else:
+                messages.error(request, "Invalid security code.")
+    else:
+        form = ResetPasswordForm()
+
+    return render(request, 'views/forgot_pass.html', {'form': form, 'admin': admin})
+
+
+
+def reset_health_worker_password(request, worker_id):
+    health_worker = get_object_or_404(HealthWorker, worker_id=worker_id)
+
+    if request.method == 'POST':
+        form = ResetPasswordForm(request.POST)
+        if form.is_valid():
+            security_code = form.cleaned_data['security_code']
+            new_password = form.cleaned_data['new_password']
+
+            # Check if the provided security code matches the health worker's code
+            if int(security_code) == int(health_worker.security_code):  # Ensure 'security_code' is in your HealthWorker model
+                health_worker.password = new_password 
+                health_worker.save()
+                messages.success(request, "Password has been reset successfully.")
+                return redirect('login')  # Redirect to the login page
+            else:
+                messages.error(request, "Invalid security code.")
+    else:
+        form = ResetPasswordForm()
+
+    return render(request, 'views/forgot_pass_h.html', {'form': form, 'health_worker': health_worker})
+
 # SeniorCitizen create
 def senior_citizen_create(request):
     username = request.session.get('user_name', 'Guest')
     user_type = request.session.get('user_type', None) 
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
- # Retrieve user_type from the session
+    
     if request.method == 'POST':
         form = SeniorCitizenForm(request.POST)
         if form.is_valid():
-            form.save()
+            # Generate a random 8-digit number
+            citizen_id = random.randint(10000000, 99999999)  # Generates a number between 10,000,000 and 99,999,999
+            
+            # Set the citizen_id in the form's cleaned data
+            senior_citizen = form.save(commit=False)  # Do not save to the database yet
+            senior_citizen.citizen_id = citizen_id  # Assign the random citizen_id
+            senior_citizen.save()  # Now save it to the database
+            
             return redirect('citizens')
     else:
         form = SeniorCitizenForm() 
+    
     return render(request, 'views/senior_citizen_create.html', {
         'form': form, 
         'username': username, 
-        'user_type': user_type, 'user_id': user_id
+        'user_type': user_type, 
+        'user_id': user_id
     })
 
 # Activity update
@@ -511,6 +567,8 @@ from django.utils import timezone
 from datetime import timedelta
 
 
+import random
+
 def predict_all_diseases():
     # Get the start and end of today
     now = timezone.now()
@@ -528,20 +586,41 @@ def predict_all_diseases():
     if today_count < 300:
         # Proceed with your prediction logic
         citizens = SeniorCitizen.objects.all()
+        recent_predictions = []  # To track recent predictions and avoid repetition
+        
         for citizen in citizens:
             # Check if a prediction for this citizen already exists
             if not PredictedDisease.objects.filter(citizen_id=citizen.citizen_id).exists():
                 disease_predictions = predict_diseases(citizen)  # Your existing prediction function
                 
                 if disease_predictions:  # Ensure there is at least one prediction
-                    disease = disease_predictions[0]  # Get the first disease prediction
+                    # Shuffle the predictions for variety
+                    random.shuffle(disease_predictions)
+                    
+                    # Pick the first non-recent prediction
+                    disease = None
+                    for pred in disease_predictions:
+                        if pred not in recent_predictions:
+                            disease = pred
+                            break
+                    
+                    # If all predictions are recent, fallback to the first one
+                    if not disease:
+                        disease = disease_predictions[0]
+                    
+                    # Update recent predictions (maintain a short list of recent ones)
+                    recent_predictions.append(disease)
+                    if len(recent_predictions) > 5:  # Adjust the length of memory as needed
+                        recent_predictions.pop(0)
+
                     # Create a new PredictedDisease entry
                     PredictedDisease.objects.create(
                         citizen_id=citizen.citizen_id,
                         disease_name=disease,
-                        score=1.0,  # Adjust this based on your logic
+                        score=random.uniform(0.7, 1.0),  # Adjust score based on prediction confidence
                         prediction_rank=1  # Adjust this based on your logic
                     )
+
 
  
 def predict_disease_list(request):

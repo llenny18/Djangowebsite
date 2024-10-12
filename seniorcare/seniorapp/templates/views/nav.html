@@ -20,7 +20,7 @@
     <ul class="navbar-nav navbar-nav-right">
      
       <li class="nav-item nav-profile dropdown">
-        <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link font-weight-bold dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
           <div class="nav-profile-img">
             <img src="{% static 'images/faces/face28.png' %}" alt="image">
           </div>
@@ -70,23 +70,23 @@
     <ul class="nav">
       <li class="nav-item nav-category">Home</li>
       <li class="nav-item">
-        <a class="nav-link" href={% url 'index' %}>
+        <a class="nav-link font-weight-bold" href={% url 'index' %}>
           <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
           <span class="menu-title">Dashboard</span>
         </a>
       </li>
       {% if user_type == 'Admin' %}
 <li class="nav-item">
-<a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+<a class="nav-link font-weight-bold" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
   <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
   <span class="menu-title">Users</span>
   <i class="menu-arrow"></i>
 </a>
 <div class="collapse" id="ui-basic">
   <ul class="nav flex-column sub-menu">
-      <li class="nav-item"> <a class="nav-link" href="{% url 'admins' %}">Administrators</a></li>
-      <li class="nav-item"> <a class="nav-link" href="{% url 'healthworkers' %}">Health Workers</a></li>
-      <li class="nav-item"> <a class="nav-link" href="{% url 'userlogs' %}">Logs</a></li>
+      <li class="nav-item"> <a class="nav-link font-weight-bold" href="{% url 'admins' %}">Administrators</a></li>
+      <li class="nav-item"> <a class="nav-link font-weight-bold" href="{% url 'healthworkers' %}">Health Workers</a></li>
+      <li class="nav-item"> <a class="nav-link font-weight-bold" href="{% url 'userlogs' %}">Logs</a></li>
   </ul>
 </div>
 </li>
@@ -94,44 +94,44 @@
 
       <li class="nav-item nav-category">System Management</li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'data_profiling' %}">
+        <a class="nav-link font-weight-bold" href="{% url 'data_profiling' %}">
           <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
           <span class="menu-title">Data Profiling</span>
         </a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'citizens' %}">
+        <a class="nav-link font-weight-bold" href="{% url 'citizens' %}">
           <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
           <span class="menu-title">Senior Citizens</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'announcements' %}">
+        <a class="nav-link font-weight-bold" href="{% url 'announcements' %}">
           <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
           <span class="menu-title">Announcements</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'activities' %}">
+        <a class="nav-link font-weight-bold" href="{% url 'activities' %}">
           <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
           <span class="menu-title">Activities</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'smsnotifications' %}">
+        <a class="nav-link font-weight-bold" href="{% url 'smsnotifications' %}">
           <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
           <span class="menu-title">SMS Notifications</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'predictdis' %}">
+        <a class="nav-link font-weight-bold" href="{% url 'predictdis' %}">
           <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
           <span class="menu-title">Predictive Analytics</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'profile_reports' %}">
+        <a class="nav-link font-weight-bold" href="{% url 'profile_reports' %}">
           <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
           <span class="menu-title">Data Profiling Reports</span>
         </a>

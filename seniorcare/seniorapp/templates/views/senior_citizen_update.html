@@ -61,7 +61,7 @@
                       </div>
                       <div class="form-group">
                           <label for="id_date_of_birth">Date of Birth</label>
-                          <input type="date" class="form-control" id="id_date_of_birth" name="date_of_birth" value="{{ form.date_of_birth.value }}">
+                          <input type="date" class="form-control" id="id_date_of_birth" name="date_of_birth" value="{{ form.date_of_birth.value|date:'Y-m-d' }}">
                           {% if form.date_of_birth.errors %}
                               <div class="text-danger">{{ form.date_of_birth.errors }}</div>
                           {% endif %}
@@ -69,8 +69,8 @@
                       <div class="form-group">
                           <label for="id_gender">Gender</label>
                           <select class="form-control" id="id_gender" name="gender">
-                              <option value="Male">Male</option>
-                              <option value="Female">Female</option>
+                              <option value="Male" {% if form.gender.value == "Male" %}selected{% endif %}>Male</option>
+                              <option value="Female" {% if form.gender.value == "Female" %}selected{% endif %}>Female</option>
                           </select>
                           {% if form.gender.errors %}
                               <div class="text-danger">{{ form.gender.errors }}</div>
@@ -88,6 +88,20 @@
                           <input type="text" class="form-control" id="id_address" name="address" value="{{ form.address.value }}">
                           {% if form.address.errors %}
                               <div class="text-danger">{{ form.address.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_treatments">Treatments</label>
+                          <input type="text" class="form-control" id="id_treatments" name="treatments" value="{{ form.treatments.value }}">
+                          {% if form.treatments.errors %}
+                              <div class="text-danger">{{ form.treatments.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_checkups">Checkups</label>
+                          <input type="text" class="form-control" id="id_checkups" name="checkups" value="{{ form.checkups.value }}">
+                          {% if form.checkups.errors %}
+                              <div class="text-danger">{{ form.checkups.errors }}</div>
                           {% endif %}
                       </div>
                       <div class="form-group">

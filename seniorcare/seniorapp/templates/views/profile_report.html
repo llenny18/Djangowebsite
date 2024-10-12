@@ -268,7 +268,7 @@
                             <hr>
                             <!-- Action buttons -->
         <button class="btn btn-primary" onclick="printTable()">Print Table</button>
-        <button class="btn btn-success" onclick="exportTableToExcel()">Export to Excel</button>
+        <button class="btn btn-success" onclick="exportTableToPDF()">Export to PDF</button>
 
                             <hr>
                          
@@ -297,7 +297,7 @@
                                                 </div>
                                             </div>
                                             <hr>
-                                            <h4 class="card-title text-center text-uppercase">Data Profiling Reports List</h4>
+                                            <h4 class="card-title text-center text-uppercase">Data Profiling Reports </h4>
                                             <table class="table table-bordered" id="table"> 
                                                 <thead>
                                                     <tr>
@@ -404,7 +404,9 @@
         });
     </script>
     
-        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    
     <!-- JavaScript code -->
     <script>
        
@@ -447,10 +449,30 @@
         }
 
         // Export Table to Excel Function
-        function exportTableToExcel() {
-            var wb = XLSX.utils.table_to_book(document.getElementById('table'), { sheet: "Sheet1" });
-            XLSX.writeFile(wb, 'Data Profiling Report.xlsx');
+        function exportTableToPDF() {
+            const { jsPDF } = window.jspdf;
+            var doc = new jsPDF();
+        
+            // Get the table element
+            var table = document.getElementById('table');
+        
+            // Parse the table and convert it to autoTable format
+            doc.autoTable({
+                html: table,
+                startY: 10,
+                theme: 'grid',
+                styles: {
+                    fontSize: 8
+                },
+                headStyles: {
+                    fillColor: [22, 160, 133] // Custom header color
+                }
+            });
+        
+            // Save the PDF with the desired filename
+            doc.save('Data_Profiling_Report.pdf');
         }
+        
     </script>
 </body>
 </html>

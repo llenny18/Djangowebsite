@@ -43,7 +43,7 @@
                   <div class="card-body">
                  
                     <h1>Input Credentials</h1>
-                    <form method="post">
+                    <form method="post"> 
                       {% csrf_token %}
                       <div class="form-group">
                           <label for="id_first_name">First Name</label>
@@ -69,15 +69,15 @@
                       <div class="form-group">
                           <label for="id_gender">Gender</label>
                           <select class="form-control" id="id_gender" name="gender">
-                              <option value="Male">Male</option>
-                              <option value="Female">Female</option>
+                              <option value="Male" {% if form.gender.value == "Male" %}selected{% endif %}>Male</option>
+                              <option value="Female" {% if form.gender.value == "Female" %}selected{% endif %}>Female</option>
                           </select>
                           {% if form.gender.errors %}
                               <div class="text-danger">{{ form.gender.errors }}</div>
                           {% endif %}
                       </div>
                       <div class="form-group">
-                          <label for="id_health_condition">Health Condition</label>
+                          <label for="id_health_condition">Diagnosis</label>
                           <textarea class="form-control" id="id_health_condition" name="health_condition">{{ form.health_condition.value }}</textarea>
                           {% if form.health_condition.errors %}
                               <div class="text-danger">{{ form.health_condition.errors }}</div>
@@ -91,6 +91,20 @@
                           {% endif %}
                       </div>
                       <div class="form-group">
+                          <label for="id_treatments">Treatments</label>
+                          <input type="text" class="form-control" id="id_treatments" name="treatments" value="{{ form.treatments.value }}">
+                          {% if form.treatments.errors %}
+                              <div class="text-danger">{{ form.treatments.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
+                          <label for="id_checkups">Checkups</label>
+                          <input type="text" class="form-control" id="id_checkups" name="checkups" value="{{ form.checkups.value }}">
+                          {% if form.checkups.errors %}
+                              <div class="text-danger">{{ form.checkups.errors }}</div>
+                          {% endif %}
+                      </div>
+                      <div class="form-group">
                           <label for="id_phone">Phone</label>
                           <input type="text" class="form-control" id="id_phone" name="phone" value="{{ form.phone.value }}">
                           {% if form.phone.errors %}
@@ -100,6 +114,7 @@
                       <button type="submit" class="btn btn-primary mr-2">Submit</button>
                       <a href="{% url 'citizens' %}" class="btn btn-light">Cancel</a>
                   </form>
+                  
                   
                   
                   </div>

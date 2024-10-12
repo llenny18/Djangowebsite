@@ -1,0 +1,107 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Senior Citizen MIS - Forgot Password Administrator</title>
+
+    <!-- plugins:css -->
+
+  
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth">
+          <div class="row flex-grow">
+            <div class="col-lg-4 mx-auto">
+              <div class="auth-form-light text-left p-5">
+                <div class="brand-logo text-center" >
+                  <img src="{% static 'images/logo.png' %}">
+                </div>
+                <h4 style="color: black;" class="text-center mb-3">Forgot Password Administrator</h4>
+                <h6 class="font-weight-light text-center" style="color: black;">Input your credentials.</h6>
+                <form method="POST" action="{% url 'reset_password' admin_id=admin.admin_id %}" id="myForm" style="color: black;">
+                  {% csrf_token %}
+                  
+                  <!-- Security Code Field -->
+                  <div class="form-group">
+                      <label for="security_code"> Security Code</label>
+                      {{ form.security_code }}
+                  </div>
+              
+                  <!-- New Password Field -->
+                  <div class="form-group position-relative">
+                      <label for="new_password">New Password</label>
+                      {{ form.new_password }}
+                  </div>
+              
+                  <!-- Confirm Password Field -->
+                  <div class="form-group position-relative">
+                      <label for="confirm_password">Re-Type New Password</label>
+                      {{ form.confirm_password }}
+                  </div>
+              
+                  {% if messages %}
+                      {% for message in messages %}
+                          <p style="color: red;">{{ message }}</p>
+                      {% endfor %}
+                  {% endif %}
+              
+                  <div class="mt-3">
+                      <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">RESET PASSWORD</button>
+                  </div>
+              </form>
+              
+              
+            
+              
+              
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script> 
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function () {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.classList.toggle('mdi-eye-off');
+        this.classList.toggle('mdi-eye');
+    });
+</script>
+
+
+    <!-- inject:js -->
+    <script src="{% static 'js/off-canvas.js' %}"></script>
+    <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+     <script src="{% static 'js/misc.js' %}"></script>
+    <!-- endinject -->
+  </body>
+</html>

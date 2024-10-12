@@ -32,7 +32,7 @@
                 <div class="brand-logo text-center" >
                   <img src="{% static 'images/logo.png' %}">
                 </div>
-                <h4 style="color: black;" class="text-center mb-3">BRGY. Pinagbuhatan Senior Citizen Management App Login </h4>
+                <h4 style="color: black;" class="text-center mb-3">Information System for Senior Citizen of Brgy. Pinagbuhatan, Pasig City </h4>
                 <h6 class="font-weight-light text-center" style="color: black;">Input your credentials.</h6>
                 <form method="POST" action="{% url 'login' %}" id="myForm" style="color: black;">
                   {% csrf_token %}
@@ -68,9 +68,37 @@
                       <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN IN</button>
                   </div>
               </form>
+              <br>
+              <hr>
+              <div class="row text-center">
+              <button onclick="handleButtonClick()" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn col-5 m-1">FORGET PASSWORD ADMIN</button>
               
+              <button onclick="handleButtonClick2()" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn col-5 m-1">FORGET PASSWORD HEATLH WORKER</button>
+              </div>
             
-              
+              <script>
+                function handleButtonClick() {
+                    // Prompt for input
+                    const userInput = prompt("Enter your ID:");
+        
+                    // Check if user input is not null (canceled)
+                    if (userInput !== null) {
+                        // Redirect to the reset password URL with the admin ID
+                        window.location.href = "{% url 'reset_password' admin_id='0' %}".replace('0', encodeURIComponent(userInput));
+                    }
+                }
+                
+                function handleButtonClick2() {
+                  // Prompt for input
+                  const userInput = prompt("Enter your ID:");
+      
+                  // Check if user input is not null (canceled)
+                  if (userInput !== null) {
+                      // Redirect to the reset password URL with the admin ID
+                      window.location.href = "{% url 'forgot_password_h' worker_id='0' %}".replace('0', encodeURIComponent(userInput));
+                  }
+              }
+            </script>
               
               </div>
             </div>

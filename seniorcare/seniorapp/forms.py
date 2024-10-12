@@ -32,6 +32,33 @@ class AdminForm(forms.ModelForm):
         model = Admin
         fields = '__all__'
 
+from django import forms
+
+class ResetPasswordForm(forms.Form):
+    security_code = forms.CharField(
+        label='Security Code', 
+        max_length=50, 
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    new_password = forms.CharField(
+        label='New Password', 
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    confirm_password = forms.CharField(
+        label='Re-Type New Password', 
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if new_password != confirm_password:
+            raise forms.ValidationError("Passwords do not match.")
+        return cleaned_data
+
+
 class HealthWorkerForm(forms.ModelForm):
     class Meta:
         model = HealthWorker

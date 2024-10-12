@@ -53,14 +53,30 @@
                           </tr>
                       </thead>
                       <tbody>
-                          {% for disease in predicts %}
-                          <tr>
-                              <td>{{ disease.first_name  }} {{ disease.last_name  }}</td>
-                              <td>{{ disease.date_of_birth  }}</td>
-                              <td>{{ disease.disease_name  }}</td>
-                              <td>{{ disease.disease_prediction_date }}</td>
-                          </tr>
-                          {% endfor %}
+                        {% for disease in predicts %}
+    <tr>
+        <td>{{ disease.first_name }} {{ disease.last_name }}</td>
+        <td>{{ disease.date_of_birth }}</td>
+        <td>
+            {% if disease.disease_name == "Heart failure" or disease.disease_name == "Stroke" or disease.disease_name == "Myocardial infarction" or disease.disease_name == "Arrhythmia" or disease.disease_name == "Atrial fibrillation" or disease.disease_name == "Peripheral artery disease" or disease.disease_name == "Deep vein thrombosis" or disease.disease_name == "Pulmonary embolism" or disease.disease_name == "Coronary artery disease" or disease.disease_name == "Aortic aneurysm" or disease.disease_name == "Thromboembolism" or disease.disease_name == "Ventricular tachycardia" or disease.disease_name == "Ventricular fibrillation" %}
+                High-Risk Diagnosis: Possible {{ disease.disease_name }}
+            {% elif disease.disease_name == "Parkinson's disease" or disease.disease_name == "Dementia" or disease.disease_name == "Respiratory infections" or disease.disease_name == "Multiple sclerosis" or disease.disease_name == "Osteoarthritis" or disease.disease_name == "Amyotrophic lateral sclerosis" or disease.disease_name == "Spinal muscular atrophy" or disease.disease_name == "Rheumatoid arthritis" or disease.disease_name == "Ankylosing spondylitis" or disease.disease_name == "Scleroderma" or disease.disease_name == "Spondylitis" or disease.disease_name == "Spinal stenosis" %}
+                Decline in Physical Health: Possible {{ disease.disease_name }}
+            {% elif disease.disease_name == "Diabetes mellitus" or disease.disease_name == "Hypertension"  or disease.disease_name == "Alzheimer's disease" or disease.disease_name == "Type 2 Diabetes mellitus" or disease.disease_name == "Asthma" or disease.disease_name == "Coronary artery disease" or disease.disease_name == "Bone fractures" or disease.disease_name == "Hyperlipidemia" or disease.disease_name == "Chronic kidney disease" or disease.disease_name == "Chronic obstructive pulmonary disease" or disease.disease_name == "Chronic bronchitis" or disease.disease_name == "Osteoporosis" %}
+                Need for Medical Checkups: Possible {{ disease.disease_name }}
+            {% elif disease.disease_name == "Chronic obstructive pulmonary disease" or disease.disease_name == "Chronic bronchitis"  or disease.disease_name == "Heart disease"  or disease.disease_name == "Prostate cancer"  or disease.disease_name == "Cancer" or disease.disease_name == "Breast cancer" or disease.disease_name == "Pulmonary fibrosis" or disease.disease_name == "Emphysema" or disease.disease_name == "Cystic fibrosis" or disease.disease_name == "Bronchiectasis" %}
+                Chronic Disease Progression: Possible {{ disease.disease_name }}
+            {% elif disease.disease_name == "Pneumonia" or disease.disease_name == "Depression"  or disease.disease_name == "	Obesity"  or disease.disease_name == "Anxiety" or disease.disease_name == "Anxiety disorders" or disease.disease_name == "Bipolar disorder" or disease.disease_name == "Schizophrenia" or disease.disease_name == "Substance use disorder" or disease.disease_name == "Tuberculosis" %}
+                Risk of Hospitalization: Possible {{ disease.disease_name }}
+            {% else %}
+            Risk of Hospitalization: Possible  {{ disease.disease_name }}
+            {% endif %}
+        </td>
+        <td>{{ disease.disease_prediction_date }}</td>
+    </tr>
+{% endfor %}
+
+                    
                       </tbody>
                   </table>
                   

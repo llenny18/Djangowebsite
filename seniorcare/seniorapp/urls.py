@@ -6,9 +6,10 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('', views.login_view, name='home'),
     path('index', views.home, name='index'),
+    path('forgot_password/<int:admin_id>/', views.reset_password, name='reset_password'),
+    path('forgot_password_h/<int:worker_id>/', views.reset_health_worker_password, name='forgot_password_h'),
 
     path('predictdis', views.predict_disease_list, name='predictdis'),
-
 
     path('citizens', views.citizens, name='citizens'),
     path('userlogs', views.userlogs, name='userlogs'),
