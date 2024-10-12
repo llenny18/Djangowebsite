@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView, UserLogs, UserActivityLog
+from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView, UserLogs, UserActivityLog, PredictedDisease, SeniorCitizenDiseaseView
 from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm
 
 from django.contrib.auth import authenticate, login
@@ -142,7 +142,7 @@ def logout_view(request):
 def login_view(request):
     user_id = request.session.get('user_id', 'None')  # Retrieve user_id from the session
     error_message = None  # Initialize error_message variable
-
+    predict_all_diseases()
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -493,7 +493,75 @@ def sms_notification_update(request, id):
     
 import requests
 
-# Function to send SMS via Semaphore
+
+def citizen_predictions(request, citizen_id):
+    citizen = get_object_or_404(SeniorCitizen, citizen_id=citizen_id)
+    predictions = citizen.predictions.all().order_by('prediction_rank')
+    context = {
+        'citizen': citizen,
+        'predictions': predictions
+    }
+    return render(request, 'seniorcare/citizen_predictions.html', context)
+
+
+
+from .prediction_service import predict_diseases
+
+from django.utils import timezone
+from datetime import timedelta
+
+
+def predict_all_diseases():
+    # Get the start and end of today
+    now = timezone.now()
+    start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_of_today = start_of_today + timedelta(days=1)
+
+    # Count the number of predicted diseases created today
+    today_count = PredictedDisease.objects.filter(created_at__range=(start_of_today, end_of_today)).count()
+
+    # Check if the count is less than 300
+    if today_count >= 300:
+        print("Prediction limit reached for today. No new predictions will be made.")
+        return
+
+    if today_count < 300:
+        # Proceed with your prediction logic
+        citizens = SeniorCitizen.objects.all()
+        for citizen in citizens:
+            # Check if a prediction for this citizen already exists
+            if not PredictedDisease.objects.filter(citizen_id=citizen.citizen_id).exists():
+                disease_predictions = predict_diseases(citizen)  # Your existing prediction function
+                
+                if disease_predictions:  # Ensure there is at least one prediction
+                    disease = disease_predictions[0]  # Get the first disease prediction
+                    # Create a new PredictedDisease entry
+                    PredictedDisease.objects.create(
+                        citizen_id=citizen.citizen_id,
+                        disease_name=disease,
+                        score=1.0,  # Adjust this based on your logic
+                        prediction_rank=1  # Adjust this based on your logic
+                    )
+
+ 
+def predict_disease_list(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    predicts = SeniorCitizenDiseaseView.objects.all()
+    return render(request, 'views/predicts.html', {
+        'predicts': predicts, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+    
+ 
+ 
+
+
+# Function to 
+# send SMS via Semaphore
 def send_sms_via_semaphore(phone_number, message):
     url = 'https://api.semaphore.co/api/v4/messages'
     payload = {
@@ -512,6 +580,7 @@ def send_sms_via_semaphore(phone_number, message):
 # SMSNotification create
 def sms_notification_create(request):
     username = request.session.get('user_name', 'Guest')
+
     user_type = request.session.get('user_type', None)
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
     seniors = SeniorCitizen.objects.all()

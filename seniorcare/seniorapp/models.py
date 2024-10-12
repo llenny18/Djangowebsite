@@ -108,6 +108,41 @@ class SeniorCitizen(models.Model):
         db_table = 'seniorcitizen'
         managed = False
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.citizen_id})"
+
+class PredictedDisease(models.Model):
+    citizen_id = models.AutoField(primary_key=True)
+    disease_name = models.CharField(max_length=255)
+    score = models.FloatField(default=1.0)
+    prediction_rank = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'predicted_diseases'
+        managed = False
+
+
+class SeniorCitizenDiseaseView(models.Model):
+    citizen_id = models.IntegerField(primary_key=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    date_of_birth = models.DateField()
+    health_condition = models.CharField(max_length=100)
+    gender = models.CharField(max_length=10)
+    address = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+    treatments = models.CharField(max_length=355)
+    checkups = models.CharField(max_length=355)
+    disease_name = models.CharField(max_length=255, null=True)
+    score = models.FloatField(default=1)
+    prediction_rank = models.IntegerField(default=1)
+    disease_prediction_date = models.DateTimeField(null=True)
+
+    class Meta:
+        managed = False  # This model is based on a view, not a table
+        db_table = 'senior_citizen_disease_view'  # The name of the MySQL view
+
 class Activity(models.Model):
     activity_id = models.AutoField(primary_key=True)
     activity_name = models.CharField(max_length=100)
