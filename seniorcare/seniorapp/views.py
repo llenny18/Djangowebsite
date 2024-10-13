@@ -9,7 +9,7 @@ from django.utils import timezone
 import pytz
 import datetime
 from django.utils import timezone
-from .models import PredictiveAnalytics, DataProfilingView, SeniorCitizen
+from .models import PredictiveAnalytics, DataProfilingView, SeniorCitizen, TopCheckupsView, TopHealthConditionsView, TopPredictedDiseasesView, DiseaseCount, TopTreatments
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
@@ -212,24 +212,51 @@ def home(request):
     check_and_generate_report()
     
     summary_data = SummaryCounts.objects.all().first()  # Assuming there's only one row
-    
     # Fetch data using the model
     weekly_sms_data = WeeklySMSSent.objects.all()
-    
+    top_checkup = TopCheckupsView.objects.all()
+    top_disease = TopPredictedDiseasesView.objects.all()
+    top_health_condition = TopHealthConditionsView.objects.all()
+    disease_count = DiseaseCount.objects.all()
+    top_treatments = TopTreatments.objects.all()  # Fetch top treatments
+
     # Process data for chart
     weeks = [data.week for data in weekly_sms_data]
     sms_sent_counts = [data.sms_sent_count for data in weekly_sms_data]
-    
+
+    # Prepare data for charts
+    checkup_labels = [data.checkups for data in top_checkup]
+    checkup_counts = [data.checkup_count for data in top_checkup]
+
+    disease_labels = [data.disease_name for data in top_disease]
+    disease_counts = [data.disease_count for data in top_disease]
+
+    condition_labels = [data.health_condition for data in top_health_condition]
+    condition_counts = [data.condition_count for data in top_health_condition]
+
+    # Prepare data for top treatments
+    treatment_labels = [data.treatments for data in top_treatments]
+    treatment_counts = [data.condition_count for data in top_treatments]
+
     context = {
         'username': username,
         'user_type': user_type,
+        'checkup_labels': checkup_labels,
+        'checkup_counts': checkup_counts,
+        'disease_labels': disease_labels,
+        'disease_counts': disease_counts,
+        'condition_labels': condition_labels,
+        'condition_counts': condition_counts,
+        'treatment_labels': treatment_labels,  # Add top treatments labels
+        'treatment_counts': treatment_counts,  # Add top treatments counts
         'user_id': user_id,
         'summary_data': summary_data,
         'weeks': weeks,
         'sms_sent_counts': sms_sent_counts,
     }
-    
+
     return render(request, 'views/index.html', context)
+
 
 
 

@@ -93,6 +93,51 @@ class HealthWorker(models.Model):
         db_table = 'healthworker'
         managed = False
 
+
+class TopHealthConditionsView(models.Model):
+    health_condition = models.CharField(max_length=255)
+    condition_count = models.IntegerField()
+
+    class Meta:
+        db_table = 'top_health_conditions'
+        managed = False
+class TopPredictedDiseasesView(models.Model):
+    disease_name = models.CharField(max_length=255)
+    disease_count = models.IntegerField()
+
+    class Meta:
+        db_table = 'top_predicted_diseases'
+        managed = False
+
+
+class TopTreatments(models.Model):
+    treatments = models.CharField(max_length=255)  # Adjust the max_length based on your needs
+    condition_count = models.IntegerField()
+
+    class Meta:
+        managed = False  # No migrations will be created for this model
+        db_table = 'top_treatments'  # The name of the view in the database
+
+
+class DiseaseCount(models.Model):
+    category_disease = models.CharField(max_length=255)
+    count = models.IntegerField()
+
+    class Meta:
+        db_table = 'disease_count'  # The name of the MySQL view
+        managed = False  # Django will not manage this model
+
+
+class TopCheckupsView(models.Model):
+    checkups = models.CharField(max_length=255)
+    checkup_count = models.IntegerField()
+
+    class Meta:
+        db_table = 'top_checkups'
+        managed = False
+
+
+
 class SeniorCitizen(models.Model):
     citizen_id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50)

@@ -16,98 +16,293 @@
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 20px;
+      }
+  
+      .dashboard-row-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+  
+      .dashboard-row-3 {
+        grid-template-columns: 1fr;
+      }
+  
+      .chart-container {
+        position: relative;
+        width: 100%;
+        height: 300px;
+      }
+    </style>
   </head>
   <body>
     <div class="container-scroller">
       <!-- partial:partials/_navbar.html -->
       {% include 'views/nav.html' %}
-        <!-- partial -->
-        <div class="main-panel">
-          <button id="bannerClose" style="display:none">X</button>
-          <div class="content-wrapper">
-            <div class="row" id="proBanner">
-             
-            </div>
-            <div class="d-xl-flex justify-content-between align-items-start">
-              <h2 class="text-dark font-weight-bold mb-2"> Overview dashboard </h2>
-             
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-              
-                <div class="tab-content tab-transparent-content">
-                  <div class="tab-pane fade show active" id="business-1" role="tabpanel" aria-labelledby="business-tab">
-                    <div class="row">
-                      <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                          <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Data Profilings</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.profile_count }}</h2>
-                            <div class="dashboard-progress dashboard-progress-1 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-calendar-month icon-md absolute-center text-dark"></i></div>
-                        
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                          <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Health Workers</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.healthworker_count }}</h2>
-                            <div class="dashboard-progress dashboard-progress-2 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-account-circle icon-md absolute-center text-dark"></i></div>
-                        
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-xl-3  col-lg-6 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                          <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Events</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.activity_count }}</h2>
-                            <div class="dashboard-progress dashboard-progress-3 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-calendar-check icon-md absolute-center text-dark"></i></div>
-                       
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                          <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Messages</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.smsnotification_count }}</h2>
-                            <div class="dashboard-progress dashboard-progress-4 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-email-open icon-md absolute-center text-dark"></i></div>
-                 
-                          </div>
+      <!-- partial -->
+      <div class="main-panel">
+        <button id="bannerClose" style="display:none">X</button>
+        <div class="content-wrapper">
+          <div class="row" id="proBanner"></div>
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h2 class="text-dark font-weight-bold">Overview Dashboard</h2>
+          </div>
+    
+          <!-- Summary Cards -->
+          <div class="row">
+            <div class="col-md-12">
+            
+              <div class="tab-content tab-transparent-content">
+                <div class="tab-pane fade show active" id="business-1" role="tabpanel" aria-labelledby="business-tab">
+                  <div class="row">
+                    <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body text-center">
+                          <h5 class="mb-2 text-dark font-weight-normal">Data Profilings</h5>
+                          <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.profile_count }}</h2>
+                          <div class="dashboard-progress dashboard-progress-1 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-calendar-month icon-md absolute-center text-dark"></i></div>
+                      
                         </div>
                       </div>
                     </div>
-                    
-                    <div class="row">
+                    <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body text-center">
+                          <h5 class="mb-2 text-dark font-weight-normal">Health Workers</h5>
+                          <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.healthworker_count }}</h2>
+                          <div class="dashboard-progress dashboard-progress-2 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-account-circle icon-md absolute-center text-dark"></i></div>
                       
-                      <div class="col-sm-12  grid-margin stretch-card">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="d-xl-flex justify-content-between mb-2">
-                              <h4 class="card-title">SMS Sent to Senior Citizens</h4>
-                              <div class="graph-custom-legend primary-dot" id="pageViewAnalyticLengend"></div>
-                            </div>
-                            <canvas id="page-view-analytic"></canvas>
-                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3  col-lg-6 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body text-center">
+                          <h5 class="mb-2 text-dark font-weight-normal">Events</h5>
+                          <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.activity_count }}</h2>
+                          <div class="dashboard-progress dashboard-progress-3 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-calendar-check icon-md absolute-center text-dark"></i></div>
+                     
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body text-center">
+                          <h5 class="mb-2 text-dark font-weight-normal">Messages</h5>
+                          <h2 class="mb-4 text-dark font-weight-bold">{{ summary_data.smsnotification_count }}</h2>
+                          <div class="dashboard-progress dashboard-progress-4 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-email-open icon-md absolute-center text-dark"></i></div>
+               
                         </div>
                       </div>
                     </div>
                   </div>
+    
+    
+          <!-- Dashboard Charts -->
+          <div class="row">
+            <!-- First Row: Three Pie Charts -->
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title text-center">Most COmmon Predicted Diseases</h5>
+                  <canvas id="pieChart1"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title text-center">Most Common Health Conditions</h5>
+                  <canvas id="pieChart2"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title text-center">Most Common Chekup Schedules</h5>
+                  <canvas id="pieChart3"></canvas>
                 </div>
               </div>
             </div>
           </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:partials/_footer.html -->
-          
-          <!-- partial -->
+    
+          <div class="row">
+            <!-- Second Row: Two Bar Charts -->
+            <div class="col-lg-6 col-md-12 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title text-center">Top Used Treamtnets for Senior Citizens</h5>
+                  <canvas id="barChart1"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-12 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title text-center">Top Predicted Results of Senior Citizens</h5>
+                  <canvas id="barChart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <!-- SMS Sent Graph -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">SMS Sent to Senior Citizens</h4>
+                  </div>
+                  <canvas id="page-view-analytic"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <script>
+              // Pass Django data to JavaScript variables
+              const checkupLabels = {{ checkup_labels|safe }};
+              const checkupCounts = {{ checkup_counts|safe }};
+            
+              const diseaseLabels = {{ disease_labels|safe }};
+              const diseaseCounts = {{ disease_counts|safe }};
+            
+              const conditionLabels = {{ condition_labels|safe }};
+              const conditionCounts = {{ condition_counts|safe }};
+            
+              // Pie Chart 1 (Most Common Predicted Diseases)
+              const pieConfig1 = {
+                type: 'pie',
+                data: {
+                  labels: diseaseLabels,  // Use labels from Django
+                  datasets: [{
+                    data: diseaseCounts,   // Use data counts from Django
+                    backgroundColor: ['#FF6384',  '#4BC0C0', '#9966FF', '#36A2EB', '#FFCE56'],
+                  }]
+                },
+                options: {
+                  responsive: true,
+                }
+              };
+            
+              // Pie Chart 2 (Most Common Health Conditions)
+              const pieConfig2 = {
+                type: 'pie',
+                data: {
+                  labels: conditionLabels,  // Use labels from Django
+                  datasets: [{
+                    data: conditionCounts,   // Use data counts from Django
+                    backgroundColor: ['#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF6384'],
+                  }]
+                },
+                options: {
+                  responsive: true,
+                }
+              };
+            
+              // Pie Chart 3 (Most Common Checkup Schedules)
+              const pieConfig3 = {
+                type: 'pie',
+                data: {
+                  labels: checkupLabels,  // Use labels from Django
+                  datasets: [{
+                    data: checkupCounts,   // Use data counts from Django
+                    backgroundColor: [ '#FFCE56', '#4BC0C0', '#9966FF'],
+                  }]
+                },
+                options: {
+                  responsive: true,
+                }
+              };
+            
+              // Initialize Charts
+              new Chart(document.getElementById('pieChart1'), pieConfig1);
+              new Chart(document.getElementById('pieChart2'), pieConfig2);
+              new Chart(document.getElementById('pieChart3'), pieConfig3);
+        
+            
+    
+            // Bar Chart Configuration
+            const barConfig = {
+              type: 'bar',
+              data: {
+                labels: {{ treatment_labels|safe }},
+                datasets: [{
+                  label: 'Treatment Count',
+                  data: {{ treatment_counts|safe }},
+                  backgroundColor: '#36A2EB',
+                }]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  }
+                }
+              }
+            };
+
+            
+            // Bar Chart Configuration
+            const barConfig2 = {
+              type: 'bar',
+              data: {
+                labels: {{ disease_labels|safe }},
+                datasets: [{
+                  label: 'Disease Prediction Count',
+                  data: {{ disease_counts|safe }},
+                  backgroundColor: '#36A2EB',
+                }]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  }
+                }
+              }
+            };
+    
+            // Line Chart Configuration
+            const lineConfig = {
+              type: 'line',
+              data: {
+                labels: {{ disease_labels|safe }},
+                datasets: [{
+                  label: 'Performance',
+                  data: {{ disease_counts|safe }},
+                  borderColor: '#FF6384',
+                  fill: false,
+                  tension: 0.1
+                }]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  }
+                }
+              }
+            };
+    
+            new Chart(document.getElementById('barChart1'), barConfig);
+            new Chart(document.getElementById('barChart2'), barConfig2);
+            new Chart(document.getElementById('lineChart'), lineConfig);
+          </script>
         </div>
-        <!-- main-panel ends -->
       </div>
-      <!-- page-body-wrapper ends -->
+      <!-- content-wrapper ends -->
     </div>
+    
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
