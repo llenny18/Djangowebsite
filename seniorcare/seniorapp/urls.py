@@ -37,6 +37,7 @@ urlpatterns = [
     path('profile/update/<int:id>/', views.profile_update, name='profile_update'),
     
     path('sms_notification/create/', views.sms_notification_create, name='sms_notification_create'),
+    path('sms_notification/create_bulk/', views.sms_notification_create_bulk, name='sms_notification_create_bulk'),
     path('sms_notification/update/<int:id>/', views.sms_notification_update, name='sms_notification_update'),
     
 

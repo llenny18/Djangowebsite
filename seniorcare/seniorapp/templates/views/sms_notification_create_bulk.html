@@ -49,18 +49,7 @@
                     <h1>Input Credentials</h1>
                     <form method="post">
                       {% csrf_token %}
-                      <div class="form-group">
-                          <label for="id_recipient_phone">Recipient Phone</label>
-                          <select class="form-control" id="id_recipient_phone" name="recipient_phone">
-                          {% for senior in seniors %}
-                          <option value="{{ senior.phone }}">{{ senior.first_name }} {{ senior.last_name }} - {{ senior.phone }}</option>
-                           {% endfor %} 
-                          </select >
-
-                          {% if form.recipient_phone.errors %}
-                              <div class="text-danger">{{ form.recipient_phone.errors }}</div>
-                          {% endif %}
-                      </div>
+                  
                       <div class="form-group">
                           <label for="id_message">Message</label>
                           <textarea class="form-control" id="id_message" name="message">{{ form.message.value }}</textarea>
@@ -68,9 +57,10 @@
                               <div class="text-danger">{{ form.message.errors }}</div>
                           {% endif %}
                       </div>
+                  
                       <div class="form-group">
                           <label for="id_sent_by">Sent By</label>
-                          <select class="form-control" id="id_sent_by" name="sent_by" readonly>
+                          <select class="form-control" id="id_sent_by" name="sent_by">
                               <option value="Admin" {% if form.sent_by.value == 'Admin' %}selected{% endif %}>Admin</option>
                               <option value="HealthWorker" {% if form.sent_by.value == 'HealthWorker' %}selected{% endif %}>Health Worker</option>
                           </select>
@@ -78,6 +68,7 @@
                               <div class="text-danger">{{ form.sent_by.errors }}</div>
                           {% endif %}
                       </div>
+                  
                       <div class="form-group">
                           <label for="id_sender_id">Sender ID</label>
                           <input type="number" class="form-control" id="id_sender_id" name="sender_id" value="{{ user_id }}" readonly>
@@ -85,9 +76,12 @@
                               <div class="text-danger">{{ form.sender_id.errors }}</div>
                           {% endif %}
                       </div>
+                  
                       <button type="submit" class="btn btn-primary mr-2">Submit</button>
                       <a href="{% url 'smsnotifications' %}" class="btn btn-light">Cancel</a>
                   </form>
+                  
+                  
                   
                   
                   </div>

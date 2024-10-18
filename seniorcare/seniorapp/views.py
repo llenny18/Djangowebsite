@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView, UserLogs, UserActivityLog, PredictedDisease, SeniorCitizenDiseaseView
-from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm, ResetPasswordForm
+from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm, ResetPasswordForm, SMSNotificationFormBulk
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password, make_password
@@ -673,7 +673,8 @@ def send_sms_via_semaphore(phone_number, message):
     payload = {
         'apikey': "3cbb7512ba20c029b92cbacf3fb22191",  # Replace with your actual API key
         'number': phone_number,
-        'message': message
+        'message': message,
+        'sendername': "PbuhatSCare"
     }
 
     response = requests.post(url, data=payload)
@@ -719,6 +720,89 @@ def sms_notification_create(request):
         'seniors': seniors
     })
 
+
+
+# Function to send SMS via Semaphore API
+def send_bulk_sms_via_semaphore(message):
+    # Query all senior citizens from the database
+    senior_citizens = SeniorCitizen.objects.all()
+    url = 'https://api.semaphore.co/api/v4/messages'
+    success = True  # Initialize success variable
+    
+    # Loop through each senior citizen and send a personalized message
+    for citizen in senior_citizens:
+        if not citizen.phone:
+            print(f"Phone number missing for {citizen.first_name} {citizen.last_name} (ID: {citizen.citizen_id})")
+            continue
+
+        personalized_message = f"""
+        ID: {citizen.citizen_id}
+        Name: {citizen.first_name} {citizen.last_name}
+        Gender: {citizen.gender}
+
+        Message: {message}
+        """
+
+        payload = {
+            'apikey': "3cbb7512ba20c029b92cbacf3fb22191",  # Replace with your actual API key
+            'number': citizen.phone,
+            'message': personalized_message,
+            'sendername': "PbuhatSCare"
+        }
+
+        response = requests.post(url, data=payload)
+        print(response.status_code, response.text)  # Print response for debugging
+        
+        if response.status_code != 200:
+            print(f"Failed to send message to {citizen.first_name} {citizen.last_name} (ID: {citizen.citizen_id})")
+            success = False  # Mark as unsuccessful
+        else:
+            print(f"Message sent to {citizen.first_name} {citizen.last_name} (ID: {citizen.citizen_id})")
+
+    return success  # Return success status
+
+
+
+
+def sms_notification_create_bulk(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None)
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+    seniors = SeniorCitizen.objects.all()
+
+    if request.method == 'POST':
+        form = SMSNotificationFormBulk(request.POST)
+        if form.is_valid():
+            # Extract the message from the form
+            message = form.cleaned_data['message']
+            sent_by = form.cleaned_data['sent_by']
+
+            # Send SMS to all senior citizens
+            sms_response = send_bulk_sms_via_semaphore(message)
+
+            if sms_response:  # If SMS was successfully sent
+                # Save SMS notification for each senior citizen
+                for senior in seniors:
+                    SMSNotification.objects.create(
+                        recipient_phone=senior.phone,
+                        message=message,
+                        sent_by=sent_by,
+                        sender_id=user_id,
+                        sent_at=datetime.now()  # Set current time as sent_at
+                    )
+                return redirect('smsnotifications')
+            else:
+                form.add_error(None, 'Failed to send SMS. Please try again.')
+    else:
+        form = SMSNotificationForm()
+
+    return render(request, 'views/sms_notification_create_bulk.html', {
+        'form': form,
+        'username': username,
+        'user_type': user_type,
+        'user_id': user_id,
+        'seniors': seniors
+    })
 
 
 # PredictiveAnalytics update

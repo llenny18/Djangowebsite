@@ -90,6 +90,49 @@ class SMSNotificationForm(forms.ModelForm):
         model = SMSNotification
         fields = '__all__'
 
+
+
+class SMSNotificationFormBulk(forms.ModelForm):
+    class Meta:
+        model = SMSNotification
+        fields = ['message', 'sent_by', 'sender_id']  # Specify fields explicitly if needed
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Customize field widgets
+        self.fields['message'].widget = forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 4,
+            'placeholder': 'Enter your message here...'
+        })
+        self.fields['sent_by'].widget = forms.Select(attrs={
+            'class': 'form-control',
+            'readonly': 'readonly'  # Makes this field read-only
+        })
+        self.fields['sender_id'].widget = forms.NumberInput(attrs={
+            'class': 'form-control',
+            'readonly': 'readonly'  # Make this field read-only
+        })
+
+        # Set default values if needed
+        if 'sent_by' not in self.initial:
+            self.initial['sent_by'] = 'Admin'  # Default value for sent_by
+
+    def clean_sender_id(self):
+        # Optionally add validation logic
+        sender_id = self.cleaned_data.get('sender_id')
+        if not sender_id:  # Example validation
+            raise forms.ValidationError("Sender ID is required.")
+        return sender_id
+
+    def clean_message(self):
+        message = self.cleaned_data.get('message')
+        if not message:
+            raise forms.ValidationError("Message cannot be empty.")
+        return message
+    
+    
+    
 class PredictiveAnalyticsForm(forms.ModelForm):
     class Meta:
         model = PredictiveAnalytics
