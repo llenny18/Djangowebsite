@@ -44,14 +44,15 @@
             
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
-                  <div class="card-body">
+                  <div class="card-body" style="color: black">
                  
                     <h1>Input Credentials</h1>
                     <form method="post">
                       {% csrf_token %}
                       <div class="form-group">
                           <label for="id_recipient_phone">Recipient Phone</label>
-                          <select class="form-control" id="id_recipient_phone" name="recipient_phone">
+                          <p>Hold down the Ctrl (windows) or Command (Mac) button to select multiple options.</p>
+                          <select class="form-control" id="id_recipient_phone" name="recipient_phone" multiple>
                           {% for senior in seniors %}
                           <option value="{{ senior.phone }}">{{ senior.first_name }} {{ senior.last_name }} - {{ senior.phone }}</option>
                            {% endfor %} 
@@ -70,10 +71,8 @@
                       </div>
                       <div class="form-group">
                           <label for="id_sent_by">Sent By</label>
-                          <select class="form-control" id="id_sent_by" name="sent_by" readonly>
-                              <option value="Admin" {% if form.sent_by.value == 'Admin' %}selected{% endif %}>Admin</option>
-                              <option value="HealthWorker" {% if form.sent_by.value == 'HealthWorker' %}selected{% endif %}>Health Worker</option>
-                          </select>
+                       
+                          <input type="text" class="form-control"  id="id_sent_by" name="sent_by" value="{{ user_type }}" readonly>
                           {% if form.sent_by.errors %}
                               <div class="text-danger">{{ form.sent_by.errors }}</div>
                           {% endif %}

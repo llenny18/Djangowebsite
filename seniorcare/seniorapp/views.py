@@ -687,7 +687,6 @@ def send_sms_via_semaphore(phone_number, message):
 # SMSNotification create
 def sms_notification_create(request):
     username = request.session.get('user_name', 'Guest')
-
     user_type = request.session.get('user_type', None)
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
     seniors = SeniorCitizen.objects.all()
@@ -696,19 +695,27 @@ def sms_notification_create(request):
         form = SMSNotificationForm(request.POST)
         if form.is_valid():
             # Extract the data from the form
-            recipient_phone = form.cleaned_data['recipient_phone']
+            recipient_phones = request.POST.getlist('recipient_phone')  # Get all selected phone numbers
             message = form.cleaned_data['message']
             
-            # First, try to send the SMS
-            sms_response = send_sms_via_semaphore(recipient_phone, message)
-            
-            if sms_response:  # If the SMS is successfully sent
-                # Save the SMS notification data in the database
-                form.save()
-                return redirect('smsnotifications')
-            else:
-                # Handle the case where SMS sending fails
-                form.add_error(None, 'Failed to send SMS. Please try again.')
+            # Iterate over each selected recipient and send SMS
+            for recipient_phone in recipient_phones:
+                # First, try to send the SMS
+                sms_response = send_sms_via_semaphore(recipient_phone, message)
+                
+                if sms_response:  # If the SMS is successfully sent
+                    # Save each SMS notification data in the database
+                    SMSNotification.objects.create(
+                        recipient_phone=recipient_phone,
+                        message=message,
+                        sent_by=user_type,
+                        sender_id=user_id
+                    )
+                else:
+                    # Handle the case where SMS sending fails for specific recipient
+                    form.add_error(None, f'Failed to send SMS to {recipient_phone}. Please try again.')
+
+            return redirect('smsnotifications')  # After all SMS are sent
     else:
         form = SMSNotificationForm()
 
@@ -865,7 +872,9 @@ def userlogs(request):
     user_type = request.session.get('user_type', None) 
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
  # Retrieve user_type from the session
-    user_logs = UserActivityLog.objects.all()
+    user_logs = UserActivityLog.objects.all().order_by('-logs')
+    
+    
     return render(request, 'views/user_logs.html', {
         'user_logs': user_logs, 
         'username': username, 

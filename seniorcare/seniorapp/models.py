@@ -18,8 +18,8 @@ class UserActivityLog(models.Model):
     username = models.CharField(max_length=255)  # Computed field for 'username'
     email = models.CharField(max_length=255)  # Computed field for 'email'
     user_type = models.CharField(max_length=255)  # user_type from user_logs
-    login_time = models.DateTimeField()  # login_time from user_logs
-    logout_time = models.DateTimeField()  # logout_time from user_logs
+    login_time = models.CharField(max_length=255)  # login_time from user_logs
+    logout_time = models.CharField(max_length=255)  # logout_time from user_logs
 
     class Meta:
         db_table = 'user_activity_log'  # Referencing the view in the database
@@ -74,7 +74,7 @@ class Admin(models.Model):
     email = models.EmailField(max_length=100, unique=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    security_code = models.IntegerField(max_length=20)
+    security_code = models.IntegerField()
 
     class Meta:
         db_table = 'admin'
@@ -87,7 +87,7 @@ class HealthWorker(models.Model):
     email = models.EmailField(max_length=100, unique=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    security_code = models.IntegerField(max_length=20)
+    security_code = models.IntegerField()
 
     class Meta:
         db_table = 'healthworker'

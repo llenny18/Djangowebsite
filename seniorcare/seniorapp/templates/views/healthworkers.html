@@ -51,6 +51,7 @@
                           <th>Username</th>
                           <th>Email</th>
                           <th>Phone</th>
+                          <th>Security Code</th>
                           <th>Created At</th>
                           <th>Action</th>
                         </tr>
@@ -62,6 +63,7 @@
                             <td>{{ worker.username }}</td>
                             <td>{{ worker.email }}</td>
                             <td>{{ worker.phone }}</td>
+                            <td>{{ worker.security_code }}</td>
                             <td>{{ worker.created_at }}</td>
                             <td><a href="{% url 'health_worker_update' id=worker.worker_id %}" class="btn badge-primary m-1">Edit</a><br><a href="" class="btn badge-danger m-1">Delete</a></td>
                         </tr>
