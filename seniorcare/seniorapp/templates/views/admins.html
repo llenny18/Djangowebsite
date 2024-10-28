@@ -65,7 +65,7 @@
                             <td>{{ admin.phone }}</td>
                             <td>{{ admin.security_code }}</td>
                             <td>{{ admin.created_at }}</td>
-                            <td><a href="{% url 'admin_update' id=admin.admin_id %}" class="btn badge-primary m-1">Edit</a><br><a href="" class="btn badge-danger m-1">Delete</a></td>
+                            <td><a href="{% url 'admin_update' id=admin.admin_id %}" class="btn badge-primary m-1">Edit</a><br><a href="{% url 'delete_admin' admin_id=admin.admin_id %}" onclick="deleted('{{admin.username}}')" class="btn badge-danger m-1">Delete</a></td>
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -79,7 +79,13 @@
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
-          
+          <script>
+            function deleted(uname){
+              alert('Deleted User: '+uname)
+            }
+          </script>
+
+
           <!-- partial -->
         </div>
         <!-- main-panel ends -->

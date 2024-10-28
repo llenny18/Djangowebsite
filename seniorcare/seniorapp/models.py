@@ -26,6 +26,30 @@ class UserActivityLog(models.Model):
         managed = False  # Since it's a view, Django won't manage it (no migrations)
 
 
+
+class SeniorCitizenView(models.Model):
+    id = models.IntegerField(primary_key=True)
+    first_name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
+    date_of_birth = models.DateField(null=True)
+    health_condition = models.CharField(max_length=100, null=True)
+    gender = models.CharField(max_length=10, null=True)
+    address = models.CharField(max_length=100, null=True)
+    phone = models.CharField(max_length=15, null=True)
+    treatments = models.CharField(max_length=355)
+    checkups = models.CharField(max_length=355)
+    created_at = models.DateTimeField()
+    created_date = models.DateField()
+    created_week = models.CharField(max_length=20)
+    created_month = models.CharField(max_length=20)
+    created_year = models.CharField(max_length=4)
+    created_week_number = models.IntegerField()
+
+    class Meta:
+        managed = False  # No migrations will be created for this model
+        db_table = 'seniorcitizen_view'  # Matches the name of the view in the database
+
+
 class PredictiveAnalyticsView(models.Model):
     analytics_id = models.IntegerField(primary_key=True)
     description = models.TextField()

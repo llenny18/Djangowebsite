@@ -14,11 +14,20 @@
    
       
     <style>
+        table {
+            border-collapse: collapse; /* Ensures no extra space between cells */
+            color: black;
+        }
+        
+        table th, table td {
+            padding: 4px 8px; /* Adjust padding to control the space within cells */
+        }
+        
         /* Default styles */
         th {
             font-size: 14px;
         }
-
+        
         table {
             margin: 20px 0; /* Adjust table margin */
         }
@@ -26,7 +35,7 @@
         /* Print-specific styles */
         @media print {
             th {
-                font-size: 8px; /* Smaller font size for print */
+                font-size: 14px; /* Smaller font size for print */
             }
 
             table {
@@ -43,9 +52,8 @@
                 border: 1px solid #000; /* Add border to card for printing */
             }
         }
-        <style>
+  
             .header {
-                background-color: #333;
                 color: white;
                 padding: 20px 0;
                 text-align: center;
@@ -71,7 +79,7 @@
                 margin: 20px auto;
                 width: 80%;
             }
-        </style>
+    
     </style>
 
 </head>
@@ -165,10 +173,10 @@
                     const rows = table.querySelectorAll('tbody tr');
                 
                     rows.forEach(row => {
-                        const createdDate = row.cells[10].innerText;  // Assuming created_date is at cell index 12
-                        const createdWeek = row.cells[14].innerText;  // Assuming created_week is at cell index 13
-                        const createdMonth = row.cells[12].innerText; // Assuming created_month is at cell index 14
-                        const createdYear = row.cells[13].innerText;  // Assuming created_year is at cell index 15
+                        const createdDate = row.cells[9].innerText;  // Assuming created_date is at cell index 12
+                        const createdWeek = row.cells[13].innerText;  // Assuming created_week is at cell index 13
+                        const createdMonth = row.cells[11].innerText; // Assuming created_month is at cell index 14
+                        const createdYear = row.cells[12].innerText;  // Assuming created_year is at cell index 15
                 
                         let showRow = true;
                 
@@ -298,46 +306,44 @@
                                             </div>
                                             <hr>
                                             <h4 class="card-title text-center text-uppercase">Data Profiling Reports </h4>
-                                            <table class="table table-bordered" id="table"> 
+                                            <table class="table-bordered" id="table"> 
                                                 <thead>
                                                     <tr>
-                                                        <th>Address</th>
-                                                        <th>Gender</th>
-                                                        <th>Age</th>
-                                                        <th>Lifestyle<br> Diet</th>
-                                                        <th>Lifestyle <br>Exercise</th>
-                                                        <th>Lifestyle<br> Others</th>
-                                                        <th>Medical<br> History<br> Past<br> Illness</th>
-                                                        <th>Medical<br> History<br> Treatments</th>
-                                                        <th>Medical<br> History<br> Ongoing<br> Medications</th>
-                                                        <th>Medical<br> History<br> Checkups</th>
-                                                   
-                                                        <th>Created<br> Date</th>
-                                                        <th>Created<br> Week</th>
-                                                        <th>Created<br> Month</th>
-                                                        <th>Created<br> Year</th>
-                                                        <th>Created<br> Week Number</th>
+                                                        <td class="font-weight-bold">Citizen ID</td>
+                                                        <td class="font-weight-bold">Full Name</td>
+                                                 
+                                                        <td class="font-weight-bold">Date of Birth</td>
+                                                        <td class="font-weight-bold">Diagnosis</td>
+                                                        <td class="font-weight-bold">Gender</td>
+                                                        <td class="font-weight-bold">Address</td>
+                                                        <td class="font-weight-bold">Phone</td>
+                                                        <td class="font-weight-bold">Treatments</td>
+                                                        <td class="font-weight-bold">Checkups</td>
+                                                        <td class="font-weight-bold">Created At</td>
+                                                        <td class="font-weight-bold">Weekday</td>
+                                                        <td class="font-weight-bold">Month & Year</td>
+                                                        <td class="font-weight-bold">Year</td>
+                                                        <td class="font-weight-bold">Week Number</td>
                                                     </tr>
                                                 </thead>
+                                                
                                                 <tbody>
                                                     {% for profiling in reports %}
                                                     <tr>
-                                                        <td>{{ profiling.address }}</td>
-                                                        <td>{{ profiling.gender }}</td>
-                                                        <td>{{ profiling.age }}</td>
-                                                        <td>{{ profiling.lifestyle_diet }}</td>
-                                                        <td>{{ profiling.lifestyle_exercise }}</td>
-                                                        <td>{{ profiling.lifestyle_others }}</td>
-                                                        <td>{{ profiling.medical_history_past_illness }}</td>
-                                                        <td>{{ profiling.medical_history_treatments }}</td>
-                                                        <td>{{ profiling.medical_history_ongoing_medications }}</td>
-                                                        <td>{{ profiling.medical_history_checkups }}</td>
-                                            
-                                                        <td>{{ profiling.created_date }}</td>
-                                                        <td>{{ profiling.created_week }} </td>
-                                                        <td>{{ profiling.created_month }} {{ profiling.created_year }}</td>
-                                                        <td>{{ profiling.created_year }}</td>
-                                                        <td>{{ profiling.created_week_number }}</td>
+                                                        <td>{{ profiling.id }}</td>
+                                                        <td>{{ profiling.first_name }} {{ profiling.last_name }}</td>
+                                                        <td>{{ profiling.date_of_birth }}</td>
+                                                        <td>{{ profiling.health_condition }}</td>
+            <td>{{ profiling.gender }}</td>
+            <td>{{ profiling.address }}</td>
+            <td>{{ profiling.phone }}</td>
+            <td>{{ profiling.treatments }}</td>
+            <td>{{ profiling.checkups }}</td>
+            <td>{{ profiling.created_date }}</td>
+            <td>{{ profiling.created_week }}</td>
+            <td>{{ profiling.created_month }} {{ profiling.created_year }}</td>
+            <td>{{ profiling.created_year }}</td>
+            <td>{{ profiling.created_week_number }}</td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>
@@ -385,21 +391,22 @@
             const rows = document.querySelectorAll('#table tbody tr');
         
             rows.forEach(row => {
+                
+                const thCells = row.querySelectorAll('th'); // Changed to 'thCells'
+        
+                thCells.forEach(cell => {
+                    cell.style.fontSize = '14px';    // Set font size to 12px for headers
+                    cell.style.margin = '1px';       // Set margin to 1px
+                    cell.style.whiteSpace = 'pre-wrap'; // Make text break at whitespace
+                });
                 const tdCells = row.querySelectorAll('td'); // Changed to 'tdCells'
         
                 tdCells.forEach(cell => {
-                    cell.style.fontSize = '10px';    // Set font size to 10px
+                    cell.style.fontSize = '12px';    // Set font size to 10px
                     cell.style.margin = '1px';       // Set margin to 1px
                     cell.style.whiteSpace = 'pre-wrap'; // Make text break at whitespace
                 });
     
-                const thCells = row.querySelectorAll('th'); // Changed to 'thCells'
-        
-                thCells.forEach(cell => {
-                    cell.style.fontSize = '12px';    // Set font size to 12px for headers
-                    cell.style.margin = '1px';       // Set margin to 1px
-                    cell.style.whiteSpace = 'pre-wrap'; // Make text break at whitespace
-                });
             });
         });
     </script>

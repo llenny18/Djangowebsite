@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView, UserLogs, UserActivityLog, PredictedDisease, SeniorCitizenDiseaseView
+from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView, UserLogs, UserActivityLog, PredictedDisease, SeniorCitizenDiseaseView, SeniorCitizenView
 from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm, ResetPasswordForm, SMSNotificationFormBulk
 
 from django.contrib.auth import authenticate, login
@@ -124,8 +124,10 @@ def logout_view(request):
                         """
                         UPDATE user_logs 
                         SET logout_time = CONVERT_TZ(NOW(), '+00:00', '+08:00')
-                        WHERE user_id = %s
-                        """, [last_log.user_id]
+                        WHERE user_id = %s AND user_type = %s AND logout_time IS NULL
+                        ORDER BY login_time DESC 
+                        LIMIT 1
+                        """, [user_id, user_type]
                     )
 
         except UserLogs.DoesNotExist:
@@ -136,6 +138,7 @@ def logout_view(request):
 
     # Redirect to the login page
     return redirect('login')
+
 
 
 
@@ -257,14 +260,23 @@ def home(request):
 
     return render(request, 'views/index.html', context)
 
+def delete_admin(request, admin_id):
+    admin_user = get_object_or_404(Admin, admin_id=admin_id)
+    admin_user.delete()
+    return redirect('admins')  # Redirect to a list of admins or a success page
 
+
+def delete_worker(request, worker_id):
+    worker = get_object_or_404(HealthWorker, worker_id=worker_id)
+    worker.delete()
+    return redirect('healthworkers')  # Redirect to a list of admins or a success page
 
 
 def profile_reports(request):
     username = request.session.get('user_name', 'Guest')
     user_type = request.session.get('user_type', None)
     user_id = request.session.get('user_id', None)
-    Reports = DataProfilingView.objects.all()
+    Reports = SeniorCitizenView.objects.all()
     
     
     
@@ -654,11 +666,47 @@ def predict_disease_list(request):
     username = request.session.get('user_name', 'Guest')
     user_type = request.session.get('user_type', None) 
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+    
+    top_checkup = TopCheckupsView.objects.all()
+    top_disease = TopPredictedDiseasesView.objects.all()
+    top_health_condition = TopHealthConditionsView.objects.all()
+    disease_count = DiseaseCount.objects.all()
+    top_treatments = TopTreatments.objects.all()  # Fetch top treatments
+    
+    weekly_sms_data = WeeklySMSSent.objects.all()
+    
+    # Process data for chart
+    weeks = [data.week for data in weekly_sms_data]
+    sms_sent_counts = [data.sms_sent_count for data in weekly_sms_data]
+
+    # Prepare data for charts
+    checkup_labels = [data.checkups for data in top_checkup]
+    checkup_counts = [data.checkup_count for data in top_checkup]
+
+    disease_labels = [data.disease_name for data in top_disease]
+    disease_counts = [data.disease_count for data in top_disease]
+
+    condition_labels = [data.health_condition for data in top_health_condition]
+    condition_counts = [data.condition_count for data in top_health_condition]
+
+    # Prepare data for top treatments
+    treatment_labels = [data.treatments for data in top_treatments]
+    treatment_counts = [data.condition_count for data in top_treatments]
+    
  # Retrieve user_type from the session
     predicts = SeniorCitizenDiseaseView.objects.all()
     return render(request, 'views/predicts.html', {
         'predicts': predicts, 
         'username': username, 
+        'checkup_labels': checkup_labels,
+        'checkup_counts': checkup_counts,
+        'weeks': weeks,
+        'disease_labels': disease_labels,
+        'disease_counts': disease_counts,
+        'condition_labels': condition_labels,
+        'condition_counts': condition_counts,
+        'treatment_labels': treatment_labels,  # Add top treatments labels
+        'treatment_counts': treatment_counts,  # Add top treatments counts
         'user_type': user_type, 'user_id': user_id
     })
     

@@ -6,22 +6,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Senior Citizen MIS - Send SMS</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- plugins:css -->
+ <!-- jQuery library -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="{% static 'vendors/select2/select2.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
+ <!-- Select2 CSS and JS -->
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <!-- Layout styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+
+    
   </head>
   <body>
+    
     <div class="container-scroller">
       <!-- partial:../../partials/_navbar.html -->
       {% include 'views/nav.html' %}
@@ -103,18 +106,27 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
+
+    
+    <script>
+      $(document).ready(function() {
+        $('#id_recipient_phone').select2({
+          placeholder: "Select options",
+          allowClear: true
+        });
+      });
+    </script>
+    
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
     <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="{% static 'vendors/select2/select2.min.js' %}"></script>
-    <script src="{% static 'vendors/typeahead.js/typeahead.bundle.min.js' %}"></script>
+
     <!-- End plugin js for this page -->
     <!-- inject:js -->
     <script src="{% static 'js/off-canvas.js' %}"></script>
     <script src="{% static 'js/hoverable-collapse.js' %}"></script>
-     <script src="{% static 'js/misc.js' %}"></script><script>
+     <script src="{% static 'js/misc.js' %}"></script>
+     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var username = "{{ username }}";
             if (username === 'Guest') {
@@ -124,9 +136,7 @@
     </script>
     <!-- endinject -->
     <!-- Custom js for this page -->
-    <script src="{% static 'js/file-upload.js' %}"></script>
-    <script src="{% static 'js/typeahead.js' %}"></script>
-    <script src="{% static 'js/select2.js' %}"></script>
+
     <!-- End custom js for this page -->
   </body>
 </html>

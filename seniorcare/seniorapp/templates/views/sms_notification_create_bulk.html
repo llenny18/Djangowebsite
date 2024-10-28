@@ -60,10 +60,10 @@
                   
                       <div class="form-group">
                           <label for="id_sent_by">Sent By</label>
-                          <select class="form-control" id="id_sent_by" name="sent_by">
-                              <option value="Admin" {% if form.sent_by.value == 'Admin' %}selected{% endif %}>Admin</option>
-                              <option value="HealthWorker" {% if form.sent_by.value == 'HealthWorker' %}selected{% endif %}>Health Worker</option>
-                          </select>
+                          <input type="text" class="form-control"  id="id_sent_by" name="sent_by" value="{{ user_type }}" readonly>
+                          {% if form.sent_by.errors %}
+                              <div class="text-danger">{{ form.sent_by.errors }}</div>
+                          {% endif %}
                           {% if form.sent_by.errors %}
                               <div class="text-danger">{{ form.sent_by.errors }}</div>
                           {% endif %}
