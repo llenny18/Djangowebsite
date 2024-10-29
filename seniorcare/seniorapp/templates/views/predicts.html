@@ -6,7 +6,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Senior Citizen MIS - Predicted Diseases</title>
+    <title>Senior Citizen  - Predicted Diseases</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- plugins:css -->
 
@@ -39,11 +39,19 @@
   <!-- Dashboard Charts -->
   <div class="row text-center" >
     <!-- First Row: Three Pie Charts -->
-    <div class="col-lg-12 col-md-6 mb-4"  >
+    <div class="col-lg-6 col-md-6 mb-4"  >
       <div class="card"  style="height: 700px;">
         <div class="card-body">
           <h5 class="card-title text-center">Most Common Predicted Diseases</h5>
-          <canvas id="pieChart1" style="margin-left: 35%"></canvas>
+          <canvas id="pieChart1" ></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-12 mb-4">
+      <div class="card"   style="height: 700px;">
+        <div class="card-body">
+          <h5 class="card-title text-center">Top Predicted Results of Senior Citizens</h5>
+          <canvas id="barChart2"></canvas>
         </div>
       </div>
     </div>
@@ -116,6 +124,30 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
+
+            // Bar Chart Configuration
+            const barConfig2 = {
+              type: 'bar',
+              data: {
+                labels: {{ disease_labels|safe }},
+                datasets: [{
+                  label: 'Disease Prediction Count',
+                  data: {{ disease_counts|safe }},
+                  backgroundColor: '#36A2EB',
+                }]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  }
+                }
+              }
+            };
+            new Chart(document.getElementById('barChart2'), barConfig2);
+
+
       new DataTable('#table');
   </script>
     <!-- plugins:js -->

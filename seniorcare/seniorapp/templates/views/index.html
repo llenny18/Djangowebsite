@@ -6,7 +6,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Senior Citizen MIS - Dashboard</title>
+    <title>Senior Citizen  - Dashboard</title>
 
    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -151,28 +151,19 @@
                 </div>
               </div>
             </div>
+
             <div class="col-lg-6 col-md-12 mb-4">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title text-center">Top Predicted Results of Senior Citizens</h5>
-                  <canvas id="barChart2"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- SMS Sent Graph -->
-          <div class="row mb-4">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">SMS Sent to Senior Citizens</h4>
-                  </div>
+                  <h5 class="card-title text-center">SMS Sent to Senior Citizens</h5>
                   <canvas id="page-view-analytic"></canvas>
+
                 </div>
               </div>
             </div>
+           
           </div>
+          
           <script>
 
             
@@ -200,30 +191,10 @@
             };
 
             
-            // Bar Chart Configuration
-            const barConfig2 = {
-              type: 'bar',
-              data: {
-                labels: {{ disease_labels|safe }},
-                datasets: [{
-                  label: 'Disease Prediction Count',
-                  data: {{ disease_counts|safe }},
-                  backgroundColor: '#36A2EB',
-                }]
-              },
-              options: {
-                responsive: true,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                  }
-                }
-              }
-            };
+
     
 
             new Chart(document.getElementById('barChart1'), barConfig);
-            new Chart(document.getElementById('barChart2'), barConfig2);
         document.addEventListener('DOMContentLoaded', function() {
             var username = "{{ username }}";
             if (username === 'Guest') {
