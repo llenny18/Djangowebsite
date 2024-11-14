@@ -64,7 +64,7 @@
                               <td>{{ notification.sent_by }}</td>
                               <td>{{ notification.sender_id }}</td>
                               <td>{{ notification.sent_at }}</td>
-                              <td><a href="{% url 'sms_notification_update' id=notification.sms_id %}" class="btn badge-primary m-1">Edit</a><br><a href="" class="btn badge-danger m-1">Delete</a></td>
+                              <td><a href="{% url 'delete_sms' sms_id=notification.sms_id %}" class="btn badge-danger m-1">Delete</a></td>
                           </tr>
                           {% endfor %}
                       </tbody>

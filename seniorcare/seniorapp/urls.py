@@ -12,6 +12,10 @@ urlpatterns = [
     path('predictdis', views.predict_disease_list, name='predictdis'),
     path('admin_delete/<int:admin_id>/', views.delete_admin, name='delete_admin'),
     path('worker_delete/<int:worker_id>/', views.delete_worker, name='delete_worker'),
+    
+    path('delete_sms/<int:sms_id>/', views.delete_sms, name='delete_sms'),
+    path('delete_citizen/<int:citizen_id>/', views.delete_citizen, name='delete_citizen'),
+    
     path('citizens', views.citizens, name='citizens'),
     path('userlogs', views.userlogs, name='userlogs'),
     path('announcements', views.announcements, name='announcements'),

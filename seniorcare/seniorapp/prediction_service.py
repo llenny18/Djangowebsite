@@ -1,9 +1,16 @@
 # seniorcare/prediction_service.py
 
 import re
+import os
 from datetime import datetime, date
 from collections import defaultdict
 from .factor_disease_map import factor_disease_map
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.multiclass import OneVsRestClassifier
+import numpy as np
+import joblib  # For saving/loading the model
 
 # List of factors excluding age ranges
 factors = list(factor_disease_map.keys())
@@ -29,8 +36,6 @@ def calculate_age(dob):
             
     age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
     return age
-
-
 
 def map_age_to_factor(age):
     """
@@ -58,28 +63,82 @@ def map_age_to_factor(age):
         return "age_91_100"
     return None
 
-def predict_diseases(citizen):
-    """
-    Predict diseases for a given citizen based on their factors.
-    """
-    predictions = defaultdict(list)
-    
-    # Calculate age and get corresponding age factor
-    age = calculate_age(citizen.date_of_birth)
-    age_factor_key = map_age_to_factor(age) if age is not None else None
-    
-    # Add diseases from age factor
-    if age_factor_key:
-        predictions['age_factor'].extend(factor_disease_map[age_factor_key])
 
-    # Check other health factors and map diseases
-    for factor in other_factors:
-        if getattr(citizen, factor, None):
-            predictions['other_factors'].extend(factor_disease_map[factor])
+def prepare_data_for_training():
+    """
+    Prepare data for training by converting factors to binary features and diseases to labels.
+    This function uses the provided 'factor_disease_map' and the input dataset 'data'.
+    """
+    # Creating a binary dataset based on the factors
+    # Example: if a person has the factor 'age_1_10', it would map to diseases in that range
+    binary_data = []
+    label_data = []
+    
+    # Iterate over the factors and map them to disease labels
+    for factor, diseases in factor_disease_map.items():
+        # Binary indicator for each factor (1 if factor applies, 0 if not)
+        binary_row = [1 if factor in factors else 0 for factor in factor_disease_map]
+        binary_data.append(binary_row)
 
-    # Combine predictions and remove duplicates
-    combined_predictions = list(set(predictions['age_factor'] + predictions['other_factors']))
-    return combined_predictions
+        # Multi-hot encoded disease labels
+        disease_row = [1 if disease in diseases else 0 for disease in mlb.classes_]
+        label_data.append(disease_row)
+    
+    # Convert the binary data and label data to numpy arrays
+    binary_data = np.array(binary_data)
+    label_data = np.array(label_data)
+
+    return binary_data, label_data
+
+def train_svm_model():
+    """
+    Train an SVM model for predicting diseases based on factors.
+    """
+    X, y = prepare_data_for_training()
+
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Initialize the SVM model with a One-vs-Rest strategy
+    svm_classifier = OneVsRestClassifier(SVC(kernel='linear', probability=True))  # Using linear kernel for simplicity
+    svm_classifier.fit(X_train, y_train)
+    
+    directory_model = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'svm_model.pkl')
+
+    # Save the trained model to disk
+    joblib.dump(svm_classifier, directory_model)
+
+    # Evaluate the model (optional)
+    score = svm_classifier.score(X_test, y_test)
+    print(f"SVM model accuracy: {score:.4f}")
+
+
+def predict_diseases(factors, model, label_encoder):
+    """
+    Predict the most likely disease based on the provided factors using the trained model.
+    
+    Parameters:
+    - factors: a dictionary of factors (e.g., age, smoking, etc.)
+    - model: the trained machine learning model
+    - label_encoder: the MultiLabelBinarizer used for encoding the diseases
+    
+    Returns:
+    - The most likely predicted disease
+    """
+    # Convert input factors into the corresponding binary vector
+    input_vector = [1 if factor in factors else 0 for factor in factor_disease_map]
+
+    # Predict using the trained model (assuming it's a classification model)
+    prediction = model.predict([input_vector])
+
+    # Get the index of the highest prediction value
+    predicted_index = np.argmax(prediction)  # This gets the index with the highest probability
+
+    # Decode the index back to the disease label
+    predicted_label = label_encoder.inverse_transform([[predicted_index]])  # Make sure it's in a 2D format
+    
+    return predicted_label[0]  # Return the most likely disease
+
 
 # Example usage:
 # citizen = SeniorCitizen.objects.get(citizen_id=1)

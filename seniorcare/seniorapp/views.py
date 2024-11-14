@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Admin, HealthWorker, SeniorCitizen, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView, UserLogs, UserActivityLog, PredictedDisease, SeniorCitizenDiseaseView, SeniorCitizenView
+from .models import Admin, HealthWorker, SeniorCitizen, SeniorCitizenAge, Activity, Announcement, Profile, SMSNotification, PredictiveAnalytics, Appointment, DataProfiling, SummaryCounts, WeeklySMSSent, DataProfilingView, PredictiveAnalyticsView, UserLogs, UserActivityLog, PredictedDisease, SeniorCitizenDiseaseView, SeniorCitizenView, SVMAnalytics
 from .forms import AdminForm, HealthWorkerForm, SeniorCitizenForm, ActivityForm, AnnouncementForm, ProfileForm, SMSNotificationForm, PredictiveAnalyticsForm, LoginForm, AppointmentForm, DataProfilingForm, ResetPasswordForm, SMSNotificationFormBulk
 
 from django.contrib.auth import authenticate, login
@@ -9,7 +9,7 @@ from django.utils import timezone
 import pytz
 import datetime
 from django.utils import timezone
-from .models import PredictiveAnalytics, DataProfilingView, SeniorCitizen, TopCheckupsView, TopHealthConditionsView, TopPredictedDiseasesView, DiseaseCount, TopTreatments
+from .models import PredictiveAnalytics, DataProfilingView, SeniorCitizen, TopCheckupsView, TopHealthConditionsView, TopPredictedDiseasesView, DiseaseCount
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
@@ -140,12 +140,19 @@ def logout_view(request):
     return redirect('login')
 
 
-
+def predict_diseases_for_senior(request, citizen_id):
+    """Predict diseases for a senior citizen based on their data."""
+    try:
+        citizen = SeniorCitizenAge.objects.get(citizen_id=citizen_id)
+        predicted_diseases = citizen.predict_diseases()
+        return JsonResponse({"citizen_id": citizen_id, "predicted_diseases": predicted_diseases[0]})
+    except SeniorCitizenAge.DoesNotExist:
+        return JsonResponse({"error": "Citizen not found"}, status=404)
 
 def login_view(request):
     user_id = request.session.get('user_id', 'None')  # Retrieve user_id from the session
     error_message = None  # Initialize error_message variable
-    predict_all_diseases()
+    predict_all_and_insert_diseases()
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -221,7 +228,6 @@ def home(request):
     top_disease = TopPredictedDiseasesView.objects.all()
     top_health_condition = TopHealthConditionsView.objects.all()
     disease_count = DiseaseCount.objects.all()
-    top_treatments = TopTreatments.objects.all()  # Fetch top treatments
 
     # Process data for chart
     weeks = [data.week for data in weekly_sms_data]
@@ -237,9 +243,6 @@ def home(request):
     condition_labels = [data.health_condition for data in top_health_condition]
     condition_counts = [data.condition_count for data in top_health_condition]
 
-    # Prepare data for top treatments
-    treatment_labels = [data.treatments for data in top_treatments]
-    treatment_counts = [data.condition_count for data in top_treatments]
 
     context = {
         'username': username,
@@ -250,8 +253,6 @@ def home(request):
         'disease_counts': disease_counts,
         'condition_labels': condition_labels,
         'condition_counts': condition_counts,
-        'treatment_labels': treatment_labels,  # Add top treatments labels
-        'treatment_counts': treatment_counts,  # Add top treatments counts
         'user_id': user_id,
         'summary_data': summary_data,
         'weeks': weeks,
@@ -264,6 +265,22 @@ def delete_admin(request, admin_id):
     admin_user = get_object_or_404(Admin, admin_id=admin_id)
     admin_user.delete()
     return redirect('admins')  # Redirect to a list of admins or a success page
+
+
+
+def delete_sms(request, sms_id):
+    sms = get_object_or_404(SMSNotification, sms_id=sms_id)
+    sms.delete()
+    return redirect('smsnotifications')  # Redirect to a list of admins or a success page
+
+
+
+def delete_citizen(request, citizen_id):
+    citizen = get_object_or_404(SeniorCitizen, citizen_id=citizen_id)
+    citizen.delete()
+    return redirect('citizens')  
+
+
 
 
 def delete_worker(request, worker_id):
@@ -373,6 +390,18 @@ def senior_citizen_update(request, id):
 from django.contrib import messages
 
 def reset_password(request, admin_id):
+    if 'security_code' not in request.session:
+        # If not, generate a new random number and send the email
+        random_number = random.randint(100000, 999999)
+        admin_data = get_object_or_404(Admin, admin_id=admin_id)
+        send_email(random_number, admin_data.email)
+        request.session['security_code'] = random_number  # Store the random number in the session
+        otp_value = request.session['security_code']
+    else:
+        otp_value = request.session['security_code']
+    
+    
+    
     admin = get_object_or_404(Admin, admin_id=admin_id)
 
     if request.method == 'POST':
@@ -381,10 +410,11 @@ def reset_password(request, admin_id):
             security_code = form.cleaned_data['security_code']
             new_password = form.cleaned_data['new_password']
 
-            if int(security_code) == int(admin.security_code):  # Assuming 'security_code' is a field in your Admin model
+            if int(security_code) == int(otp_value):  # Assuming 'security_code' is a field in your Admin model
                 admin.password = new_password  # You might want to hash the password here
                 admin.save()
                 messages.success(request, "Password has been reset successfully.")
+                del request.session['security_code']
                 return redirect('login')  # Redirect to the login page
             else:
                 messages.error(request, "Invalid security code.")
@@ -396,6 +426,16 @@ def reset_password(request, admin_id):
 
 
 def reset_health_worker_password(request, worker_id):
+    if 'security_code' not in request.session:
+        # If not, generate a new random number and send the email
+        random_number = random.randint(100000, 999999)
+        health_worker_data = get_object_or_404(HealthWorker, worker_id=worker_id)
+        send_email(random_number, health_worker_data.email)
+        request.session['security_code'] = random_number  # Store the random number in the session
+        otp_value = request.session['security_code']
+    else:
+        otp_value = request.session['security_code']
+        
     health_worker = get_object_or_404(HealthWorker, worker_id=worker_id)
 
     if request.method == 'POST':
@@ -405,10 +445,11 @@ def reset_health_worker_password(request, worker_id):
             new_password = form.cleaned_data['new_password']
 
             # Check if the provided security code matches the health worker's code
-            if int(security_code) == int(health_worker.security_code):  # Ensure 'security_code' is in your HealthWorker model
+            if int(security_code) == int(otp_value):  # Ensure 'security_code' is in your HealthWorker model
                 health_worker.password = new_password 
                 health_worker.save()
                 messages.success(request, "Password has been reset successfully.")
+                del request.session['security_code']
                 return redirect('login')  # Redirect to the login page
             else:
                 messages.error(request, "Invalid security code.")
@@ -606,6 +647,8 @@ from django.utils import timezone
 from datetime import timedelta
 
 
+
+
 import random
 
 def predict_all_diseases():
@@ -624,7 +667,7 @@ def predict_all_diseases():
 
     if today_count < 300:
         # Proceed with your prediction logic
-        citizens = SeniorCitizen.objects.all()
+        citizens = SeniorCitizenAge.objects.all()
         recent_predictions = []  # To track recent predictions and avoid repetition
         
         for citizen in citizens:
@@ -661,7 +704,85 @@ def predict_all_diseases():
                     )
 
 
- 
+def predict_all_and_insert_diseases():
+    # Get the start and end of today
+    now = timezone.now()
+    start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_of_today = start_of_today + timedelta(days=1)
+
+    # Count the number of predicted diseases created today
+    today_count = PredictedDisease.objects.filter(created_at__range=(start_of_today, end_of_today)).count()
+
+    # Check if the count is less than 300
+    if today_count >= 300:
+        print("Prediction limit reached for today. No new predictions will be made.")
+        return
+
+    # Fetch all citizens
+    citizens = SeniorCitizenAge.objects.all()
+
+    for citizen in citizens:
+        # Check if a prediction already exists for this citizen
+        if not PredictedDisease.objects.filter(citizen_id=citizen.citizen_id).exists():
+            # Use the citizen's data to predict diseases
+            disease_predictions = citizen.predict_diseases()  # Assuming this method exists in the SeniorCitizenAge model
+            
+            if disease_predictions:  # Ensure there are predictions
+                # Shuffle predictions for variety
+                random.shuffle(disease_predictions)
+
+                # Track recent predictions to avoid repetition for this citizen only
+                recent_predictions = set()  # Set for unique disease tracking
+
+                # Try to pick a prediction that hasn't been used recently for this citizen
+                disease = None
+                for pred in disease_predictions:
+                    if pred not in recent_predictions:
+                        disease = pred
+                        recent_predictions.add(pred)
+                        break
+                
+                # If all predictions are recent, fallback to the first one
+                if not disease:
+                    disease = disease_predictions[0]
+                
+                conditions_list = list(disease)
+
+                # Get the number of indices
+                num_indices = len(conditions_list)
+
+                # Get a random index
+                random_index = random.randint(0, num_indices - 1)
+
+                # Get the value at the random index
+                random_value = conditions_list[random_index]
+
+                # Create a new PredictedDisease record for this citizen
+                PredictedDisease.objects.create(
+                    citizen_id=citizen.citizen_id,
+                    disease_name=random_value,
+                    score=random.uniform(0.7, 1.0),  # Simulated prediction confidence score
+                    prediction_rank=1  # Adjust this as necessary for your ranking logic
+                )
+
+
+    print("Predictions for all citizens completed successfully.")
+    
+    
+from django.core.mail import send_mail
+
+def send_email(random_number, email):
+    subject = 'Forgot Password One Time Password'
+    message = 'Your OTP: ' + str(random_number)
+    from_email = 'netninjas.p1@gmail.com'
+    recipient_list = [email]
+
+    send_mail(subject, message, from_email, recipient_list)
+
+# Call the function to send the email
+
+
+    
 def predict_disease_list(request):
     username = request.session.get('user_name', 'Guest')
     user_type = request.session.get('user_type', None) 
@@ -671,7 +792,12 @@ def predict_disease_list(request):
     top_disease = TopPredictedDiseasesView.objects.all()
     top_health_condition = TopHealthConditionsView.objects.all()
     disease_count = DiseaseCount.objects.all()
-    top_treatments = TopTreatments.objects.all()  # Fetch top treatments
+    
+    svm_analytics_data = SVMAnalytics.objects.all()
+    
+    diseases = [data.disease_name for data in svm_analytics_data]
+    average_scores = [data.average_score for data in svm_analytics_data]
+    prediction_counts = [data.prediction_count for data in svm_analytics_data]
     
     weekly_sms_data = WeeklySMSSent.objects.all()
     
@@ -689,10 +815,6 @@ def predict_disease_list(request):
     condition_labels = [data.health_condition for data in top_health_condition]
     condition_counts = [data.condition_count for data in top_health_condition]
 
-    # Prepare data for top treatments
-    treatment_labels = [data.treatments for data in top_treatments]
-    treatment_counts = [data.condition_count for data in top_treatments]
-    
  # Retrieve user_type from the session
     predicts = SeniorCitizenDiseaseView.objects.all()
     return render(request, 'views/predicts.html', {
@@ -705,8 +827,9 @@ def predict_disease_list(request):
         'disease_counts': disease_counts,
         'condition_labels': condition_labels,
         'condition_counts': condition_counts,
-        'treatment_labels': treatment_labels,  # Add top treatments labels
-        'treatment_counts': treatment_counts,  # Add top treatments counts
+        'diseases': diseases,
+        'average_scores': average_scores,
+        'prediction_counts': prediction_counts,
         'user_type': user_type, 'user_id': user_id
     })
     

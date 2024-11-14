@@ -77,12 +77,28 @@
                           {% endif %}
                       </div>
                       <div class="form-group">
-                          <label for="id_health_condition">Diagnosis</label>
+                          <label for="id_health_condition">Medical History</label>
                           <textarea class="form-control" id="id_health_condition" name="health_condition">{{ form.health_condition.value }}</textarea>
                           {% if form.health_condition.errors %}
                               <div class="text-danger">{{ form.health_condition.errors }}</div>
                           {% endif %}
                       </div>
+                      
+                      <div class="form-group">
+                        <label for="id_lifestyle">Lifestyle</label>
+                        <textarea class="form-control" id="id_lifestyle" name="lifestyle">{{ form.lifestyle.value }}</textarea>
+                        {% if form.lifestyle.errors %}
+                            <div class="text-danger">{{ form.lifestyle.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="id_medication">Medication</label>
+                      <textarea class="form-control" id="id_medication" name="medication">{{ form.medication.value }}</textarea>
+                      {% if form.medication.errors %}
+                          <div class="text-danger">{{ form.medication.errors }}</div>
+                      {% endif %}
+                  </div>
                       <div class="form-group">
                           <label for="id_address">Address</label>
                           <input type="text" class="form-control" id="id_address" name="address" value="{{ form.address.value }}">
@@ -90,16 +106,15 @@
                               <div class="text-danger">{{ form.address.errors }}</div>
                           {% endif %}
                       </div>
-                      <div class="form-group">
-                          <label for="id_treatments">Treatments</label>
-                          <input type="text" class="form-control" id="id_treatments" name="treatments" value="{{ form.treatments.value }}">
-                          {% if form.treatments.errors %}
-                              <div class="text-danger">{{ form.treatments.errors }}</div>
-                          {% endif %}
-                      </div>
+                     
                       <div class="form-group">
                           <label for="id_checkups">Checkups</label>
-                          <input type="text" class="form-control" id="id_checkups" name="checkups" value="{{ form.checkups.value }}">
+                          <select class="form-control" id="id_checkups" name="checkups" >
+                            <option value="Walk-in">Walk-in</option>
+                            <option value="Scheduled">Scheduled</option>
+                          </select>
+
+
                           {% if form.checkups.errors %}
                               <div class="text-danger">{{ form.checkups.errors }}</div>
                           {% endif %}
@@ -111,7 +126,7 @@
                               <div class="text-danger">{{ form.phone.errors }}</div>
                           {% endif %}
                       </div>
-                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <button type="submit" class="btn btn-primary mr-2" onclick="alert('Record Inserted Successfully')">Submit</button>
                       <a href="{% url 'citizens' %}" class="btn btn-light">Cancel</a>
                   </form>
                   
@@ -142,6 +157,7 @@
     <!-- inject:js -->
     <script src="{% static 'js/off-canvas.js' %}"></script>
     <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+   
      <script src="{% static 'js/misc.js' %}"></script><script>
         document.addEventListener('DOMContentLoaded', function() {
             var username = "{{ username }}";

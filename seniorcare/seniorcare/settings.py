@@ -35,6 +35,16 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'netninjas.p1@gmail.com'
+EMAIL_HOST_PASSWORD = 'evgglweodjbcsxmh'  # Use the generated app password here
+DEFAULT_FROM_EMAIL = 'netninjas.p1@gmail.com'
+
+
 # Application definition
 
 INSTALLED_APPS = [

@@ -134,13 +134,15 @@ class TopPredictedDiseasesView(models.Model):
         managed = False
 
 
-class TopTreatments(models.Model):
-    treatments = models.CharField(max_length=255)  # Adjust the max_length based on your needs
-    condition_count = models.IntegerField()
+class SVMAnalytics(models.Model):
+    id = models.AutoField(primary_key=True)
+    disease_name = models.CharField(max_length=100)
+    average_score = models.FloatField()
+    prediction_count = models.IntegerField()
 
     class Meta:
-        managed = False  # No migrations will be created for this model
-        db_table = 'top_treatments'  # The name of the view in the database
+        db_table = 'svm_analytics'
+        managed = False  # This is a view, so Django should not manage it
 
 
 class DiseaseCount(models.Model):
@@ -168,10 +170,11 @@ class SeniorCitizen(models.Model):
     last_name = models.CharField(max_length=50)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=10)
-    health_condition = models.TextField()
     address = models.CharField(max_length=255)
-    treatments = models.CharField(max_length=255)
+    health_condition = models.CharField(max_length=255)
     checkups = models.CharField(max_length=255)
+    lifestyle = models.CharField(max_length=255)
+    medication = models.CharField(max_length=255)
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -181,6 +184,117 @@ class SeniorCitizen(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.citizen_id})"
+
+
+
+from django.db import models
+import joblib
+import pickle
+import os
+import numpy as np
+from sklearn.preprocessing import MultiLabelBinarizer
+from datetime import datetime
+
+class SeniorCitizenAge(models.Model):
+    citizen_id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    date_of_birth = models.DateField()
+    gender = models.CharField(max_length=10)
+    address = models.CharField(max_length=255)
+    health_condition = models.CharField(max_length=255)
+    checkups = models.CharField(max_length=255)
+    lifestyle = models.CharField(max_length=255)
+    medication = models.CharField(max_length=255)
+    age = models.CharField(max_length=255)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'seniorcitizen_with_age'
+        managed = False
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.citizen_id})"
+
+    def calculate_age(self):
+        """Calculate age from date of birth."""
+        if not self.date_of_birth:
+            return None
+        today = datetime.today()
+        age = today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+        return age
+
+    def map_age_to_factor(self, age):
+        """Map the calculated age to the corresponding age range factor."""
+        if 1 <= age <= 10:
+            return "age_1_10"
+        elif 11 <= age <= 20:
+            return "age_11_20"
+        elif 21 <= age <= 30:
+            return "age_21_30"
+        elif 31 <= age <= 40:
+            return "age_31_40"
+        elif 41 <= age <= 50:
+            return "age_41_50"
+        elif 51 <= age <= 60:
+            return "age_51_60"
+        elif 61 <= age <= 70:
+            return "age_61_70"
+        elif 71 <= age <= 80:
+            return "age_71_80"
+        elif 81 <= age <= 90:
+            return "age_81_90"
+        elif 91 <= age <= 100:
+            return "age_91_100"
+        return None
+
+    def prepare_data_for_prediction(self):
+        """Prepare the citizen's data for prediction."""
+        # Convert age to the corresponding factor
+        age = self.calculate_age()
+        if age is None:
+            return None  # Age is required for prediction
+        age_factor = self.map_age_to_factor(age)
+
+        # Simulate other factors for prediction (you can adjust this as per actual data)
+        factors_data = np.zeros(51)  # Assuming there are 51 factors, adjust accordingly
+        if age_factor:
+            factors_data[0] = 1  # Assuming age factors are placed in the first index
+
+        # Example: Add other factors such as gender, health condition, lifestyle, etc.
+        # Assuming you convert categorical fields into binary values (1 for present, 0 for absent)
+        # Adjust these mappings as per your data
+        if self.gender == "Male":
+            factors_data[1] = 1  # Assume gender is mapped to index 1
+        if self.lifestyle == "Sedentary":
+            factors_data[2] = 1  # Example for lifestyle factor
+
+        return factors_data.reshape(1, -1)  # Return a 2D array for model input
+
+    def predict_diseases(self):
+        """Predict diseases for this senior citizen."""
+        # Load the trained model and label encoder
+        model_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'health_disease_model.pkl')
+        label_encoder_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'disease_label_encoder.pkl')
+
+        with open(model_file, 'rb') as f:
+            model = joblib.load(f)
+
+        with open(label_encoder_file, 'rb') as f:
+            mlb = pickle.load(f)
+
+        # Prepare data for prediction
+        input_data = self.prepare_data_for_prediction()
+        if input_data is None:
+            return []  # No age, hence no prediction possible
+
+        # Predict diseases
+        prediction = model.predict(input_data)
+        predicted_diseases = mlb.inverse_transform(prediction)
+        
+        return predicted_diseases
+
 
 class PredictedDisease(models.Model):
     citizen_id = models.AutoField(primary_key=True)
@@ -203,7 +317,8 @@ class SeniorCitizenDiseaseView(models.Model):
     gender = models.CharField(max_length=10)
     address = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
-    treatments = models.CharField(max_length=355)
+    lifestyle = models.CharField(max_length=455)
+    medication = models.CharField(max_length=455)
     checkups = models.CharField(max_length=355)
     disease_name = models.CharField(max_length=255, null=True)
     score = models.FloatField(default=1)

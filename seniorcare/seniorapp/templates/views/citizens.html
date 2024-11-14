@@ -51,10 +51,11 @@
                           <th>Last Name</th>
                           <th>Date of Birth</th>
                           <th>Gender</th>
-                          <th>Diagnosis</th>
                           <th>Address</th>
                           <th>Phone</th>
-                          <th>Treatments</th>
+                          <th>Medical History</th>
+                          <th>Lifestyle</th>
+                          <th>Medication</th>
                           <th>Checkups</th>
                           <th>Created At</th>
                           <th>Action</th>
@@ -68,13 +69,14 @@
                             <td>{{ senior.last_name }}</td>
                             <td>{{ senior.date_of_birth }}</td>
                             <td>{{ senior.gender }}</td>
-                            <td>{{ senior.health_condition }}</td>
                             <td>{{ senior.address }}</td>
                             <td>{{ senior.phone }}</td>
-                            <td>{{ senior.treatments }}</td>
+                            <td>{{ senior.health_condition }}</td>
+                            <td>{{ senior.lifestyle }}</td>
+                            <td>{{ senior.medication }}</td>
                             <td>{{ senior.checkups }}</td>
                             <td>{{ senior.created_at }}</td>
-                            <td><a href="{% url 'senior_citizen_update' id=senior.citizen_id %}" class="btn badge-primary m-1">Edit</a><br><a href="" class="btn badge-danger m-1">Delete</a></td>
+                            <td><a href="{% url 'senior_citizen_update' id=senior.citizen_id %}" class="btn badge-primary m-1">Edit</a><br><a href="{% url 'delete_citizen' citizen_id=senior.citizen_id %}" class="btn badge-danger m-1">Delete</a></td>
                         </tr>
                         {% endfor %}
                       </tbody>
