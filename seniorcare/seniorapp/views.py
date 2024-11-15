@@ -766,7 +766,6 @@ def predict_all_and_insert_diseases():
                 )
 
 
-    print("Predictions for all citizens completed successfully.")
     
     
 from django.core.mail import send_mail
@@ -1059,7 +1058,7 @@ def citizens(request):
     user_type = request.session.get('user_type', None) 
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
  # Retrieve user_type from the session
-    seniors = SeniorCitizen.objects.all()
+    seniors = SeniorCitizenAge.objects.all()
     return render(request, 'views/citizens.html', {
         'seniors': seniors, 
         'username': username, 

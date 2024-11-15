@@ -173,10 +173,10 @@
                     const rows = table.querySelectorAll('tbody tr');
                 
                     rows.forEach(row => {
-                        const createdDate = row.cells[9].innerText;  // Assuming created_date is at cell index 12
-                        const createdWeek = row.cells[13].innerText;  // Assuming created_week is at cell index 13
-                        const createdMonth = row.cells[11].innerText; // Assuming created_month is at cell index 14
-                        const createdYear = row.cells[12].innerText;  // Assuming created_year is at cell index 15
+                        const createdDate = row.cells[11].innerText;  // Assuming created_date is at cell index 12
+                        const createdWeek = row.cells[15].innerText;  // Assuming created_week is at cell index 13
+                        const createdMonth = row.cells[13].innerText; // Assuming created_month is at cell index 14
+                        const createdYear = row.cells[14].innerText;  // Assuming created_year is at cell index 15
                 
                         let showRow = true;
                 
@@ -313,11 +313,13 @@
                                                         <td class="font-weight-bold">Full Name</td>
                                                  
                                                         <td class="font-weight-bold">Date of Birth</td>
+                                                        <td class="font-weight-bold">Age</td>
                                                         <td class="font-weight-bold">Diagnosis</td>
                                                         <td class="font-weight-bold">Gender</td>
                                                         <td class="font-weight-bold">Address</td>
                                                         <td class="font-weight-bold">Phone</td>
-                                                        <td class="font-weight-bold">Treatments</td>
+                                                        <td class="font-weight-bold">LifeStyle</td>
+                                                        <td class="font-weight-bold">Medication</td>
                                                         <td class="font-weight-bold">Checkups</td>
                                                         <td class="font-weight-bold">Created At</td>
                                                         <td class="font-weight-bold">Weekday</td>
@@ -333,11 +335,13 @@
                                                         <td>{{ profiling.id }}</td>
                                                         <td>{{ profiling.first_name }} {{ profiling.last_name }}</td>
                                                         <td>{{ profiling.date_of_birth }}</td>
+                                                        <td>{{ profiling.age }}</td>
                                                         <td>{{ profiling.health_condition }}</td>
             <td>{{ profiling.gender }}</td>
             <td>{{ profiling.address }}</td>
             <td>{{ profiling.phone }}</td>
-            <td>{{ profiling.treatments }}</td>
+            <td>{{ profiling.lifestyle }}</td>
+            <td>{{ profiling.medication }}</td>
             <td>{{ profiling.checkups }}</td>
             <td>{{ profiling.created_date }}</td>
             <td>{{ profiling.created_week }}</td>
