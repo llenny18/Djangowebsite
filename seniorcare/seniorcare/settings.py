@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-j8+th9uu=(pia%hzs^ng*-niy8*$w^x%h3dl+@ta)0_yi_g6&m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['185.170.58.95','seniorcitizencare.site','www.seniorcitizencare.site', '127.0.0.1']
+ALLOWED_HOSTS = ['185.170.58.95','seniorcitizencare.site','www.seniorcitizencare.site', '127.0.0.1', '185.170.58.95']
 
 CSRF_TRUSTED_ORIGINS = ['https://seniorcitizencare.site', 'https://www.seniorcitizencare.site']
 
