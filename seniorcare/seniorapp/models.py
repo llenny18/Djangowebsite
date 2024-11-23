@@ -101,6 +101,7 @@ class Admin(models.Model):
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     security_code = models.IntegerField()
+    status = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'admin'
@@ -114,6 +115,7 @@ class HealthWorker(models.Model):
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     security_code = models.IntegerField()
+    status = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'healthworker'
@@ -179,6 +181,7 @@ class SeniorCitizen(models.Model):
     medication = models.CharField(max_length=255)
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'seniorcitizen'
@@ -211,6 +214,7 @@ class SeniorCitizenAge(models.Model):
     age = models.CharField(max_length=255)
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'seniorcitizen_with_age'
@@ -381,6 +385,7 @@ class SMSNotification(models.Model):
     sent_by = models.CharField(max_length=15, choices=[('Admin', 'Admin'), ('HealthWorker', 'HealthWorker')])
     sender_id = models.IntegerField()
     sent_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'smsnotification'

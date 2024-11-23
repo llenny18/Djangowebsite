@@ -132,3 +132,45 @@
 
   
   
+<!-- nav.html -->
+<script>
+  // JavaScript code for managing session timeout and tab activity
+  const logoutURL = "{% url 'logout' %}"; // Django's URL template tag for logout URL
+
+  let tabInactive = false;
+  let lastActiveTime = new Date(); // Tracks the last time the tab was active
+  const maxInactiveTime = 15 * 60 * 1000; // 15 minutes in milliseconds
+
+  // Function to get the current time in Asia/Manila timezone
+  function getManilaTime() {
+      const now = new Date();
+      return new Date(now.toLocaleString("en-US", { timeZone: "Asia/Manila" }));
+  }
+
+  // Update the last active time when the tab is focused
+  window.onfocus = function () {
+      tabInactive = false;
+
+      // Check if the user exceeded the 15-minute limit
+      const currentTime = getManilaTime();
+      if (currentTime - lastActiveTime >= maxInactiveTime) {
+          window.location.href = logoutURL; // Logout if inactive for more than 15 minutes
+      }
+  };
+
+  // Mark the tab as inactive when it is blurred
+  window.onblur = function () {
+      tabInactive = true;
+      lastActiveTime = getManilaTime(); // Update the last active time when the tab is left
+  };
+
+  // Periodically check if the user should be logged out
+  setInterval(function () {
+      if (tabInactive) {
+          const currentTime = getManilaTime();
+          if (currentTime - lastActiveTime >= maxInactiveTime) {
+              window.location.href = logoutURL; // Logout if inactive for more than 15 minutes
+          }
+      }
+  }, 1000); // Check every second
+</script>

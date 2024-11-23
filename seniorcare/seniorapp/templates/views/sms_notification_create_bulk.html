@@ -76,7 +76,10 @@
                               <div class="text-danger">{{ form.sender_id.errors }}</div>
                           {% endif %}
                       </div>
-                  
+                      <div class="form-group" style="display: none;">
+                        <label for="id_code">Status</label>
+                        <input type="text" class="form-control" id="status" name="status" value="{{ form.status.value }}">
+                      </div>
                       <button type="submit" class="btn btn-primary mr-2" onclick="alert('Bilk SMS Sent Successfully')">Submit</button>
                       <a href="{% url 'smsnotifications' %}" class="btn btn-light">Cancel</a>
                   </form>

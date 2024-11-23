@@ -21,7 +21,35 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
 
-    
+    <style>
+      .filter-container {
+          margin-bottom: 20px;
+      }
+  
+      .filter-options {
+          display: flex;
+          align-items: center;
+          gap: 10px; /* Spacing between elements */
+          flex-wrap: wrap; /* Allow elements to wrap to the next line if space is constrained */
+      }
+  
+      .filter-options label {
+          margin-right: 5px; /* Add space between label and input */
+      }
+  
+      .filter-options .form-control {
+          width: 150px; /* Adjust the width of inputs/selects */
+      }
+  
+      .filter-options input,
+      .filter-options select {
+          flex: 1;
+      }
+  
+      #filterBtn {
+          margin-top: 10px; /* Adds space above the button */
+      }
+  </style>
   </head>
   <body>
     
@@ -49,15 +77,39 @@
                 <div class="card">
                   <div class="card-body" style="color: black">
                  
+                    <div class="filter-container">
+                      <hr>
+                      <h3>Filter Options</h3>
+                  
+                      <!-- Wrapper for filter inputs and dropdown -->
+                      <div class="filter-options">
+                          <label for="ageFilter">Age: </label>
+                          <input type="number" id="ageFilter" class="form-control" placeholder="Enter age" />
+                  
+                          <label for="genderFilter">Gender: </label>
+                          <select id="genderFilter" class="form-control">
+                              <option value="">All</option>
+                              <option value="Female">Female</option>
+                              <option value="Male">Male</option>
+                          </select>
+                  
+                          <label for="addressFilter">Address: </label>
+                          <input type="text" id="addressFilter" class="form-control" placeholder="Enter address" />
+                      </div>
+                  
+                      <!-- Filter Button -->
+                      <button id="filterBtn" class="btn btn-primary" onclick="filterData()">Filter</button>
+                  
+                      <hr>
+                  </div>
                     <h1>Input Credentials</h1>
                     <form method="post">
                       {% csrf_token %}
                       <div class="form-group">
                           <label for="id_recipient_phone">Recipient Phone</label>
-                          <p>Hold down the Ctrl (windows) or Command (Mac) button to select multiple options.</p>
                           <select class="form-control" id="id_recipient_phone" name="recipient_phone" multiple>
                           {% for senior in seniors %}
-                          <option value="{{ senior.phone }}">{{ senior.first_name }} {{ senior.last_name }} - {{ senior.phone }}</option>
+                          <option value="{{ senior.phone }}" hidden>{{ senior.first_name }} {{ senior.last_name }} | Phone: {{ senior.phone }}  | Age: {{ senior.age }} | Gender: {{ senior.gender }} | Address: {{ senior.address }}</option>
                            {% endfor %} 
                           </select >
 
@@ -87,6 +139,10 @@
                               <div class="text-danger">{{ form.sender_id.errors }}</div>
                           {% endif %}
                       </div>
+                      <div class="form-group" style="display: none;">
+                        <label for="id_code">Status</label>
+                        <input type="text" class="form-control" id="status" name="status" value="{{ form.status.value }}">
+                      </div>
                       <button type="submit" class="btn btn-primary mr-2" onclick="alert('SMS Sent Successfully')">Submit</button>
                       <a href="{% url 'smsnotifications' %}" class="btn btn-light">Cancel</a>
                   </form>
@@ -107,7 +163,51 @@
       <!-- page-body-wrapper ends -->
     </div>
 
+    <script>
+      function filterData() {
+        var ageFilter = $('#ageFilter').val();
+        var genderFilter = $('#genderFilter').val().toLowerCase();
+        var addressFilter = $('#addressFilter').val().toLowerCase();
     
+        $('#id_recipient_phone option').each(function() {
+            var optionText = $(this).text().toLowerCase();
+            
+            // Extract age, gender, and address from the option text using regular expressions
+            let regex = /age: (\d+)\s+\| gender: (\w+)\s+\| address: (.+)/;
+            let match = optionText.match(regex);
+    
+            // If match is found, extract values, else skip this option
+            if (match) {
+                var age = match[1];
+                var gender = match[2].toLowerCase();
+                var address = match[3].toLowerCase();
+
+                
+                // Apply filters
+                var isAgeMatch = ageFilter ? (parseInt(age) == ageFilter) : true;
+                var isGenderMatch = genderFilter ? (gender == genderFilter) : true;
+                var isAddressMatch = addressFilter ? (address.includes(addressFilter)) : true;
+                
+                // Determine if this option should be shown or hidden based on filter conditions
+                if (isAgeMatch&& isGenderMatch && isAddressMatch) {
+                    $(this).show();  // Show matching option
+                } else {
+                    $(this).remove();  // Hide non-matching option
+                }
+            } else {
+                $(this).remove();  // Hide options that don't match the expected format
+            }
+        });
+    
+        // Trigger a Select2 update to refresh the options
+        $('#id_recipient_phone').trigger('change');
+    }
+    
+    
+    
+    
+    
+  </script>
     <script>
       $(document).ready(function() {
         $('#id_recipient_phone').select2({
@@ -134,6 +234,8 @@
             }
         });
     </script>
+
+    
     <!-- endinject -->
     <!-- Custom js for this page -->
 

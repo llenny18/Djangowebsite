@@ -109,6 +109,7 @@ def generate_predictive_report():
 
 
 def logout_view(request):
+    
     user_id = request.session.get('user_id')  # Get the user_id from the session
     user_type = request.session.get('user_type')  # Get the user_type from the session
 
@@ -149,65 +150,91 @@ def predict_diseases_for_senior(request, citizen_id):
     except SeniorCitizenAge.DoesNotExist:
         return JsonResponse({"error": "Citizen not found"}, status=404)
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db import connection
+from .models import Admin, HealthWorker
+from .forms import LoginForm
+from django.http import JsonResponse
+
 def login_view(request):
     user_id = request.session.get('user_id', 'None')  # Retrieve user_id from the session
     error_message = None  # Initialize error_message variable
-    predict_all_and_insert_diseases()
+    
     if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+        # Check if the form is for the "Forgot Password"
+        if 'forgot_password_email' in request.POST:
+            useremail = request.POST.get('forgot_password_email')
+            
+            # Search for the user based on the email
+            admin = Admin.objects.filter(email=useremail).first()
+            if admin:
+                return redirect('reset_password', admin_id=admin.admin_id)
+            
+            health_worker = HealthWorker.objects.filter(email=useremail).first()
+            if health_worker:
+                return redirect('forgot_password_h', worker_id=health_worker.worker_id)
+            
+            # If no user found, return an error
+            error_message = 'Email not found. Please try again.'
+        
+        else:
+            # Handle login form submission
+            form = LoginForm(request.POST)
+            if form.is_valid():
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password']
 
-            # Check if the user is an Admin
-            try:
-                user = Admin.objects.get(username=username)
-                if password == user.password:
-                    request.session['user_id'] = user.admin_id
-                    request.session['user_name'] = user.username
-                    request.session['user_type'] = 'Admin'
+                # Check if the user is an Admin
+                try:
+                    user = Admin.objects.get(username=username)
+                    if password == user.password:
+                        request.session['user_id'] = user.admin_id
+                        request.session['user_name'] = user.username
+                        request.session['user_type'] = 'Admin'
 
-                    # Insert login time using raw SQL with CONVERT_TZ
-                    with connection.cursor() as cursor:
-                        cursor.execute(
-                            """
-                            INSERT INTO user_logs (user_id, user_type, login_time)
-                            VALUES (%s, %s, CONVERT_TZ(NOW(), '+00:00', '+08:00'))
-                            """, [user.admin_id, 'Admin']
-                        )
+                        # Insert login time using raw SQL with CONVERT_TZ
+                        with connection.cursor() as cursor:
+                            cursor.execute(
+                                """
+                                INSERT INTO user_logs (user_id, user_type, login_time)
+                                VALUES (%s, %s, CONVERT_TZ(NOW(), '+00:00', '+08:00'))
+                                """, [user.admin_id, 'Admin']
+                            )
+                        return redirect('index')
+                except Admin.DoesNotExist:
+                    pass  # Continue to check HealthWorker
 
-                    return redirect('index')
-            except Admin.DoesNotExist:
-                pass  # Continue to check HealthWorker
+                # Check if the user is a HealthWorker
+                try:
+                    user = HealthWorker.objects.get(username=username)
+                    if password == user.password:
+                        request.session['user_id'] = user.worker_id
+                        request.session['user_name'] = user.username
+                        request.session['user_type'] = 'HealthWorker'
 
-            # Check if the user is a HealthWorker
-            try:
-                user = HealthWorker.objects.get(username=username)
-                if password == user.password:
-                    request.session['user_id'] = user.worker_id
-                    request.session['user_name'] = user.username
-                    request.session['user_type'] = 'HealthWorker'
+                        # Insert login time using raw SQL with CONVERT_TZ
+                        with connection.cursor() as cursor:
+                            cursor.execute(
+                                """
+                                INSERT INTO user_logs (user_id, user_type, login_time)
+                                VALUES (%s, %s, CONVERT_TZ(NOW(), '+00:00', '+08:00'))
+                                """, [user.worker_id, 'HealthWorker']
+                            )
+                        return redirect('index')
+                except HealthWorker.DoesNotExist:
+                    pass  # No action needed; we will show the error below
 
-                    # Insert login time using raw SQL with CONVERT_TZ
-                    with connection.cursor() as cursor:
-                        cursor.execute(
-                            """
-                            INSERT INTO user_logs (user_id, user_type, login_time)
-                            VALUES (%s, %s, CONVERT_TZ(NOW(), '+00:00', '+08:00'))
-                            """, [user.worker_id, 'HealthWorker']
-                        )
-
-                    return redirect('index')
-            except HealthWorker.DoesNotExist:
-                pass  # No action needed; we will show the error below
-
-            # If the user does not exist or password is incorrect
-            error_message = 'Invalid username or password. Please try again.'
-
+                # If the user does not exist or password is incorrect
+                error_message = 'Invalid username or password. Please try again.'
     else:
         form = LoginForm()
 
-    return render(request, 'views/login.html', {'form': form, 'user_id': user_id, 'error_message': error_message})
+    return render(request, 'views/login.html', {
+        'form': form,
+        'user_id': user_id,
+        'error_message': error_message
+    })
+
 
 
 
@@ -261,32 +288,65 @@ def home(request):
 
     return render(request, 'views/index.html', context)
 
-def delete_admin(request, admin_id):
-    admin_user = get_object_or_404(Admin, admin_id=admin_id)
-    admin_user.delete()
-    return redirect('admins')  # Redirect to a list of admins or a success page
-
 
 
 def delete_sms(request, sms_id):
     sms = get_object_or_404(SMSNotification, sms_id=sms_id)
-    sms.delete()
-    return redirect('smsnotifications')  # Redirect to a list of admins or a success page
+    sms.status = 'archived'  # Set the status to 'archived'
+    sms.save()  # Save the updated object
+    return redirect('smsnotifications') 
 
 
 
 def delete_citizen(request, citizen_id):
     citizen = get_object_or_404(SeniorCitizen, citizen_id=citizen_id)
-    citizen.delete()
-    return redirect('citizens')  
+    citizen.status = 'archived'  # Set the status to 'archived'
+    citizen.save()  # Save the updated object
+    return redirect('citizens')  # Redirect to the list of citizens
 
 
+def delete_admin(request, admin_id):
+    admin_user = get_object_or_404(Admin, admin_id=admin_id)
+    admin_user.status = 'archived'  # Set the status to 'archived'
+    admin_user.save()  # Save the updated object
+    return redirect('admins')
 
 
 def delete_worker(request, worker_id):
     worker = get_object_or_404(HealthWorker, worker_id=worker_id)
-    worker.delete()
-    return redirect('healthworkers')  # Redirect to a list of admins or a success page
+    worker.status = 'archived'  # Set the status to 'archived'
+    worker.save()  # Save the updated object
+    return redirect('healthworkers')
+
+
+def restore_sms(request, sms_id):
+    sms = get_object_or_404(SMSNotification, sms_id=sms_id)
+    sms.status = 'active'  # Set the status to 'active' (not archived)
+    sms.save()  # Save the updated object
+    return redirect('smsnotifications')
+
+
+def restore_citizen(request, citizen_id):
+    citizen = get_object_or_404(SeniorCitizen, citizen_id=citizen_id)
+    citizen.status = 'active'  # Set the status to 'active' (not archived)
+    citizen.save()  # Save the updated object
+    return redirect('citizens')  # Redirect to the list of citizens
+
+
+def restore_admin(request, admin_id):
+    admin_user = get_object_or_404(Admin, admin_id=admin_id)
+    admin_user.status = 'active'  # Set the status to 'active' (not archived)
+    admin_user.save()  # Save the updated object
+    return redirect('admins')
+
+
+def restore_worker(request, worker_id):
+    worker = get_object_or_404(HealthWorker, worker_id=worker_id)
+    worker.status = 'active'  # Set the status to 'active' (not archived)
+    worker.save()  # Save the updated object
+    return redirect('healthworkers')
+
+
 
 
 def profile_reports(request):
@@ -386,6 +446,21 @@ def senior_citizen_update(request, id):
         'username': username, 
         'user_type': user_type, 'user_id': user_id
     })
+
+
+def search_user(request, useremail):
+    # Search for email in Admin model
+    admin = Admin.objects.filter(email=useremail).first()
+    if admin:
+        return redirect('reset_password', admin_id=admin.admin_id)
+    
+    # Search for email in HealthWorker model
+    health_worker = HealthWorker.objects.filter(email=useremail).first()
+    if health_worker:
+        return redirect('reset_health_worker_password', worker_id=health_worker.worker_id)
+    
+    # If email not found in either model
+    return JsonResponse({'status': 'error', 'message': 'Email not found.'})
 
 from django.contrib import messages
 
@@ -771,8 +846,9 @@ def predict_all_and_insert_diseases():
 from django.core.mail import send_mail
 
 def send_email(random_number, email):
-    subject = 'Forgot Password One Time Password'
-    message = 'Your OTP: ' + str(random_number)
+    subject = 'Barangay Pinagbuhatan Senior Care'
+    message = f"""Forgot Password: One Time Password
+Your OTP: {random_number}"""
     from_email = 'netninjas.p1@gmail.com'
     recipient_list = [email]
 
@@ -859,7 +935,7 @@ def sms_notification_create(request):
     username = request.session.get('user_name', 'Guest')
     user_type = request.session.get('user_type', None)
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
-    seniors = SeniorCitizen.objects.all()
+    seniors = SeniorCitizenAge.objects.all()
 
     if request.method == 'POST':
         form = SMSNotificationForm(request.POST)
@@ -1051,19 +1127,8 @@ def userlogs(request):
         'user_type': user_type, 'user_id': user_id
     })
     
-    
+from django.db.models import Q
 
-def citizens(request):
-    username = request.session.get('user_name', 'Guest')
-    user_type = request.session.get('user_type', None) 
-    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
- # Retrieve user_type from the session
-    seniors = SeniorCitizenAge.objects.all()
-    return render(request, 'views/citizens.html', {
-        'seniors': seniors, 
-        'username': username, 
-        'user_type': user_type, 'user_id': user_id
-    })
 
 def appointments(request):
     username = request.session.get('user_name', 'Guest')
@@ -1088,13 +1153,28 @@ def announcements(request):
         'username': username, 
         'user_type': user_type, 'user_id': user_id
     })
+    
+
+
+def citizens(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    seniors = SeniorCitizenAge.objects.filter(~Q(status="archived"))
+    return render(request, 'views/citizens.html', {
+        'seniors': seniors, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+    
 
 def admins(request):
     username = request.session.get('user_name', 'Guest')
     user_type = request.session.get('user_type', None) 
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
  # Retrieve user_type from the session
-    Admins = Admin.objects.all()
+    Admins = Admin.objects.filter(~Q(status="archived"))
     return render(request, 'views/admins.html', {
         'admins': Admins, 
         'username': username, 
@@ -1106,7 +1186,7 @@ def healthworkers(request):
     user_type = request.session.get('user_type', None) 
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
  # Retrieve user_type from the session
-    HealthWorkers = HealthWorker.objects.all()
+    HealthWorkers = HealthWorker.objects.filter(~Q(status="archived"))
     return render(request, 'views/healthworkers.html', {
         'healthworkers': HealthWorkers, 
         'username': username, 
@@ -1118,12 +1198,105 @@ def smsnotifications(request):
     user_type = request.session.get('user_type', None) 
     user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
  # Retrieve user_type from the session
-    smsnotifications = SMSNotification.objects.all()
+    smsnotifications = SMSNotification.objects.filter(~Q(status="archived"))
     return render(request, 'views/smsnotifications.html', {
         'smsnotifications': smsnotifications, 
         'username': username, 
         'user_type': user_type, 'user_id': user_id
     })
+
+
+def citizens(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    seniors = SeniorCitizenAge.objects.filter(~Q(status="archived"))
+    return render(request, 'views/citizens.html', {
+        'seniors': seniors, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+    
+
+def admins(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    Admins = Admin.objects.filter(~Q(status="archived"))
+    return render(request, 'views/admins.html', {
+        'admins': Admins, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+
+def healthworkers(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    HealthWorkers = HealthWorker.objects.filter(~Q(status="archived"))
+    return render(request, 'views/healthworkers.html', {
+        'healthworkers': HealthWorkers, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+
+
+
+def smsnotifications_arch(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    smsnotifications = SMSNotification.objects.filter(status="archived")
+    return render(request, 'views/smsnotifications_arch.html', {
+        'smsnotifications': smsnotifications, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+
+
+def citizens_arch(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    seniors = SeniorCitizenAge.objects.filter(status="archived")
+    return render(request, 'views/citizens_arch.html', {
+        'seniors': seniors, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+    
+
+def admins_arch(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    Admins = Admin.objects.filter(status="archived")
+    return render(request, 'views/admins_arch.html', {
+        'admins': Admins, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+
+def healthworkers_arch(request):
+    username = request.session.get('user_name', 'Guest')
+    user_type = request.session.get('user_type', None) 
+    user_id = request.session.get('user_id', None)  # Retrieve user_id from the session
+ # Retrieve user_type from the session
+    HealthWorkers = HealthWorker.objects.filter(status="archived")
+    return render(request, 'views/healthworkers_arch.html', {
+        'healthworkers': HealthWorkers, 
+        'username': username, 
+        'user_type': user_type, 'user_id': user_id
+    })
+
+
+
 
 def admin_update(request, id):
     username = request.session.get('user_name', 'Guest')

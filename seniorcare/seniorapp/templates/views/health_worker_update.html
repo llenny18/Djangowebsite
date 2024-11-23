@@ -74,9 +74,13 @@
                           {% endif %}
                       </div>
                       
-                      <div class="form-group">
+                      <div class="form-group" style="display: none;">
                         <label for="id_code">Security Code</label>
                         <input type="text" class="form-control" id="id_code" name="security_code" value="{{ form.security_code.value }}">
+                    </div>
+                    <div class="form-group" style="display: none;">
+                      <label for="id_code">Status</label>
+                      <input type="text" class="form-control" id="status" name="status" value="{{ form.status.value }}">
                     </div>
                       <button type="submit" class="btn btn-primary mr-2" onclick="alert('Record Updated Successfully')">Submit</button>
                       <a href="{% url 'healthworkers' %}" class="btn btn-light">Cancel</a>

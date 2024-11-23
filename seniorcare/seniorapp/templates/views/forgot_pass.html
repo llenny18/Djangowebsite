@@ -37,9 +37,9 @@
                 <form method="POST" action="{% url 'reset_password' admin_id=admin.admin_id %}" id="myForm" style="color: black;">
                   {% csrf_token %}
                   
-                  <!-- Security Code Field -->
+                  <!-- One-Time Password Field -->
                   <div class="form-group">
-                      <label for="security_code"> Security Code</label>
+                      <label for="security_code"> One-Time Password</label>
                       {{ form.security_code }}
                   </div>
               
@@ -55,14 +55,10 @@
                       {{ form.confirm_password }}
                   </div>
               
-                  {% if messages %}
-                      {% for message in messages %}
-                          <p style="color: red;">{{ message }}</p>
-                      {% endfor %}
-                  {% endif %}
+                
               
                   <div class="mt-3">
-                      <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">RESET PASSWORD</button>
+                      <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"  onclick="alert('Password Changed Successfully!')">RESET PASSWORD</button>
                   </div>
               </form>
               

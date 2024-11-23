@@ -69,36 +69,26 @@
                   </div>
               </form>
               <br>
-              <hr>
               <div class="row text-center">
-              <button onclick="handleButtonClick()" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn col-5 m-1">FORGET PASSWORD ADMIN</button>
-              
-              <button onclick="handleButtonClick2()" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn col-5 m-1">FORGET PASSWORD HEATLH WORKER</button>
-              </div>
+                <div class="col">
+                  <!-- Simple link -->
+                  <a href="#" data-toggle="modal" data-target=".bd-example-modal-sm">Forgot password?</a>
+                </div></div>
             
-              <script>
-                function handleButtonClick() {
-                    // Prompt for input
-                    const userInput = prompt("Enter your ID:");
-        
-                    // Check if user input is not null (canceled)
-                    if (userInput !== null) {
-                        // Redirect to the reset password URL with the admin ID
-                        window.location.href = "{% url 'reset_password' admin_id='0' %}".replace('0', encodeURIComponent(userInput));
-                    }
-                }
+                <script>
+                  document.getElementById('forgotPasswordForm').addEventListener('submit', function (event) {
+                    event.preventDefault(); // Prevent the default form submission
+                    const emailInput = document.getElementById('emailInput').value;
                 
-                function handleButtonClick2() {
-                  // Prompt for input
-                  const userInput = prompt("Enter your ID:");
-      
-                  // Check if user input is not null (canceled)
-                  if (userInput !== null) {
-                      // Redirect to the reset password URL with the admin ID
-                      window.location.href = "{% url 'forgot_password_h' worker_id='0' %}".replace('0', encodeURIComponent(userInput));
-                  }
-              }
-            </script>
+                    if (emailInput) {
+                      // Redirect to the search_user endpoint with the provided email
+                      const searchUrl = `/search_user/${encodeURIComponent(emailInput)}/`;
+                      window.location.href = searchUrl;
+                    } else {
+                      alert('Please enter a valid email address.');
+                    }
+                  });
+                </script>
               
               </div>
             </div>
@@ -108,6 +98,37 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
+ <!-- Forgot Password Modal -->
+<div class="modal fade bd-example-modal-sm" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true" style="color: black;">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot your password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="{% static 'images/logo.png' %}" style="width: 80%; margin: 10%;">
+
+        <p>Please enter the email address you'd like your password reset information sent to:</p>
+        <form id="forgotPasswordForm"  method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+            <label for="emailInput">Enter email address</label>
+            <input type="email" class="form-control" name="forgot_password_email" id="emailInput" placeholder="Enter your email" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Send One-Time Password</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Back to Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="{% static 'js/vendor.bundle.base.js' %}"></script> 

@@ -27,7 +27,7 @@
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Notification Records Management </h3>
+              <h3 class="page-title">Archived: SMS  Notification Records Management </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Management</a></li>
@@ -40,7 +40,7 @@
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card" style="width: 1000px; overflow-y: scroll;overflow-x: scroll;">
                   <div class="card-body">
-                    <h4 class="card-title">Citizens List <a href="{% url 'sms_notification_create' %}" class="btn badge-success m-1">+ Send to Multiple Recipients</a> <a href="{% url 'sms_notification_create_bulk' %}" class="btn badge-success m-1">+ Send To All</a></h4>
+                    <h4 class="card-title"> SMS List <a href="{% url 'sms_notification_create' %}" class="btn badge-success m-1">+ Send to Multiple Recipients</a> <a href="{% url 'sms_notification_create_bulk' %}" class="btn badge-success m-1">+ Send To All</a> <a href="{% url 'smsnotifications_arch' %}" class="btn badge-danger m-1">View Archive</a></h4>
                   
                     </p>
                     <table class="table table-bordered" id="table">
@@ -64,7 +64,7 @@
                               <td>{{ notification.sent_by }}</td>
                               <td>{{ notification.sender_id }}</td>
                               <td>{{ notification.sent_at }}</td>
-                              <td><a href="{% url 'delete_sms' sms_id=notification.sms_id %}" class="btn badge-danger m-1">Delete</a></td>
+                              <td><a href="{% url 'delete_sms' sms_id=notification.sms_id %}" class="btn badge-danger m-1"  onclick="alert('Archived Successfully!')"><span class="mdi mdi-archive" style="font-size: 1.3rem;"></span></a></td>
                           </tr>
                           {% endfor %}
                       </tbody>
