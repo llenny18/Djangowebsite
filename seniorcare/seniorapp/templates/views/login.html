@@ -128,7 +128,11 @@
   </div>
 </div>
 
+{% if is_changed != 0 %}
+   
+<script>alert('Password Changed Successfully');</script>
 
+{% endif %}
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="{% static 'js/vendor.bundle.base.js' %}"></script> 

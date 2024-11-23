@@ -24,16 +24,15 @@
      
       <li class="nav-item nav-profile dropdown">
         <a class="nav-link font-weight-bold dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-          <div class="nav-profile-img">
-            <img src="{% static 'images/faces/face28.png' %}" alt="image">
-          </div>
+          
+            <span class="mdi mdi-account-badge menu-icon" style="font-size: 25px; color: green; "></span>
+       
           <div class="nav-profile-text">
             <p class="mb-1 text-black">{{ username }}</p>
           </div>
         </a>
         <div class="dropdown-menu navbar-dropdown dropdown-menu-right p-0 border-0 font-size-sm" aria-labelledby="profileDropdown" data-x-placement="bottom-end">
           <div class="p-3 text-center bg-primary">
-            <img class="img-avatar img-avatar48 img-avatar-thumb" src="{% static 'images/faces/face28.png' %}" alt="">
           </div>
           <div class="p-2">
             <h5 class="dropdown-header text-uppercase pl-2 text-dark">User Options</h5>
@@ -75,14 +74,14 @@
       <li class="nav-item nav-category">Home</li>
       <li class="nav-item">
         <a class="nav-link font-weight-bold" href={% url 'index' %}>
-          <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
+          <span class="icon-bg"><i class="mdi mdi-home-circle-outline menu-icon"></i></span>
           <span class="menu-title">Dashboard</span>
         </a>
       </li>
       {% if user_type == 'Admin' %}
 <li class="nav-item">
 <a class="nav-link font-weight-bold" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-  <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
+  <span class="icon-bg"><i class="mdi mdi-account-group menu-icon"></i></span>
   <span class="menu-title">Users</span>
   <i class="menu-arrow"></i>
 </a>
@@ -101,14 +100,14 @@
       
       <li class="nav-item">
         <a class="nav-link font-weight-bold" href="{% url 'citizens' %}">
-          <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
+          <span class="icon-bg"><i class="mdi mdi-view-list menu-icon"></i></span>
           <span class="menu-title">Data Profiling</span>
         </a>
       </li>
     
       <li class="nav-item">
         <a class="nav-link font-weight-bold" href="{% url 'smsnotifications' %}">
-          <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
+          <span class="icon-bg"><i class="mdi mdi-message-processing menu-icon"></i></span>
           <span class="menu-title">SMS Notifications</span>
         </a>
       </li>
@@ -120,7 +119,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link font-weight-bold" href="{% url 'profile_reports' %}">
-          <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
+          <span class="icon-bg"><i class="mdi mdi-file-chart menu-icon"></i></span>
           <span class="menu-title">Data Profiling Reports</span>
         </a>
       </li>

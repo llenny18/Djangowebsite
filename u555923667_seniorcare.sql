@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 21, 2024 at 03:42 PM
+-- Generation Time: Nov 23, 2024 at 04:23 AM
 -- Server version: 10.11.9-MariaDB
 -- PHP Version: 7.2.34
 
@@ -60,22 +60,23 @@ INSERT INTO `activity` (`activity_id`, `activity_name`, `description`, `date`, `
 --
 
 CREATE TABLE `admin` (
-  `admin_id` int(11) NOT NULL,
+  `admin_id` int(20) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL,
   `phone` varchar(15) DEFAULT NULL,
-  `security_code` int(20) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `security_code` int(20) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(455) DEFAULT 'saved'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`admin_id`, `username`, `password`, `email`, `phone`, `security_code`, `created_at`) VALUES
-(46882260, 'admin_user', 'adminpass', 'adminemail@email.com', '32094823987', 660016, '2024-08-04 04:15:20'),
-(97557510, 'admin_tin', 'tintin', 'admin_tin@gmail.com', '09123456789', 123, '2024-10-25 01:17:26');
+INSERT INTO `admin` (`admin_id`, `username`, `password`, `email`, `phone`, `security_code`, `created_at`, `status`) VALUES
+(46882260, 'admin_user', 'adminpass', 'adminemail@email.com', '32094823987', 660016, '2024-08-04 04:15:20', 'active'),
+(97557510, 'admin_tin', '123456', 'tintinoliveros36@gmail.com', '09270398546', 123, '2024-10-25 01:17:26', 'saved');
 
 -- --------------------------------------------------------
 
@@ -634,7 +635,14 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 ('awvdbfm6y9kxk9och2ay1r5bfjm3trv6', '.eJyrViotTi2Kz0xRsjIxs7AwMjIz0IEI5SXmpipZKSWm5GbmxYNElKASJZUFIAlHkIRSLQC2vBWR:1tDZJH:oitkdG8_ZEjocxGL7ovwAyOPeblIbGE1uCBwW72O1Nw', '2024-11-20 02:45:11.235607'),
 ('2pzxsgvz55ka5mnjp9lzbpkb6z26rdwp', '.eJyrViotTi2Kz0xRsjIxs7AwMjIz0IEI5SXmpipZKSWm5GbmxYNElKASJZUFIAlHkIRSLQC2vBWR:1tDajk:p2XoBmQEqBXbEvAfXxTUvTxICaa-mtJHik2quwqCaZw', '2024-11-20 04:16:36.091388'),
 ('j5rn4v9dkq2ao2722a7xrw5s61q59kv9', '.eJyrViotTi2Kz0xRsjIxs7AwMjIz0IEI5SXmpipZKSWm5GbmxYNElKASJZUFIAlHkIRSLQC2vBWR:1tE97T:_XKtBEik9o8S-cTxcH7BHpdSNIe0vF73mOcC_EG3lAs', '2024-11-21 16:59:23.567308'),
-('dqhb7lm8r67lkspxqwmc8a9dy9i3ifvf', '.eJyrViotTi2Kz0xRsjIxs7AwMjIz0IEI5SXmpipZKSWm5GbmxYNElKASJZUFIAlHkIRSLQC2vBWR:1tE9In:DOslBUG3xUNrPC1juG0f6qP0I1UxaDzO2UtfNLStLwg', '2024-11-21 17:11:05.446906');
+('dqhb7lm8r67lkspxqwmc8a9dy9i3ifvf', '.eJyrViotTi2Kz0xRsjIxs7AwMjIz0IEI5SXmpipZKSWm5GbmxYNElKASJZUFIAlHkIRSLQC2vBWR:1tE9In:DOslBUG3xUNrPC1juG0f6qP0I1UxaDzO2UtfNLStLwg', '2024-11-21 17:11:05.446906'),
+('pmakrezi465bk105nc4v12nrxxe37xuy', '.eJyrViotTi2Kz0xRsjIxs7AwMjIz0IEI5SXmpipZKSWm5GbmxYNElKASJZUFIAlHkIRSLQC2vBWR:1tEMSi:pvlbGdmxZeN0ai4hUYQldFrkAwwl6rXZ30uJhaL8TdU', '2024-11-22 07:14:12.583480'),
+('mg2tx9e1icpnqil8tai7v0zujvd7xgcc', '.eJyrViotTi2Kz0xRsjIxs7AwMjIz0IEI5SXmpipZKSWm5GbmxYNElKASJZUFIAlHkIRSLQC2vBWR:1tENq9:M7usjWi_1rP6MKe_YOpoG-mhCdZpah7JVaaYocHlOSM', '2024-11-22 08:42:29.295994'),
+('pfabqdfg8z0ij6nt5vk7ywf4ztgztz3y', '.eJyrVipOTS4tyiypjE_OT0lVsjI1MTU3stBRKi1OLYrPTFGyMjGzsDAyMjOACuUl5gJVKSWm5GbmxYNElKASJZUFIAlHkIRSLQD8JRzs:1tESU0:3EZ30z5sohxdMEowhk6qzepi19wWeReRvcatkOR5ZzM', '2024-11-22 13:39:56.742172'),
+('90gofsyyjefch20niryd564tgspgmn4d', '.eJyrVipOTS4tyiypjE_OT0lVsjI0M7Ews9BRKi1OLYrPTFGyMjGzsDAyMjOACuUl5gJVKSWm5GbmxYNElKASJZUFIAlHkIRSLQD8oBzu:1tEUEj:amuHMEWTntbjwZXBdXo23E0bM9n81R7Fh34se8OlkwQ', '2024-11-22 15:32:17.860868'),
+('q6fwi9l3cb5emhaucqexym7b84eg1wcj', '.eJyrViotTi2Kz0xRsjIxs7AwMjIz0IEI5SXmpipZKSWm5GbmxYNElKASJZUFIAlHkIRSLQC2vBWR:1tEfbG:ggDYYWCUi_IZtjAndMPMnKP51pMXYLU0Z1ejOqWH5gM', '2024-11-23 03:40:18.176106'),
+('p8fyaej3yr5quinuczk5l3s5b7v2iiyj', '.eJyrViotTi2Kz0xRsjIxs7AwMjIz0IEI5SXmpipZKSWm5GbmxYNElKASJZUFIAlHkIRSLQC2vBWR:1tEh1q:mYx9UBmwQriS_DGeJSNGO71T52Rouj2rPrOlEFJasRE', '2024-11-23 05:11:50.988492'),
+('f4xmf8gsht4ovkf69p4g4oo9ft6mcvxu', 'e30:1tEhfD:_BL9-y0uMMzEMAcshMoQgk1NK7dylhLi1Aydd9bqfhk', '2024-11-23 05:52:31.546047');
 
 -- --------------------------------------------------------
 
@@ -649,23 +657,24 @@ CREATE TABLE `healthworker` (
   `email` varchar(100) NOT NULL,
   `phone` varchar(15) DEFAULT NULL,
   `security_code` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(455) DEFAULT 'saved'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `healthworker`
 --
 
-INSERT INTO `healthworker` (`worker_id`, `username`, `password`, `email`, `phone`, `security_code`, `created_at`) VALUES
-(27329118, 'worker16', 'password16', 'worker16@example.com', '555-5360', 674573, '2024-09-16 00:00:00'),
-(28091818, 'worker14', 'password14', 'worker14@example.com', '555-1328', 494847, '2024-09-14 00:00:00'),
-(34314288, 'worker1', 'password1', 'worker1@example.com', '555-1234', 941195, '2024-09-01 00:00:00'),
-(38058362, 'worker8', 'password8', 'worker8@example.com', '555-9202', 606686, '2024-09-08 00:00:00'),
-(47379393, 'worker13', 'password13', 'worker13@example.com', '555-9307', 400805, '2024-09-13 00:00:00'),
-(78320914, 'worker15', 'password15', 'worker15@example.com', '555-3349', 271823, '2024-09-15 00:00:00'),
-(81235123, 'worker5', 'password5', 'worker5@example.com', '555-3141', 441442, '2024-09-05 00:00:00'),
-(86426904, 'worker18', 'password18', 'worker18@example.com', '555-9402', 263256, '2024-09-18 00:00:00'),
-(88481145, 'worker6', 'password6', 'worker6@example.com', '555-5161', 928560, '2024-09-06 00:00:00');
+INSERT INTO `healthworker` (`worker_id`, `username`, `password`, `email`, `phone`, `security_code`, `created_at`, `status`) VALUES
+(27329118, 'worker16', 'newpasswordviaotp', 'worker16@example.com', '555-5360', 674573, '2024-09-16 00:00:00', 'active'),
+(28091818, 'worker14', 'password14', 'worker14@example.com', '555-1328', 494847, '2024-09-14 00:00:00', 'saved'),
+(34314288, 'worker1', 'newpassviaotp', 'worker1@example.com', '555-1234', 941195, '2024-09-01 00:00:00', 'saved'),
+(38058362, 'worker8', 'password8', 'worker8@example.com', '555-9202', 606686, '2024-09-08 00:00:00', 'saved'),
+(47379393, 'worker13', 'password13', 'worker13@example.com', '555-9307', 400805, '2024-09-13 00:00:00', 'saved'),
+(78320914, 'worker15', 'password15', 'worker15@example.com', '555-3349', 271823, '2024-09-15 00:00:00', 'saved'),
+(81235123, 'worker5', 'password5', 'worker5@example.com', '555-3141', 441442, '2024-09-05 00:00:00', 'saved'),
+(86426904, 'worker18', 'password18', 'worker18@example.com', '555-9402', 263256, '2024-09-18 00:00:00', 'saved'),
+(88481145, 'worker6', 'password6', 'worker6@example.com', '555-5161', 928560, '2024-09-06 00:00:00', 'saved');
 
 -- --------------------------------------------------------
 
@@ -844,7 +853,16 @@ INSERT INTO `predictiveanalytics` (`analytics_id`, `description`, `results`, `cr
 (100, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.75\n\nConfusion Matrix:\n[[0 1]\n [0 3]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.00      0.00      0.00         1\n           1       0.75      1.00      0.86         3\n\n    accuracy                           0.75         4\n   macro avg       0.38      0.50      0.43         4\nweighted avg       0.56      0.75      0.64         4\n\n\nOverall Predictions Summary:\nClass 1: 4 occurrences', 'Admin', 1, '2024-11-20 05:41:40'),
 (101, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.50\n\nConfusion Matrix:\n[[2 2]\n [0 0]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       1.00      0.50      0.67         4\n           1       0.00      0.00      0.00         0\n\n    accuracy                           0.50         4\n   macro avg       0.50      0.25      0.33         4\nweighted avg       1.00      0.50      0.67         4\n\n\nOverall Predictions Summary:\nClass 1: 2 occurrences, Class 0: 2 occurrences', 'Admin', 1, '2024-11-20 07:42:49'),
 (102, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.50\n\nConfusion Matrix:\n[[1 2]\n [0 1]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       1.00      0.33      0.50         3\n           1       0.33      1.00      0.50         1\n\n    accuracy                           0.50         4\n   macro avg       0.67      0.67      0.50         4\nweighted avg       0.83      0.50      0.50         4\n\n\nOverall Predictions Summary:\nClass 1: 3 occurrences, Class 0: 1 occurrences', 'Admin', 1, '2024-11-21 01:14:22'),
-(103, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.50\n\nConfusion Matrix:\n[[0 2]\n [0 2]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.00      0.00      0.00         2\n           1       0.50      1.00      0.67         2\n\n    accuracy                           0.50         4\n   macro avg       0.25      0.50      0.33         4\nweighted avg       0.25      0.50      0.33         4\n\n\nOverall Predictions Summary:\nClass 1: 4 occurrences', 'Admin', 1, '2024-11-21 15:19:46');
+(103, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.50\n\nConfusion Matrix:\n[[0 2]\n [0 2]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.00      0.00      0.00         2\n           1       0.50      1.00      0.67         2\n\n    accuracy                           0.50         4\n   macro avg       0.25      0.50      0.33         4\nweighted avg       0.25      0.50      0.33         4\n\n\nOverall Predictions Summary:\nClass 1: 4 occurrences', 'Admin', 1, '2024-11-21 15:19:46'),
+(104, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.25\n\nConfusion Matrix:\n[[1 0]\n [3 0]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.25      1.00      0.40         1\n           1       0.00      0.00      0.00         3\n\n    accuracy                           0.25         4\n   macro avg       0.12      0.50      0.20         4\nweighted avg       0.06      0.25      0.10         4\n\n\nOverall Predictions Summary:\nClass 0: 4 occurrences', 'Admin', 1, '2024-11-22 05:44:13'),
+(105, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.25\n\nConfusion Matrix:\n[[1 2]\n [1 0]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.50      0.33      0.40         3\n           1       0.00      0.00      0.00         1\n\n    accuracy                           0.25         4\n   macro avg       0.25      0.17      0.20         4\nweighted avg       0.38      0.25      0.30         4\n\n\nOverall Predictions Summary:\nClass 0: 2 occurrences, Class 1: 2 occurrences', 'Admin', 1, '2024-11-22 07:12:29'),
+(106, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 1.00\n\nConfusion Matrix:\n[[2 0]\n [0 2]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       1.00      1.00      1.00         2\n           1       1.00      1.00      1.00         2\n\n    accuracy                           1.00         4\n   macro avg       1.00      1.00      1.00         4\nweighted avg       1.00      1.00      1.00         4\n\n\nOverall Predictions Summary:\nClass 0: 2 occurrences, Class 1: 2 occurrences', 'Admin', 1, '2024-11-22 10:32:02'),
+(107, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.50\n\nConfusion Matrix:\n[[0 2]\n [0 2]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.00      0.00      0.00         2\n           1       0.50      1.00      0.67         2\n\n    accuracy                           0.50         4\n   macro avg       0.25      0.50      0.33         4\nweighted avg       0.25      0.50      0.33         4\n\n\nOverall Predictions Summary:\nClass 1: 4 occurrences', 'Admin', 1, '2024-11-22 11:48:39');
+INSERT INTO `predictiveanalytics` (`analytics_id`, `description`, `results`, `created_by`, `creator_id`, `created_at`) VALUES
+(108, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.75\n\nConfusion Matrix:\n[[3 0]\n [1 0]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.75      1.00      0.86         3\n           1       0.00      0.00      0.00         1\n\n    accuracy                           0.75         4\n   macro avg       0.38      0.50      0.43         4\nweighted avg       0.56      0.75      0.64         4\n\n\nOverall Predictions Summary:\nClass 0: 4 occurrences', 'Admin', 1, '2024-11-22 14:02:18'),
+(109, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.50\n\nConfusion Matrix:\n[[2 1]\n [1 0]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.67      0.67      0.67         3\n           1       0.00      0.00      0.00         1\n\n    accuracy                           0.50         4\n   macro avg       0.33      0.33      0.33         4\nweighted avg       0.50      0.50      0.50         4\n\n\nOverall Predictions Summary:\nClass 0: 3 occurrences, Class 1: 1 occurrences', 'Admin', 1, '2024-11-22 23:30:58'),
+(110, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.75\n\nConfusion Matrix:\n[[3 0]\n [1 0]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.75      1.00      0.86         3\n           1       0.00      0.00      0.00         1\n\n    accuracy                           0.75         4\n   macro avg       0.38      0.50      0.43         4\nweighted avg       0.56      0.75      0.64         4\n\n\nOverall Predictions Summary:\nClass 0: 4 occurrences', 'Admin', 1, '2024-11-23 01:48:10'),
+(111, 'Logistic Regression Predictive Model - Based on data from SeniorCitizen and DataProfiling tables.\n\nConclusion: The predictive model has been trained using the available data from the SeniorCitizen and DataProfiling tables. The accuracy of the model is satisfactory, and the confusion matrix and classification report provide detailed insights into the performance of the model. The overall predictions summary indicates the distribution of predicted classes.', 'Accuracy: 0.50\n\nConfusion Matrix:\n[[2 0]\n [2 0]]\n\nClassification Report:\n              precision    recall  f1-score   support\n\n           0       0.50      1.00      0.67         2\n           1       0.00      0.00      0.00         2\n\n    accuracy                           0.50         4\n   macro avg       0.25      0.50      0.33         4\nweighted avg       0.25      0.50      0.33         4\n\n\nOverall Predictions Summary:\nClass 0: 4 occurrences', 'Admin', 1, '2024-11-23 03:09:18');
 
 -- --------------------------------------------------------
 
@@ -902,60 +920,61 @@ CREATE TABLE `seniorcitizen` (
   `checkups` varchar(355) NOT NULL,
   `lifestyle` varchar(455) NOT NULL,
   `medication` varchar(455) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(455) DEFAULT 'saved'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `seniorcitizen`
 --
 
-INSERT INTO `seniorcitizen` (`citizen_id`, `first_name`, `last_name`, `date_of_birth`, `health_condition`, `gender`, `address`, `phone`, `checkups`, `lifestyle`, `medication`, `created_at`) VALUES
-(727, 'Camel', 'Gonnely', '1939-11-14', 'Dental issues, Cavities', 'Female', '46 Butterfield Way', '9704369765', 'Scheduled', 'Pain management exercises, Avoids heavy lifting', 'Levothyroxine', '2024-10-29 15:04:09'),
-(728, 'NerO', 'Jesty', '1952-11-14', 'Stroke, Cerebrovascular accident', 'Male', '68 Cherokee Circle', '6766388988', 'Scheduled', 'Low-fat diet, Avoids fried foods', 'NSAIDs', '2024-10-29 15:04:09'),
-(729, 'Denny', 'Loughlin', '1948-11-14', 'Mental health disorders, Bipolar disorder', 'Female', '0426 Sloan Plaza', '2773397600', 'Walk-in', 'Regular exercise, Balanced diet', 'Levothyroxine', '2024-10-29 15:04:09'),
-(732, 'Ibrahim', 'Blinder', '1957-11-14', 'Liver disease, Cirrhosis', 'Male', '62579 Hanover Plaza', '4335844430', 'Scheduled', 'No smoking, Regular exercise', 'NSAIDs', '2024-10-29 15:04:09'),
-(733, 'Everett', 'Doerffer', '1956-11-14', 'Genetic disorders, Cystic fibrosis', 'Male', '4 Bobwhite Place', '5826587898', 'Walk-in', 'Low-fat diet, Regular eye checkups', 'Stimulants, Behavioral therapy', '2024-10-29 15:04:09'),
-(734, 'Rubin', 'Moorcroft', '1942-11-14', 'Pancreatitis, Acute pancreatitis', 'Male', '446 Dakota Terrace', '3373219111', 'Walk-in', 'Uses air purifier, Avoids allergens', 'ACE inhibitors', '2024-10-29 15:04:09'),
-(735, 'Frans', 'Curthoys', '1938-11-14', 'Thyroid disorder, Hypothyroidism', 'Male', '64016 Village Road', '2338427296', 'Scheduled', 'Low-acid diet, Avoids late meals', 'Levothyroxine', '2024-10-29 15:04:09'),
-(737, 'Kaylyn', 'McGuiney', '1952-11-14', 'Hypertension, Diabetes', 'Female', '93 Stuart Park', '2353439523', 'Scheduled', 'Good dental hygiene, Avoids sugary foods', 'Stimulants, Behavioral therapy', '2024-10-29 15:04:09'),
-(738, 'Colas', 'Bridgland', '1950-11-14', 'Autoimmune diseases, Rheumatoid arthritis', 'Female', '216 Ronald Regan Avenue', '2929879201', 'Scheduled', 'No smoking, Regular exercise', 'Proton pump inhibitors', '2024-10-29 15:04:09'),
-(739, 'Carolina', 'Baylis', '1962-11-14', 'Gallbladder disease, Gallstones', 'Female', '9 Bartelt Point', '8602043013', 'Scheduled', 'Pain management exercises, Avoids heavy lifting', 'Proton pump inhibitors', '2024-10-29 15:04:09'),
-(740, 'Diahann', 'Grasha', '1936-11-14', 'Nutritional deficiencies, Vitamin D deficiency', 'Female', '49222 Karstens Pass', '3394613121', 'Scheduled', 'Regular exercise, Balanced diet', 'Antihistamines, Nasal sprays', '2024-10-29 15:04:09'),
-(741, 'Iolande', 'Gribbell', '1948-11-14', 'Postpartum conditions, Postpartum depression', 'Male', '62436 South Trail', '3519131631', 'Scheduled', 'Non-smoking, Uses inhaler as needed', 'Antispasmodics, Fiber supplements', '2024-10-29 15:04:09'),
-(742, 'Mohandas', 'Loram', '1937-11-14', 'Pancreatitis, Acute pancreatitis', 'Female', '75 Westport Crossing', '7632136875', 'Walk-in', 'Regular exercise, Balanced diet', 'Antidepressants, Anxiolytics', '2024-10-29 15:04:09'),
-(743, 'Jeannine', 'Jorczyk', '1937-11-14', 'Liver failure, Acute liver failure', 'Female', '6 Waubesa Plaza', '3537963047', 'Scheduled', 'High-fiber diet, Low-fat meals', 'Statins, Beta blockers', '2024-10-29 15:04:09'),
-(744, 'Ilyse', 'Mulhall', '1940-11-14', 'Alzheimers disease, AD', 'Female', '30068 Eliot Circle', '1730386907', 'Scheduled', 'High-fiber diet, Low-fat meals', 'Pain relievers, Calcium supplements', '2024-10-29 15:04:09'),
-(745, 'Dewitt', 'Buggy', '1955-11-14', 'Sleep apnea, Snoring', 'Male', '205 Ramsey Point', '1202635934', 'Scheduled', 'Uses air purifier, Avoids allergens', 'Statins, Beta blockers', '2024-10-29 15:04:09'),
-(746, 'Michell', 'Louche', '1961-11-14', 'Liver disease, Cirrhosis', 'Female', '335 Lakewood Gardens Trail', '6317417260', 'Walk-in', 'Pain management exercises, Avoids heavy lifting', 'CPAP machine', '2024-10-29 15:04:09'),
-(747, 'Whitman', 'Purnell', '1946-11-14', 'Dental issues, Cavities', 'Female', '2488 Elka Point', '9557162385', 'Walk-in', 'Safe practices, Regular exercise', 'NSAIDs', '2024-10-29 15:04:09'),
-(748, 'Kiersten', 'Browncey', '1941-11-14', 'Stroke, Cerebrovascular accident', 'Female', '9502 Schurz Crossing', '2234821000', 'Scheduled', 'No smoking, Regular exercise', 'Antispasmodics, Fiber supplements', '2024-10-29 15:04:09'),
-(749, 'Perren', 'Peploe', '1935-11-14', 'Substance abuse, Alcoholism', 'Male', '352 Rutledge Street', '6279398941', 'Scheduled', 'No smoking, Regular exercise', 'Antispasmodics, Fiber supplements', '2024-10-29 15:04:09'),
-(750, 'Georgia', 'Newbury', '1946-11-14', 'Mental health stigma, Depression stigma', 'Female', '9 6th Crossing', '8082045664', 'Walk-in', 'Pain management exercises, Avoids heavy lifting', 'Antidepressants, Anxiolytics', '2024-10-29 15:04:09'),
-(751, 'Naomi', 'Cockling', '1962-11-14', 'Skin conditions, Eczema', 'Female', '62697 High Crossing Street', '8687139171', 'Walk-in', 'Non-smoking, Uses inhaler as needed', 'Sleep aids, Pain relievers', '2024-10-29 15:04:09'),
-(752, 'Hetty', 'Levane', '1949-11-14', 'ADHD, ADD', 'Female', '263 Carey Drive', '9430456029', 'Walk-in', 'Therapy sessions, Meditation', 'Proton pump inhibitors', '2024-10-29 15:04:09'),
-(753, 'Christos', 'Baine', '1951-11-14', 'Chronic pain, Fibromyalgia', 'Male', '3692 Homewood Parkway', '1197543545', 'Scheduled', 'Therapy sessions, Meditation', 'Antispasmodics, Fiber supplements', '2024-10-29 15:04:09'),
-(754, 'Cathyleen', 'Cowope', '1943-11-14', 'Sleep apnea, Snoring', 'Male', '9 Hermina Alley', '6843753399', 'Walk-in', 'Low-acid diet, Avoids late meals', 'Stimulants, Behavioral therapy', '2024-10-29 15:04:09'),
-(755, 'Lisabeth', 'Swanne', '1960-11-14', 'ADHD, ADD', 'Male', '6644 Luster Center', '9093195059', 'Walk-in', 'Uses air purifier, Avoids allergens', 'Eye drops', '2024-10-29 15:04:09'),
-(756, 'Carline', 'Drabble', '1945-11-14', 'Thyroid disorders, Hyperthyroidism', 'Male', '8 Goodland Place', '5958007065', 'Scheduled', 'Gentle exercises, Balanced diet', 'Steroid creams, Antihistamines', '2024-10-29 15:04:09'),
-(757, 'Fey', 'Todman', '1940-11-14', 'Autoimmune diseases, Rheumatoid arthritis', 'Male', '694 Northland Place', '1751257373', 'Walk-in', 'Pain management exercises, Avoids heavy lifting', 'Liver-support medications', '2024-10-29 15:04:09'),
-(758, 'Shellie', 'dArcy', '1961-11-14', 'Thyroid disorders, Hyperthyroidism', 'Female', '56 Talmadge Terrace', '8945566773', 'Walk-in', 'Uses air purifier, Avoids allergens', 'Levothyroxine', '2024-10-29 15:04:09'),
-(759, 'Dinnie', 'Motten', '1959-11-14', 'Mental health stigma, Depression stigma', 'Female', '1469 Dapin Junction', '1726432807', 'Walk-in', 'Gentle exercises, Balanced diet', 'Statins, Beta blockers', '2024-10-29 15:04:09'),
-(760, 'Cherice', 'Gribben', '1947-11-14', 'Chronic obstructive pulmonary disease, COPD', 'Female', '69113 Stuart Street', '3129849885', 'Scheduled', 'No smoking, Regular exercise', 'Sleep aids, Pain relievers', '2024-10-29 15:04:09'),
-(761, 'Loutitia', 'Yurchishin', '1953-11-14', 'Hypertension, Diabetes', 'Female', '87754 Lunder Lane', '7272440058', 'Walk-in', 'No smoking, Regular exercise', 'Antihistamines, Nasal sprays', '2024-10-29 15:04:09'),
-(762, 'Brady', 'Gemnett', '1959-11-14', 'Endocrine disorders, Diabetes insipidus', 'Male', '7950 Dexter Junction', '1590766258', 'Scheduled', 'Therapy sessions, Meditation', 'Statins, Beta blockers', '2024-10-29 15:04:09'),
-(763, 'Bentley', 'Mohring', '1945-11-14', 'Pediatric conditions, Asthma in children', 'Female', '15294 Elmside Center', '3520575390', 'Scheduled', 'Therapy sessions, Meditation', 'Antihistamines, Nasal sprays', '2024-10-29 15:04:09'),
-(765, 'Godart', 'Mattocks', '1962-11-14', 'Depression, Anxiety', 'Female', '2 Sherman Court', '1081452307', 'Scheduled', 'Avoids caffeine, Sleeps early', 'Stimulants, Behavioral therapy', '2024-10-29 15:04:09'),
-(766, 'Nike', 'Loosmore', '1937-11-14', 'Genetic disorders, Cystic fibrosis', 'Male', '19 Gina Trail', '4925591269', 'Walk-in', 'Pain management exercises, Avoids heavy lifting', 'Levothyroxine', '2024-10-29 15:04:09'),
-(767, 'Nye', 'Rubinowicz', '1954-11-14', 'Infectious diseases, Tuberculosis', 'Male', '5 Bluejay Avenue', '5566772516', 'Scheduled', 'Regular exercise, Low-sodium diet', 'NSAIDs', '2024-10-29 15:04:09'),
-(768, 'Gwendolin', 'Holyard', '1963-11-14', 'Kidney disease, Chronic kidney disease (CKD)', 'Male', '4763 Mockingbird Circle', '6585242247', 'Scheduled', 'Moisturizes daily, Avoids allergens', 'Sleep aids, Pain relievers', '2024-10-29 15:04:09'),
-(770, 'Rena', 'Tours', '1948-11-14', 'ADHD, ADD', 'Female', '947 Chive Crossing', '1305528622', 'Walk-in', 'Regular exercise, Balanced diet', 'Pain relievers, Calcium supplements', '2024-10-29 15:04:09'),
-(771, 'Peadar', 'Farbrother', '1954-11-14', 'Kidney disease, Chronic kidney disease (CKD)', 'Female', '6 Northwestern Plaza', '6165364250', 'Scheduled', 'Pain management exercises, Avoids heavy lifting', 'Antihistamines, Nasal sprays', '2024-10-29 15:04:09'),
-(772, 'Felipa', 'Elvish', '1961-11-14', 'Geriatric conditions, Dementia', 'Male', '5470 Cambridge Road', '5545008536', 'Walk-in', 'High-fiber diet, Low-fat meals', 'Antihypertensives, Insulin', '2024-10-29 15:04:09'),
-(773, 'Kellby', 'Smithson', '1950-11-14', 'Genetic disorders, Cystic fibrosis', 'Female', '4 Schmedeman Terrace', '7411045192', 'Walk-in', 'High-fiber diet, Low-fat meals', 'Pain relievers, Calcium supplements', '2024-10-29 15:04:09'),
-(774, 'Kathryne', 'Livezey', '1962-11-14', 'Multiple sclerosis, MS', 'Female', '0882 Anderson Alley', '9859560241', 'Walk-in', 'Low-acid diet, Avoids late meals', 'Inhalers as prescribed', '2024-10-29 15:04:09'),
-(775, 'Jacinda', 'Stroband', '1963-11-14', 'Eye conditions, Glaucoma', 'Female', '24 Pleasure Park', '1583305088', 'Scheduled', 'Pain management exercises, Avoids heavy lifting', 'Statins, Beta blockers', '2024-10-29 15:04:09'),
-(776, 'Thain', 'Bohl', '1937-11-14', 'Irritable bowel syndrome (IBS)', 'Male', '7236 Leroy Park', '2334983232', 'Scheduled', 'Regular exercise, Balanced diet', 'Statins, Beta blockers', '2024-10-29 15:04:09'),
-(777, 'Ryley', 'Wakeling', '1950-11-14', 'Irritable bowel syndrome (IBS)', 'Male', '7559 Tennyson Alley', '5266645106', 'Scheduled', 'No smoking, Regular exercise', 'NSAIDs', '2024-10-29 15:04:09');
+INSERT INTO `seniorcitizen` (`citizen_id`, `first_name`, `last_name`, `date_of_birth`, `health_condition`, `gender`, `address`, `phone`, `checkups`, `lifestyle`, `medication`, `created_at`, `status`) VALUES
+(727, 'Camel', 'Gonnely', '1939-11-14', 'Dental issues, Cavities', 'Female', '46 Butterfield Way', '09469498906', 'Scheduled', 'Pain management exercises, Avoids heavy lifting', 'Levothyroxine', '2024-10-29 15:04:09', 'active'),
+(728, 'NerO', 'Jesty', '1952-11-14', 'Stroke, Cerebrovascular accident', 'Male', '68 Cherokee Circle', '6766388988', 'Scheduled', 'Low-fat diet, Avoids fried foods', 'NSAIDs', '2024-10-29 15:04:09', 'saved'),
+(729, 'Denny', 'Loughlin', '1948-11-14', 'Mental health disorders, Bipolar disorder', 'Female', '0426 Sloan Plaza', '09270398546', 'Walk-in', 'Regular exercise, Balanced diet', 'Levothyroxine', '2024-10-29 15:04:09', 'saved'),
+(732, 'Ibrahim', 'Blinder', '1957-11-14', 'Liver disease, Cirrhosis', 'Male', '62579 Hanover Plaza', '4335844430', 'Scheduled', 'No smoking, Regular exercise', 'NSAIDs', '2024-10-29 15:04:09', 'saved'),
+(733, 'Everett', 'Doerffer', '1956-11-14', 'Genetic disorders, Cystic fibrosis', 'Male', '4 Bobwhite Place', '09173244581', 'Walk-in', 'Low-fat diet, Regular eye checkups', 'Stimulants, Behavioral therapy', '2024-10-29 15:04:09', 'saved'),
+(734, 'Rubin', 'Moorcroft', '1942-11-14', 'Pancreatitis, Acute pancreatitis', 'Male', '446 Dakota Terrace', '3373219111', 'Walk-in', 'Uses air purifier, Avoids allergens', 'ACE inhibitors', '2024-10-29 15:04:09', 'saved'),
+(735, 'Frans', 'Curthoys', '1938-11-14', 'Thyroid disorder, Hypothyroidism', 'Male', '64016 Village Road', '2338427296', 'Scheduled', 'Low-acid diet, Avoids late meals', 'Levothyroxine', '2024-10-29 15:04:09', 'saved'),
+(737, 'Kaylyn', 'McGuiney', '1952-11-14', 'Hypertension, Diabetes', 'Female', '93 Stuart Park', '2353439523', 'Scheduled', 'Good dental hygiene, Avoids sugary foods', 'Stimulants, Behavioral therapy', '2024-10-29 15:04:09', 'saved'),
+(738, 'Colas', 'Bridgland', '1950-11-14', 'Autoimmune diseases, Rheumatoid arthritis', 'Female', '216 Ronald Regan Avenue', '2929879201', 'Scheduled', 'No smoking, Regular exercise', 'Proton pump inhibitors', '2024-10-29 15:04:09', 'saved'),
+(739, 'Carolina', 'Baylis', '1962-11-14', 'Gallbladder disease, Gallstones', 'Female', '9 Bartelt Point', '8602043013', 'Scheduled', 'Pain management exercises, Avoids heavy lifting', 'Proton pump inhibitors', '2024-10-29 15:04:09', 'saved'),
+(740, 'Diahann', 'Grasha', '1936-11-14', 'Nutritional deficiencies, Vitamin D deficiency', 'Female', '49222 Karstens Pass', '3394613121', 'Scheduled', 'Regular exercise, Balanced diet', 'Antihistamines, Nasal sprays', '2024-10-29 15:04:09', 'saved'),
+(741, 'Iolande', 'Gribbell', '1948-11-14', 'Postpartum conditions, Postpartum depression', 'Male', '62436 South Trail', '3519131631', 'Scheduled', 'Non-smoking, Uses inhaler as needed', 'Antispasmodics, Fiber supplements', '2024-10-29 15:04:09', 'saved'),
+(742, 'Mohandas', 'Loram', '1937-11-14', 'Pancreatitis, Acute pancreatitis', 'Female', '75 Westport Crossing', '7632136875', 'Walk-in', 'Regular exercise, Balanced diet', 'Antidepressants, Anxiolytics', '2024-10-29 15:04:09', 'saved'),
+(743, 'Jeannine', 'Jorczyk', '1937-11-14', 'Liver failure, Acute liver failure', 'Female', '6 Waubesa Plaza', '3537963047', 'Scheduled', 'High-fiber diet, Low-fat meals', 'Statins, Beta blockers', '2024-10-29 15:04:09', 'saved'),
+(744, 'Ilyse', 'Mulhall', '1940-11-14', 'Alzheimers disease, AD', 'Female', '30068 Eliot Circle', '1730386907', 'Scheduled', 'High-fiber diet, Low-fat meals', 'Pain relievers, Calcium supplements', '2024-10-29 15:04:09', 'saved'),
+(745, 'Dewitt', 'Buggy', '1955-11-14', 'Sleep apnea, Snoring', 'Male', '205 Ramsey Point', '1202635934', 'Scheduled', 'Uses air purifier, Avoids allergens', 'Statins, Beta blockers', '2024-10-29 15:04:09', 'saved'),
+(746, 'Michell', 'Louche', '1961-11-14', 'Liver disease, Cirrhosis', 'Female', '335 Lakewood Gardens Trail', '6317417260', 'Walk-in', 'Pain management exercises, Avoids heavy lifting', 'CPAP machine', '2024-10-29 15:04:09', 'saved'),
+(747, 'Whitman', 'Purnell', '1946-11-14', 'Dental issues, Cavities', 'Female', '2488 Elka Point', '9557162385', 'Walk-in', 'Safe practices, Regular exercise', 'NSAIDs', '2024-10-29 15:04:09', 'saved'),
+(748, 'Kiersten', 'Browncey', '1941-11-14', 'Stroke, Cerebrovascular accident', 'Female', '9502 Schurz Crossing', '2234821000', 'Scheduled', 'No smoking, Regular exercise', 'Antispasmodics, Fiber supplements', '2024-10-29 15:04:09', 'saved'),
+(749, 'Perren', 'Peploe', '1935-11-14', 'Substance abuse, Alcoholism', 'Male', '352 Rutledge Street', '6279398941', 'Scheduled', 'No smoking, Regular exercise', 'Antispasmodics, Fiber supplements', '2024-10-29 15:04:09', 'saved'),
+(750, 'Georgia', 'Newbury', '1946-11-14', 'Mental health stigma, Depression stigma', 'Female', '9 6th Crossing', '8082045664', 'Walk-in', 'Pain management exercises, Avoids heavy lifting', 'Antidepressants, Anxiolytics', '2024-10-29 15:04:09', 'saved'),
+(751, 'Naomi', 'Cockling', '1962-11-14', 'Skin conditions, Eczema', 'Female', '62697 High Crossing Street', '8687139171', 'Walk-in', 'Non-smoking, Uses inhaler as needed', 'Sleep aids, Pain relievers', '2024-10-29 15:04:09', 'saved'),
+(752, 'Hetty', 'Levane', '1949-11-14', 'ADHD, ADD', 'Female', '263 Carey Drive', '9430456029', 'Walk-in', 'Therapy sessions, Meditation', 'Proton pump inhibitors', '2024-10-29 15:04:09', 'saved'),
+(753, 'Christos', 'Baine', '1951-11-14', 'Chronic pain, Fibromyalgia', 'Male', '3692 Homewood Parkway', '1197543545', 'Scheduled', 'Therapy sessions, Meditation', 'Antispasmodics, Fiber supplements', '2024-10-29 15:04:09', 'saved'),
+(754, 'Cathyleen', 'Cowope', '1943-11-14', 'Sleep apnea, Snoring', 'Male', '9 Hermina Alley', '6843753399', 'Walk-in', 'Low-acid diet, Avoids late meals', 'Stimulants, Behavioral therapy', '2024-10-29 15:04:09', 'saved'),
+(755, 'Lisabeth', 'Swanne', '1960-11-14', 'ADHD, ADD', 'Male', '6644 Luster Center', '9093195059', 'Walk-in', 'Uses air purifier, Avoids allergens', 'Eye drops', '2024-10-29 15:04:09', 'saved'),
+(756, 'Carline', 'Drabble', '1945-11-14', 'Thyroid disorders, Hyperthyroidism', 'Male', '8 Goodland Place', '5958007065', 'Scheduled', 'Gentle exercises, Balanced diet', 'Steroid creams, Antihistamines', '2024-10-29 15:04:09', 'saved'),
+(757, 'Fey', 'Todman', '1940-11-14', 'Autoimmune diseases, Rheumatoid arthritis', 'Male', '694 Northland Place', '1751257373', 'Walk-in', 'Pain management exercises, Avoids heavy lifting', 'Liver-support medications', '2024-10-29 15:04:09', 'saved'),
+(758, 'Shellie', 'dArcy', '1961-11-14', 'Thyroid disorders, Hyperthyroidism', 'Female', '56 Talmadge Terrace', '8945566773', 'Walk-in', 'Uses air purifier, Avoids allergens', 'Levothyroxine', '2024-10-29 15:04:09', 'saved'),
+(759, 'Dinnie', 'Motten', '1959-11-14', 'Mental health stigma, Depression stigma', 'Female', '1469 Dapin Junction', '1726432807', 'Walk-in', 'Gentle exercises, Balanced diet', 'Statins, Beta blockers', '2024-10-29 15:04:09', 'saved'),
+(760, 'Cherice', 'Gribben', '1947-11-14', 'Chronic obstructive pulmonary disease, COPD', 'Female', '69113 Stuart Street', '3129849885', 'Scheduled', 'No smoking, Regular exercise', 'Sleep aids, Pain relievers', '2024-10-29 15:04:09', 'saved'),
+(761, 'Loutitia', 'Yurchishin', '1953-11-14', 'Hypertension, Diabetes', 'Female', '87754 Lunder Lane', '7272440058', 'Walk-in', 'No smoking, Regular exercise', 'Antihistamines, Nasal sprays', '2024-10-29 15:04:09', 'saved'),
+(762, 'Brady', 'Gemnett', '1959-11-14', 'Endocrine disorders, Diabetes insipidus', 'Male', '7950 Dexter Junction', '1590766258', 'Scheduled', 'Therapy sessions, Meditation', 'Statins, Beta blockers', '2024-10-29 15:04:09', 'saved'),
+(763, 'Bentley', 'Mohring', '1945-11-14', 'Pediatric conditions, Asthma in children', 'Female', '15294 Elmside Center', '3520575390', 'Scheduled', 'Therapy sessions, Meditation', 'Antihistamines, Nasal sprays', '2024-10-29 15:04:09', 'saved'),
+(765, 'Godart', 'Mattocks', '1962-11-14', 'Depression, Anxiety', 'Female', '2 Sherman Court', '1081452307', 'Scheduled', 'Avoids caffeine, Sleeps early', 'Stimulants, Behavioral therapy', '2024-10-29 15:04:09', 'saved'),
+(766, 'Nike', 'Loosmore', '1937-11-14', 'Genetic disorders, Cystic fibrosis', 'Male', '19 Gina Trail', '4925591269', 'Walk-in', 'Pain management exercises, Avoids heavy lifting', 'Levothyroxine', '2024-10-29 15:04:09', 'saved'),
+(767, 'Nye', 'Rubinowicz', '1954-11-14', 'Infectious diseases, Tuberculosis', 'Male', '5 Bluejay Avenue', '5566772516', 'Scheduled', 'Regular exercise, Low-sodium diet', 'NSAIDs', '2024-10-29 15:04:09', 'saved'),
+(768, 'Gwendolin', 'Holyard', '1963-11-14', 'Kidney disease, Chronic kidney disease (CKD)', 'Male', '4763 Mockingbird Circle', '6585242247', 'Scheduled', 'Moisturizes daily, Avoids allergens', 'Sleep aids, Pain relievers', '2024-10-29 15:04:09', 'saved'),
+(770, 'Rena', 'Tours', '1948-11-14', 'ADHD, ADD', 'Female', '947 Chive Crossing', '1305528622', 'Walk-in', 'Regular exercise, Balanced diet', 'Pain relievers, Calcium supplements', '2024-10-29 15:04:09', 'saved'),
+(771, 'Peadar', 'Farbrother', '1954-11-14', 'Kidney disease, Chronic kidney disease (CKD)', 'Female', '6 Northwestern Plaza', '6165364250', 'Scheduled', 'Pain management exercises, Avoids heavy lifting', 'Antihistamines, Nasal sprays', '2024-10-29 15:04:09', 'saved'),
+(772, 'Felipa', 'Elvish', '1961-11-14', 'Geriatric conditions, Dementia', 'Male', '5470 Cambridge Road', '5545008536', 'Walk-in', 'High-fiber diet, Low-fat meals', 'Antihypertensives, Insulin', '2024-10-29 15:04:09', 'saved'),
+(773, 'Kellby', 'Smithson', '1950-11-14', 'Genetic disorders, Cystic fibrosis', 'Female', '4 Schmedeman Terrace', '7411045192', 'Walk-in', 'High-fiber diet, Low-fat meals', 'Pain relievers, Calcium supplements', '2024-10-29 15:04:09', 'saved'),
+(774, 'Kathryne', 'Livezey', '1962-11-14', 'Multiple sclerosis, MS', 'Female', '0882 Anderson Alley', '9859560241', 'Walk-in', 'Low-acid diet, Avoids late meals', 'Inhalers as prescribed', '2024-10-29 15:04:09', 'saved'),
+(775, 'Jacinda', 'Stroband', '1963-11-14', 'Eye conditions, Glaucoma', 'Female', '24 Pleasure Park', '1583305088', 'Scheduled', 'Pain management exercises, Avoids heavy lifting', 'Statins, Beta blockers', '2024-10-29 15:04:09', 'saved'),
+(776, 'Thain', 'Bohl', '1937-11-14', 'Irritable bowel syndrome (IBS)', 'Male', '7236 Leroy Park', '2334983232', 'Scheduled', 'Regular exercise, Balanced diet', 'Statins, Beta blockers', '2024-10-29 15:04:09', 'saved'),
+(777, 'Ryley', 'Wakeling', '1950-11-14', 'Irritable bowel syndrome (IBS)', 'Male', '7559 Tennyson Alley', '5266645106', 'Scheduled', 'No smoking, Regular exercise', 'NSAIDs', '2024-10-29 15:04:09', 'saved');
 
 -- --------------------------------------------------------
 
@@ -994,6 +1013,7 @@ CREATE TABLE `seniorcitizen_with_age` (
 `citizen_id` int(15)
 ,`first_name` varchar(50)
 ,`last_name` varchar(50)
+,`status` varchar(455)
 ,`date_of_birth` date
 ,`health_condition` varchar(100)
 ,`gender` varchar(10)
@@ -1042,19 +1062,27 @@ CREATE TABLE `smsnotification` (
   `message` text DEFAULT NULL,
   `sent_by` enum('Admin','HealthWorker') DEFAULT NULL,
   `sender_id` int(11) DEFAULT NULL,
-  `sent_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `sent_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(455) DEFAULT 'saved'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `smsnotification`
 --
 
-INSERT INTO `smsnotification` (`sms_id`, `recipient_phone`, `message`, `sent_by`, `sender_id`, `sent_at`) VALUES
-(1, 'tryname', 'You have a chekup', 'Admin', 1, '2024-08-04 05:13:24'),
-(12, '639270398546', 'Good day, seniors! Join us for a free Health Seminar on November 5 at 9 AM in the barangay hall. Learn tips on healthy living and preventive care. Don\'t miss it!', 'Admin', 46882260, '2024-10-28 07:50:53'),
-(13, '639214358550', 'try send', 'Admin', 46882260, '2024-10-28 10:36:38'),
-(14, '639201211972', 'try send', 'Admin', 46882260, '2024-10-28 10:36:38'),
-(16, '09291501251', 'Today is your checkup', 'Admin', 46882260, '2024-11-08 05:57:56');
+INSERT INTO `smsnotification` (`sms_id`, `recipient_phone`, `message`, `sent_by`, `sender_id`, `sent_at`, `status`) VALUES
+(1, 'tryname', 'You have a chekup', 'Admin', 1, '2024-08-04 05:13:24', 'active'),
+(12, '639270398546', 'Good day, seniors! Join us for a free Health Seminar on November 5 at 9 AM in the barangay hall. Learn tips on healthy living and preventive care. Don\'t miss it!', 'Admin', 46882260, '2024-10-28 07:50:53', 'saved'),
+(13, '639214358550', 'try send', 'Admin', 46882260, '2024-10-28 10:36:38', 'saved'),
+(14, '639201211972', 'try send', 'Admin', 46882260, '2024-10-28 10:36:38', 'saved'),
+(16, '09291501251', 'Today is your checkup', 'Admin', 46882260, '2024-11-08 05:57:56', 'saved'),
+(17, '09469498906', 'You may now recieve your pension', 'Admin', 46882260, '2024-11-22 11:34:34', 'saved'),
+(18, '09270398546', 'GoodEveningi', 'Admin', 46882260, '2024-11-22 11:53:07', 'saved'),
+(19, '09173244581', 'Good Evening', 'Admin', 46882260, '2024-11-22 11:54:56', 'saved'),
+(20, '09469498906', 'November 22 2024\r\n\r\nAttention to all Senior Citizen\r\nWe Have Gift Giving @ Barangay Hall', 'Admin', 46882260, '2024-11-22 12:03:33', 'saved'),
+(21, '09270398546', 'November 22 2024\r\n\r\nAttention to all Senior Citizen\r\nWe Have Gift Giving @ Barangay Hall', 'Admin', 46882260, '2024-11-22 12:03:34', 'saved'),
+(22, '09173244581', 'November 22 2024\r\n\r\nAttention to all Senior Citizen\r\nWe Have Gift Giving @ Barangay Hall', 'Admin', 46882260, '2024-11-22 12:03:35', 'saved'),
+(23, '09469498906', 'Please attend your appointment', 'Admin', 46882260, '2024-11-23 02:46:25', '');
 
 -- --------------------------------------------------------
 
@@ -1241,7 +1269,16 @@ INSERT INTO `user_logs` (`Logs`, `user_id`, `user_type`, `login_time`, `logout_t
 (433, 46882260, 'Admin', '2024-11-21 23:19:42', '2024-11-21 23:22:52'),
 (434, 46882260, 'Admin', '2024-11-21 23:23:33', '2024-11-21 23:26:05'),
 (435, 46882260, 'Admin', '2024-11-21 23:29:23', NULL),
-(436, 46882260, 'Admin', '2024-11-21 23:41:05', NULL);
+(436, 46882260, 'Admin', '2024-11-21 23:41:05', NULL),
+(437, 46882260, 'Admin', '2024-11-22 13:44:12', NULL),
+(438, 46882260, 'Admin', '2024-11-22 15:12:29', NULL),
+(439, 46882260, 'Admin', '2024-11-22 18:32:02', '2024-11-22 19:29:14'),
+(440, 46882260, 'Admin', '2024-11-22 19:29:29', '2024-11-22 20:06:01'),
+(441, 46882260, 'Admin', '2024-11-22 20:09:56', NULL),
+(442, 46882260, 'Admin', '2024-11-22 22:02:17', NULL),
+(443, 46882260, 'Admin', '2024-11-23 09:48:06', '2024-11-23 09:48:18'),
+(444, 46882260, 'Admin', '2024-11-23 10:10:18', NULL),
+(445, 46882260, 'Admin', '2024-11-23 11:41:51', NULL);
 
 -- --------------------------------------------------------
 
@@ -1298,7 +1335,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`u555923667_seniorciticare`@`127.0.0.1` SQL S
 --
 DROP TABLE IF EXISTS `seniorcitizen_with_age`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`u555923667_seniorciticare`@`127.0.0.1` SQL SECURITY DEFINER VIEW `seniorcitizen_with_age`  AS SELECT `seniorcitizen`.`citizen_id` AS `citizen_id`, `seniorcitizen`.`first_name` AS `first_name`, `seniorcitizen`.`last_name` AS `last_name`, `seniorcitizen`.`date_of_birth` AS `date_of_birth`, `seniorcitizen`.`health_condition` AS `health_condition`, `seniorcitizen`.`gender` AS `gender`, `seniorcitizen`.`address` AS `address`, `seniorcitizen`.`phone` AS `phone`, `seniorcitizen`.`checkups` AS `checkups`, `seniorcitizen`.`lifestyle` AS `lifestyle`, `seniorcitizen`.`medication` AS `medication`, `seniorcitizen`.`created_at` AS `created_at`, floor((to_days(curdate()) - to_days(`seniorcitizen`.`date_of_birth`)) / 365) AS `age` FROM `seniorcitizen` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`u555923667_seniorciticare`@`127.0.0.1` SQL SECURITY DEFINER VIEW `seniorcitizen_with_age`  AS SELECT `seniorcitizen`.`citizen_id` AS `citizen_id`, `seniorcitizen`.`first_name` AS `first_name`, `seniorcitizen`.`last_name` AS `last_name`, `seniorcitizen`.`status` AS `status`, `seniorcitizen`.`date_of_birth` AS `date_of_birth`, `seniorcitizen`.`health_condition` AS `health_condition`, `seniorcitizen`.`gender` AS `gender`, `seniorcitizen`.`address` AS `address`, `seniorcitizen`.`phone` AS `phone`, `seniorcitizen`.`checkups` AS `checkups`, `seniorcitizen`.`lifestyle` AS `lifestyle`, `seniorcitizen`.`medication` AS `medication`, `seniorcitizen`.`created_at` AS `created_at`, floor((to_days(curdate()) - to_days(`seniorcitizen`.`date_of_birth`)) / 365) AS `age` FROM `seniorcitizen` ;
 
 -- --------------------------------------------------------
 
@@ -1468,7 +1505,7 @@ ALTER TABLE `activity`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97557511;
+  MODIFY `admin_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97557512;
 
 --
 -- AUTO_INCREMENT for table `announcement`
@@ -1510,7 +1547,7 @@ ALTER TABLE `predicted_diseases`
 -- AUTO_INCREMENT for table `predictiveanalytics`
 --
 ALTER TABLE `predictiveanalytics`
-  MODIFY `analytics_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `analytics_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `seniorcitizen`
@@ -1522,13 +1559,13 @@ ALTER TABLE `seniorcitizen`
 -- AUTO_INCREMENT for table `smsnotification`
 --
 ALTER TABLE `smsnotification`
-  MODIFY `sms_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `sms_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `user_logs`
 --
 ALTER TABLE `user_logs`
-  MODIFY `Logs` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=437;
+  MODIFY `Logs` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=446;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

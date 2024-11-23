@@ -158,7 +158,16 @@ from django.http import JsonResponse
 
 def login_view(request):
     user_id = request.session.get('user_id', 'None')  # Retrieve user_id from the session
-    error_message = None  # Initialize error_message variable
+    error_message = None  # Initialize error_message
+    
+    
+    if 'success_code' in request.session:
+        is_changed = request.session.get('success_code', 0)
+        del request.session['success_code']
+    else:
+        is_changed = 0
+
+                
     
     if request.method == "POST":
         # Check if the form is for the "Forgot Password"
@@ -232,8 +241,9 @@ def login_view(request):
     return render(request, 'views/login.html', {
         'form': form,
         'user_id': user_id,
-        'error_message': error_message
-    })
+        'error_message': error_message,
+        'is_changed' : is_changed
+     })
 
 
 
@@ -489,6 +499,7 @@ def reset_password(request, admin_id):
                 admin.password = new_password  # You might want to hash the password here
                 admin.save()
                 messages.success(request, "Password has been reset successfully.")
+                request.session['success_code'] = request.session['security_code'] 
                 del request.session['security_code']
                 return redirect('login')  # Redirect to the login page
             else:
@@ -501,6 +512,7 @@ def reset_password(request, admin_id):
 
 
 def reset_health_worker_password(request, worker_id):
+    
     if 'security_code' not in request.session:
         # If not, generate a new random number and send the email
         random_number = random.randint(100000, 999999)
@@ -519,11 +531,14 @@ def reset_health_worker_password(request, worker_id):
             security_code = form.cleaned_data['security_code']
             new_password = form.cleaned_data['new_password']
 
+
             # Check if the provided security code matches the health worker's code
             if int(security_code) == int(otp_value):  # Ensure 'security_code' is in your HealthWorker model
                 health_worker.password = new_password 
                 health_worker.save()
                 messages.success(request, "Password has been reset successfully.")
+                success = 1
+                request.session['success_code'] = request.session['security_code'] 
                 del request.session['security_code']
                 return redirect('login')  # Redirect to the login page
             else:
